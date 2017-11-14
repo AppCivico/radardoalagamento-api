@@ -1,0 +1,15 @@
+requires 'Catalyst::Controller::REST';
+requires 'DBIx::Class::PassphraseColumn';
+requires 'Authen::Passphrase::BlowfishCrypt';
+requires 'MooseX::Types::Email';
+requires 'MooseX::MarkAsMethods';
+requires 'App::Sqitch';
+requires 'MooseX::Types';
+requires 'MooseX::Types::Common::String';
+requires 'MooseX::Types::Moose';
+requires 'Moose::Util::TypeConstraints';
+requires 'Safe::Isa';
+requires 'Authen::Passphrase::RejectAll';
+requires 'Plack::App::File';
+requires 'IO::Handle';
+requires 'Plack::Middleware::ReverseProxy'
