@@ -8,20 +8,19 @@ BEGIN { extends 'Tupa::Web::App::Controller'; }
 
 __PACKAGE__->config( namespace => '' );
 
-# sub base : Chained('/') PathPart('') CaptureArgs(0) { }
+sub base : Chained('/') PathPart('') CaptureArgs(0) { }
 
 # sub root : Chained('base') PathPart('') Args(0) {
 #   my ( $self, $c ) = @_;
 #   $c->response->status(200);
 #   $c->res->body('HEY');
-
 # }
 
 sub index : Path : Args(0) {
   my ( $self, $c ) = @_;
 
   # Hello World
-  $c->response->body( $c->welcome_message );
+  $c->response->body('OK');
 }
 
 sub default : Path {

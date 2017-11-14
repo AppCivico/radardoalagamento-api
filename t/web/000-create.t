@@ -15,6 +15,10 @@ binmode STDERR, ":encoding(UTF-8)";
 
 my $schema = Tupa::Web::App->model('DB')->schema;
 
+my ( $res, $ctx ) = ctx_request( GET '/');
+ok($res->is_success);
+warn $res->as_string;
+
 db_transaction {
 
   {
