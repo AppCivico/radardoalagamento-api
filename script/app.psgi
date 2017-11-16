@@ -19,9 +19,9 @@ builder {
     origins => q{*},
     methods => [qw(GET POST OPTIONS PUT HEAD DELETE PATCH)];
 
-  enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
+#  enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
 
   mount '/' => $app;
-  mount '/_doc' =>
+  mount '/openapi' =>
     Plack::App::File->new( root => '..', file => 'docs/openapi/main.json' )->to_app
 };
