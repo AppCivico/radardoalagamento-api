@@ -1,0 +1,42 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Tupã API",
+    "version": "v0.0.1"
+  },
+  "host": "dtupa.eokoe.com",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "basePath": "/",
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Logando na API",
+        "operationId": "2a624357-362d-4b7d-a519-b07271f2f23b",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "{\"email\":\"email@email.com\"}"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -22,4 +22,6 @@ builder {
   enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
 
   mount '/' => $app;
+  mount '/_doc' =>
+    Plack::App::File->new( root => '..', file => 'docs/openapi/main.json' )->to_app
 };
