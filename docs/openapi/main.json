@@ -11,43 +11,115 @@
   ],
   "basePath": "/",
   "paths": {
+    "/signup": {
+      "post": {
+        "summary": "Cadastro de usuário",
+        "description": "Cadastrando novo usário na API",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "api_key": {
+                      "type": "uuid",
+                      "description": "Chave da API"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Nome do usuário",
+                  "type": "string",
+                  "example": "Enéas Carneiro",
+                  "required": true
+                },
+                "email": {
+                  "description": "Email do usuário",
+                  "type": "email",
+                  "example": "email@email.com",
+                  "required": true
+                },
+                "password": {
+                  "description": "Senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true,
+                  "minLength": 8
+                },
+                "password_confirmation": {
+                  "description": "Confirmação de senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true,
+                  "minLength": 8
+                },
+                "phone_number": {
+                  "description": "Telefone do usuário",
+                  "type": "string",
+                  "example": "+5511987651122",
+                  "required": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "/login": {
       "post": {
         "summary": "Login",
         "description": "Logando na API",
+        "produces": [
+          "application/json"
+        ],
         "consumes": [
           "application/json"
         ],
-        "content": {
-          "application/json": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "type": "string",
-                  "format": "email"
+                  "description": "Email do usuário",
+                  "type": "email",
+                  "example": "email@email.com",
+                  "required": true
                 },
                 "password": {
-                  "type": "string",
-                  "format": "password"
+                  "description": "Senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true
                 }
               }
-            },
-            "examples": {
-              "email": {
-                "summary": "User email",
-                "value": "email@email.com"
-              },
-              "password": {
-                "summary": "User password",
-                "value": "123secret#@"
-              }
             }
-          },
-          "responses": {
-            "default": {
-              "description": "no response description was provided for this operation"
-            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
           }
         }
       }
