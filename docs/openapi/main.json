@@ -15,28 +15,43 @@
       "post": {
         "summary": "Login",
         "description": "Logando na API",
-        "operationId": "2a624357-362d-4b7d-a519-b07271f2f23b",
         "consumes": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "required": false,
+        "content": {
+          "application/json": {
             "schema": {
-              "type": "string",
-              "default": "{\"email\":\"email@email.com\"}"
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password"
+                }
+              }
             },
-            "in": "body",
-            "name": "body"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+            "examples": {
+              "email": {
+                "summary": "User email",
+                "value": "email@email.com"
+              },
+              "password": {
+                "summary": "User password",
+                "value": "123secret#@"
+              }
+            }
+          },
+          "responses": {
+            "default": {
+              "description": "no response description was provided for this operation"
+            }
           }
         }
       }
-    }
-  },
-  "tags": []
+    },
+    "tags": []
+  }
 }
