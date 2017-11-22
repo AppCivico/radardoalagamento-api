@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
@@ -61,6 +60,11 @@ __PACKAGE__->table("user");
   data_type: 'text'
   is_nullable: 1
 
+=head2 password
+
+  data_type: 'text'
+  is_nullable: 1
+
 =head2 create_ts
 
   data_type: 'timestamp'
@@ -89,6 +93,8 @@ __PACKAGE__->add_columns(
   "email",
   { data_type => "text", is_nullable => 0 },
   "phone_number",
+  { data_type => "text", is_nullable => 1 },
+  "password",
   { data_type => "text", is_nullable => 1 },
   "create_ts",
   {
@@ -127,11 +133,12 @@ __PACKAGE__->has_many(
   "user_sessions",
   "Tupa::Schema::Result::UserSession",
   { "foreign.user_id" => "self.id" },
-  { cascade_copy      => 0, cascade_delete => 0 },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-10 11:28:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:I+jmHRAvyMxs/LspD4a1ag
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-21 22:01:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JuSxA6M1Pvxh3q9BYQk24A
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
