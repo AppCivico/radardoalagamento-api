@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::Zone;
 
 # Created by DBIx::Class::Schema::Loader
@@ -113,11 +112,12 @@ __PACKAGE__->has_many(
   "districts",
   "Tupa::Schema::Result::District",
   { "foreign.zone_id" => "self.id" },
-  { cascade_copy      => 0, cascade_delete => 0 },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-21 22:01:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bybqhjoeQdG+B1Ap7EpQMQ
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-23 19:00:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jgtBtcn9ENmeWa2hJdu69g
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 #__PACKAGE__->load_components(qw(ParameterizedJoinHack));

@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::District;
 
 # Created by DBIx::Class::Schema::Loader
@@ -102,6 +101,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 user_districts
+
+Type: has_many
+
+Related object: L<Tupa::Schema::Result::UserDistrict>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_districts",
+  "Tupa::Schema::Result::UserDistrict",
+  { "foreign.district_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 zone
 
 Type: belongs_to
@@ -111,13 +125,15 @@ Related object: L<Tupa::Schema::Result::Zone>
 =cut
 
 __PACKAGE__->belongs_to(
-  "zone", "Tupa::Schema::Result::Zone",
-  { id            => "zone_id" },
+  "zone",
+  "Tupa::Schema::Result::Zone",
+  { id => "zone_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-21 22:01:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rjThi4Wg6gBg8IJJ0yVB7A
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-23 19:05:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:THWbMdcRJp6JfLrOmgYDfg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
