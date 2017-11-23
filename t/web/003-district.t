@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use lib "t/lib";
 use Catalyst::Test 'Tupa::Web::App';
-use HTTP::Request::Common qw(GET);
+use HTTP::Request::Common qw(GET POST);
 use JSON qw(encode_json);
 
 use Tupa::Test;
@@ -74,7 +74,6 @@ db_transaction {
 
       ok( $res->is_success, 'Success' );
       is( $res->code, 200, '200 OK' );
-      warn $res->as_string;
     }
 
     {
@@ -89,7 +88,53 @@ db_transaction {
 
       ok( $res->is_success, 'Success' );
       is( $res->code, 200, '200 OK' );
-      warn $res->as_string;
+    }
+
+    {
+      diag('follow district');      
+      my ( $res, $ctx ) =
+
+        ctx_request(
+        POST '/district/' . $district->id . '/follow',
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+        );
+
+      ok( $res->is_success, 'Success' );
+      is( $res->code, 202, '200 OK' );
+
+    }
+
+    {
+      diag('unfollow district');
+      my ( $res, $ctx ) =
+
+        ctx_request(
+        POST '/district/' . $district->id . '/unfollow',
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+
+        );
+
+      ok( $res->is_success, 'Success' );
+      is( $res->code, 202, '200 OK' );
+
+    }
+
+    {
+      diag('unfollow again');
+      my ( $res, $ctx ) =
+
+        ctx_request(
+        POST '/district/' . $district->id . '/unfollow',
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+
+        );
+
+      ok( $res->is_success, 'Success' );
+      is( $res->code, 202, '200 OK' );
+
     }
 
   }

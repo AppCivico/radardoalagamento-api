@@ -29,9 +29,23 @@ sub list : Chained(base) PathPart('') Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results => [ $c->stash->{collection}->as_hashref->all ]
+      results => [ $c->stash->{collection}->summary->as_hashref->all ]
     }
   );
+}
+
+sub follow : Chained(object) Args(0) POST {
+  my ( $self, $c ) = @_;
+
+  $c->user->follow( $c->stash->{object} );
+  $self->status_accepted( $c, entity => $c->stash->{object} );
+}
+
+sub unfollow : Chained(object) Args(0) POST {
+  my ( $self, $c ) = @_;
+
+  $c->user->unfollow( $c->stash->{object} );
+  $self->status_accepted( $c, entity => $c->stash->{object} );
 }
 
 sub sensor : Chained(object) Args(0) GET {
@@ -40,7 +54,9 @@ sub sensor : Chained(object) Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results => [ $c->stash->{object}->sensors->with_geojson->as_hashref->all ]
+      results => [
+        $c->stash->{object}->sensors->with_geojson->summary->as_hashref->all
+      ]
     }
   );
 }
