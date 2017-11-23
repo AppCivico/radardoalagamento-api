@@ -18,12 +18,17 @@ my $schema = Tupa::Web::App->model('DB')->schema;
 
 db_transaction {
   {
+    my $session = __new_session($schema);
 
     diag('Listing districts');
     {
       my ( $res, $ctx ) =
 
-        ctx_request( GET '/district', Content_Type => 'application/json' );
+        ctx_request(
+        GET '/district',
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+        );
 
       ok( $res->is_success, 'Success' );
       is( $res->code, 200, '200 OK' );
@@ -62,7 +67,9 @@ db_transaction {
 
         ctx_request(
         GET '/district/' . $district->id,
-        Content_Type => 'application/json'
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+
         );
 
       ok( $res->is_success, 'Success' );
@@ -75,7 +82,9 @@ db_transaction {
 
         ctx_request(
         GET '/district/' . $district->id . '/sensor',
-        Content_Type => 'application/json'
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+
         );
 
       ok( $res->is_success, 'Success' );

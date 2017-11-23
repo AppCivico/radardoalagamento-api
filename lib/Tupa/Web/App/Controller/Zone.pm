@@ -7,7 +7,7 @@ use namespace::autoclean -except => 'Int';
 
 BEGIN { extends 'Tupa::Web::App::Controller'; }
 
-sub base : Chained(/) PathPart(zone) CaptureArgs(0) {
+sub base : Chained(/logged_in) PathPart(zone) CaptureArgs(0) {
   my ( $self, $c ) = @_;
   $c->stash->{collection} = $c->model('DB::Zone');
 }

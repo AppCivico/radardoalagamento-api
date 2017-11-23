@@ -163,7 +163,7 @@ __PACKAGE__->add_column(
 sub reset_session {
   my ($self) = @_;
   $self->user_sessions->update( { valid_until => \q|now()| } );
-  $self->user_sessions->create( {} );
+  $self->user_sessions->create( {} )->discard_changes;
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -37,8 +37,22 @@ sub db_transaction (&) {
   };
 
   die $@ unless $@ =~ /rollback/;
-
 }
 
+sub __new_user {
+  my $schema = shift;
+  $schema->resultset('User')->create(
+    {
+      name     => 'Foo ' . rand(),
+      email    => 'email.' . ( int( rand(100000) ) ) . '@emailfake.com',
+      password => 1234,
+    }
+  );
+}
+
+sub __new_session {
+  my $schema = shift;
+  __new_user($schema)->reset_session;
+}
 
 1;
