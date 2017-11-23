@@ -18,7 +18,7 @@ sub object : Chained(base) : PathPart('') : CaptureArgs(Int) {
     or $c->detach('/error_404');
 }
 
-sub view : Chained(object) : PathPart('') :Args(0) : GET {
+sub view : Chained(object) : PathPart('') : Args(0) : GET {
   my ( $self, $c ) = @_;
   $self->status_ok( $c, entity => $c->stash->{object} );
 }
@@ -29,8 +29,7 @@ sub list : Chained(base) PathPart('') Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results =>
-        [ $c->stash->{collection}->as_hashref->all ]
+      results => [ $c->stash->{collection}->as_hashref->all ]
     }
   );
 }
@@ -41,7 +40,7 @@ sub sample : Chained(object) Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results => [ $c->stash->{object}->samples->as_hashref->all ]
+      results => [ $c->stash->{object}->samples->summary->as_hashref->all ]
     }
   );
 }

@@ -41,7 +41,9 @@ sub sensor : Chained(object) Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results => [ $c->stash->{object}->sensors->with_geojson->as_hashref->all ]
+      results => [
+        $c->stash->{object}->sensors->with_geojson->summary->as_hashref->all
+      ]
     }
   );
 }

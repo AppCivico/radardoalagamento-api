@@ -22,6 +22,7 @@ sub with_geojson {
     }
   );
 }
+sub summary { shift }
 
 1;
 
