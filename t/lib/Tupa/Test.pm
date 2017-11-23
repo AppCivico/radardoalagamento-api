@@ -2,6 +2,8 @@ package Tupa::Test;
 
 use strict;
 use warnings;
+use Monkey::Patch::Action qw(patch_package);
+use feature 'say';
 
 sub import {
 
@@ -53,6 +55,31 @@ sub __new_user {
 sub __new_session {
   my $schema = shift;
   __new_user($schema)->reset_session;
+}
+
+our ( $in, $out );
+
+if ( $ENV{TRACE} ) {
+  use HTTP::Request;
+  use HTTP::Response;
+  $out = patch_package(
+    'Catalyst::Engine',
+    finalize_body => wrap => sub {
+      my $__ctx = shift;
+      my ( $app, $c ) = @_;
+      my $ret = $__ctx->{orig}->(@_);
+      my $req = $c->req;
+      my $res = $c->res;
+
+      say '------------REQUEST-------------';
+      say HTTP::Request->new( $req->method, $req->uri, $req->headers,
+        $req->body )->as_string;
+      say '------------RESPONSE------------';
+      say HTTP::Response->new( $res->code, $res->status, $res->headers,
+        $res->body )->as_string;
+      return $ret;
+    }
+  );
 }
 
 1;

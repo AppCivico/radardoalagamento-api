@@ -16,3 +16,5 @@ requires 'Plack::Middleware::ReverseProxy'
 requires 'FindBin::libs';
 requires 'DBIx::Class::ParameterizedJoinHack';
 requires 'DateTimeX::Easy';
+requires 'Monkey::Patch::Action';
+
