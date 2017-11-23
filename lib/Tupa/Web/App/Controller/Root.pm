@@ -28,6 +28,12 @@ sub default : Path {
   $c->response->body('Page not found');
   $c->response->status(404);
 }
+
+sub error_404 : Private {
+  my ( $self, $c ) = @_;
+  $c->response->status(404);
+  $c->res->body('');
+}
 sub end : ActionClass('RenderView') { }
 
 __PACKAGE__->meta->make_immutable;

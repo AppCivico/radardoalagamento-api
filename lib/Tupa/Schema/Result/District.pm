@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::District;
 
 # Created by DBIx::Class::Schema::Loader
@@ -110,17 +111,38 @@ Related object: L<Tupa::Schema::Result::Zone>
 =cut
 
 __PACKAGE__->belongs_to(
-  "zone",
-  "Tupa::Schema::Result::Zone",
-  { id => "zone_id" },
+  "zone", "Tupa::Schema::Result::Zone",
+  { id            => "zone_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
-
 
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-21 22:01:24
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rjThi4Wg6gBg8IJJ0yVB7A
 
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+__PACKAGE__->has_many(
+  "sensors",
+  "Tupa::Schema::Result::Sensor",
+  sub {
+    my $args = shift;
+    return { "$args->{foreign_alias}.location" =>
+        { '&&' => { -ident => "$args->{self_alias}.geom" } }, };
+  },
+  { cascade_copy => 0, cascade_delete => 0, join_type => 'LEFT' },
+);
+
+sub TO_JSON {
+  my $self = shift;
+  +{
+    $self->get_from_storage(
+      {
+        columns => [ grep { !/geom/ } $self->result_source->columns ],
+        '+columns' => [ { geom => \'ST_AsGeoJSON(geom)' } ],
+      }
+    )->get_columns
+  };
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

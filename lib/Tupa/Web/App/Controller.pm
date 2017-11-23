@@ -10,7 +10,7 @@ BEGIN { extends 'Catalyst::Controller::REST' }
 __PACKAGE__->config(
   default => 'application/json',
   'map'   => {
-    'application/json' => 'JSON',
+    'application/json' => 'JSON::XS',
   },
 );
 

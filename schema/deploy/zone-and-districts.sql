@@ -4,8 +4,8 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 
-SET CLIENT_ENCODING TO UTF8;
-SET STANDARD_CONFORMING_STRINGS TO ON;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
 
 CREATE TABLE "district" (
   id SERIAL NOT NULL PRIMARY KEY,

@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::Zone;
 
 # Created by DBIx::Class::Schema::Loader
@@ -112,14 +113,38 @@ __PACKAGE__->has_many(
   "districts",
   "Tupa::Schema::Result::District",
   { "foreign.zone_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  { cascade_copy      => 0, cascade_delete => 0 },
 );
-
 
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-21 22:01:24
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bybqhjoeQdG+B1Ap7EpQMQ
 
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+#__PACKAGE__->load_components(qw(ParameterizedJoinHack));
+
+__PACKAGE__->has_many(
+  "sensors",
+  "Tupa::Schema::Result::Sensor",
+  sub {
+    my $args = shift;
+    return { "$args->{foreign_alias}.location" =>
+        { '&&' => { -ident => "$args->{self_alias}.geom" } }, };
+  },
+  { cascade_copy => 0, cascade_delete => 0, join_type => 'LEFT' },
+);
+
+sub TO_JSON {
+  my $self = shift;
+  +{
+    $self->get_from_storage(
+      {
+        columns => [ grep { !/geom/ } $self->result_source->columns ],
+        '+columns' => [ { geom => \'ST_AsGeoJSON(geom)' } ],
+      }
+    )->get_columns
+  };
+}
+
 __PACKAGE__->meta->make_immutable;
+
 1;
