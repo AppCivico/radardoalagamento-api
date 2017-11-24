@@ -18,7 +18,7 @@ sub base : Chained('/') PathPart('') CaptureArgs(0) {
 
 sub logged_in : Chained(base) : PathPart('') : CaptureArgs(0) {
   my ( $self, $c ) = @_;
-  $c->forward('api_key_check');
+#  $c->forward('api_key_check');
 }
 
 sub api_key_check : Private {
