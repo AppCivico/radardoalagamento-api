@@ -78,6 +78,11 @@ __PACKAGE__->table("user");
   default_value: true
   is_nullable: 1
 
+=head2 push_token
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -105,6 +110,8 @@ __PACKAGE__->add_columns(
   },
   "active",
   { data_type => "boolean", default_value => \"true", is_nullable => 1 },
+  "push_token",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -167,8 +174,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-24 10:41:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pIIimox0J1XvIVhCVbkehw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-24 18:36:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rgsgvxvig62ZvkK3gojkfQ
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

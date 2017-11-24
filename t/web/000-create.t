@@ -15,9 +15,8 @@ binmode STDERR, ":encoding(UTF-8)";
 
 my $schema = Tupa::Web::App->model('DB')->schema;
 
-my ( $res, $ctx ) = ctx_request( GET '/');
-ok($res->is_success);
-warn $res->as_string;
+my ( $res, $ctx ) = ctx_request( GET '/' );
+ok( $res->is_success );
 
 db_transaction {
 
@@ -39,23 +38,57 @@ db_transaction {
   }
 
   {
-    diag('invalid');
+    diag('valid');
     my ( $res, $ctx ) = ctx_request(
       POST '/signup',
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          name                  => 'Foo',
-          email                 => 'email@email.com',
-          password              => '1234567890',
-          password_confirmation => '1234567890',
-          phone_number      => '+5511999911111',
+          token => {
+            value => 'oh!token',
+          },
+          user => {
+            name                  => 'Foo',
+            email                 => 'email@email.com',
+            password              => '1234567890',
+            password_confirmation => '1234567890',
+            phone_number          => '+5511999911111',
+            districts             => [
+              $schema->resultset('District')->search_rs( undef, { rows => 4 } )
+                ->get_column('id')->all
+            ]
+          },
         }
       )
     );
     ok( $res->is_success, 'success' );
     is( $res->code, 201, '201 created' );
-    warn $res->as_string;
+  }
+
+  {
+    diag('valid');
+    my ( $res, $ctx ) = ctx_request(
+      POST '/signup',
+      Content_Type => 'application/json',
+      Content      => encode_json(
+        {
+          token => {
+            value => 'oh!token2',
+          },
+          user => {
+            name                  => 'Foo',
+            email                 => 'email2@email.com',
+            password              => '1234567890',
+            password_confirmation => '1234567890',
+            phone_number          => '+5511899911111',
+            districts             => []
+          },
+        }
+      )
+    );
+    ok( $res->is_success, 'success' );
+    is( $res->code, 201, '201 created' );
+
   }
 
 };

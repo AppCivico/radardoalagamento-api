@@ -27,7 +27,84 @@ sub __build_schema {
 sub BUILDARGS { $_[2] }
 
 sub verifiers_specs {
-  my $self = shift;
+  my $self   = shift;
+  my $create = Data::Verifier->new(
+    filters => [qw(trim)],
+    profile => {
+      push_token => {
+        required   => 1,
+        type       => 'Str',
+        post_check => sub {
+          my $r = shift;
+          !$self->search_rs(
+            {
+              push_token => $r->get_value('push_token'),
+              active     => 1,
+            },
+            { rows => 1 }
+          )->count;
+
+        }
+      },
+      name => {
+        required => 1,
+        type     => 'Str',
+      },
+      email => {
+        required   => 0,
+        type       => EmailAddress,
+        filters    => [qw(lower trim flatten)],
+        post_check => sub {
+          my $r = shift;
+          return 0
+            if (
+            $self->find(
+              {
+                active => 1,
+                email  => $r->get_value('email')
+              }
+            )
+            );
+          return 1;
+        }
+      },
+      phone_number => {
+        required => 1,
+        type     => MobileNumber,
+      },
+      districts => {
+        required   => 0,
+        type       => 'ArrayRef[Int]',
+        post_check => sub {
+          my $r   = shift;
+          my $ids = $r->get_value('districts');
+          return 1 unless scalar @$ids;
+          return $self->schema->resultset('District')
+            ->search_rs( { id => { -in => $ids } } )->count == scalar @$ids;
+
+        }
+      },
+
+      password => {
+        required   => 0,
+        type       => 'Str',
+        min_length => 8,
+        dependent  => {
+          password_confirmation => {
+            required   => 0,
+            min_length => 8,
+            type       => 'Str',
+          },
+        },
+        post_check => sub {
+          my $r = shift;
+          return $r->get_value('password') eq
+            $r->get_value('password_confirmation');
+        },
+      }
+    }
+  );
+
   return {
     login => Data::Verifier->new(
       filters => [qw(trim)],
@@ -52,54 +129,8 @@ sub verifiers_specs {
         },
       }
     ),
-    create => Data::Verifier->new(
-      filters => [qw(trim)],
-      profile => {
-        name => {
-          required => 1,
-          type     => 'Str',
-        },
-        email => {
-          required   => 0,
-          type       => EmailAddress,
-          filters    => [qw(lower trim flatten)],
-          post_check => sub {
-            my $r = shift;
-            return 0
-              if (
-              $self->find(
-                {
-                  active => 1,
-                  email  => $r->get_value('email')
-                }
-              )
-              );
-            return 1;
-          }
-        },
-        phone_number => {
-          required => 1,
-          type     => MobileNumber,
-        },
-        password => {
-          required   => 0,
-          type       => 'Str',
-          min_length => 8,
-          dependent  => {
-            password_confirmation => {
-              required   => 0,
-              min_length => 8,
-              type       => 'Str',
-            },
-          },
-          post_check => sub {
-            my $r = shift;
-            return $r->get_value('password') eq
-              $r->get_value('password_confirmation');
-          },
-        }
-      }
-    )
+    create       => $create,
+    create_admin => $create,
   };
 }
 
@@ -109,9 +140,24 @@ sub action_specs {
     create => sub {
       my %values = shift->valid_values;
       delete $values{password_confirmation};
-      my $user = $self->create( \%values );
+      my $districts = delete $values{districts};
+      my $token     = delete $values{token};
+      my $user      = $self->create( \%values );
+
+      $user->follow( $self->schema->resultset('District')
+          ->search_rs( { id => { -in => $districts } } )->all )
+        if @$districts;
+
       return $user->reset_session;
     },
+    create_admin => sub {
+      my %values = shift->valid_values;
+      delete $values{password_confirmation};
+      my $user = $self->find_or_create( \%values );
+
+      return $user->reset_session;
+    },
+
     login => sub {
       my %values = shift->valid_values;
 
@@ -119,7 +165,8 @@ sub action_specs {
       my $user =
         $self->search_rs( {%values}, { rows => 1 } )->single;
 
-      die { type => 'default', msg_id => 'user_inactive' } unless $user->active;
+      die { type => 'default', msg_id => 'user_inactive' }
+        unless $user->active;
 
       die { type => 'default', msg_id => 'login_invalid' }
         if $user

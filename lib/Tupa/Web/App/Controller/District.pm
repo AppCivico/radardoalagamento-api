@@ -7,7 +7,7 @@ use namespace::autoclean -except => 'Int';
 
 BEGIN { extends 'Tupa::Web::App::Controller'; }
 
-sub base : Chained(/logged_in) PathPart(district) CaptureArgs(0) {
+sub base : Chained(/base) PathPart(district) CaptureArgs(0) {
   my ( $self, $c ) = @_;
   $c->stash->{collection} = $c->model('DB::District');
 }
@@ -36,14 +36,14 @@ sub list : Chained(base) PathPart('') Args(0) GET {
 
 sub follow : Chained(object) Args(0) POST {
   my ( $self, $c ) = @_;
-
+  $c->forward('/try_login');
   $c->user->follow( $c->stash->{object} );
   $self->status_accepted( $c, entity => $c->stash->{object} );
 }
 
 sub unfollow : Chained(object) Args(0) POST {
   my ( $self, $c ) = @_;
-
+  $c->forward('/try_login');
   $c->user->unfollow( $c->stash->{object} );
   $self->status_accepted( $c, entity => $c->stash->{object} );
 }
