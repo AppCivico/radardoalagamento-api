@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
@@ -122,6 +121,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 alerts
+
+Type: has_many
+
+Related object: L<Tupa::Schema::Result::Alert>
+
+=cut
+
+__PACKAGE__->has_many(
+  "alerts",
+  "Tupa::Schema::Result::Alert",
+  { "foreign.reporter_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_districts
 
 Type: has_many
@@ -134,7 +148,7 @@ __PACKAGE__->has_many(
   "user_districts",
   "Tupa::Schema::Result::UserDistrict",
   { "foreign.user_id" => "self.id" },
-  { cascade_copy      => 0, cascade_delete => 0 },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 user_sessions
@@ -149,11 +163,12 @@ __PACKAGE__->has_many(
   "user_sessions",
   "Tupa::Schema::Result::UserSession",
   { "foreign.user_id" => "self.id" },
-  { cascade_copy      => 0, cascade_delete => 0 },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-23 19:05:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7dZNy+M6pMAMKAUZ33CDvA
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-24 10:41:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pIIimox0J1XvIVhCVbkehw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

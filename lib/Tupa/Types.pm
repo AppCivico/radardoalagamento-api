@@ -3,7 +3,7 @@ use utf8;
 use strict;
 use warnings;
 
-use MooseX::Types -declare => [qw(MobileNumber)];
+use MooseX::Types -declare => [qw(MobileNumber AlertLevel)];
 
 use MooseX::Types::Common::String qw(NonEmptySimpleStr NonEmptyStr);
 use MooseX::Types::Moose qw(Str Int ArrayRef ScalarRef Num Maybe);
@@ -20,6 +20,8 @@ subtype MobileNumber, as Str, where {
   return 1 if $_ eq '+5599901010101';
   $is_international_mobile_number->($_);
 };
+
+enum AlertLevel, [ 'attention', 'alert', 'emergency', 'overflow' ];
 
 1;
 

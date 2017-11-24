@@ -73,7 +73,6 @@ db_transaction {
 
       ok( $res->is_success, 'Success' );
       is( $res->code, 200, '200 OK' );
-      warn $res->as_string;
     }
 
     {
@@ -87,7 +86,6 @@ db_transaction {
 
       ok( $res->is_success, 'Success' );
       is( $res->code, 200, '200 OK' );
-      warn $res->as_string;
     }
 
   }

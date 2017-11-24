@@ -89,7 +89,7 @@ sub build_api_error {
     #     channel => '#api-error'
     #   );
     # };
-    warn $@ if $@;
+    warn "Error caught while procesing request: $@" if $@;
   }
 
   $err{type} = $args{type} || 'default';

@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Monkey::Patch::Action qw(patch_package);
 use feature 'say';
+use File::Slurp qw(read_file);
 
 sub import {
 
@@ -72,8 +73,9 @@ if ( $ENV{TRACE} ) {
       my $res = $c->res;
 
       say '------------REQUEST-------------';
+
       say HTTP::Request->new( $req->method, $req->uri, $req->headers,
-        $req->body )->as_string;
+        ref $req->body eq 'File::Temp' ? read_file( $req->body->filename ) : $req->body )->as_string;
       say '------------RESPONSE------------';
       say HTTP::Response->new( $res->code, $res->status, $res->headers,
         $res->body )->as_string;

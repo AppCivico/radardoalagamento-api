@@ -6,56 +6,62 @@ use MyApp::Data::Manager;
 use Data::Diver qw(Dive);
 
 has verifiers => (
-    is         => 'ro',
-    isa        => 'HashRef',
-    lazy_build => 1,
-    builder    => 'verifiers_specs'
+  is         => 'ro',
+  isa        => 'HashRef',
+  lazy_build => 1,
+  builder    => 'verifiers_specs'
 );
 
 has actions => (
-    is         => 'ro',
-    isa        => 'HashRef',
-    lazy_build => 1,
-    builder    => 'action_specs'
+  is         => 'ro',
+  isa        => 'HashRef',
+  lazy_build => 1,
+  builder    => 'action_specs'
 );
 
 requires 'verifiers_specs';
 requires 'action_specs';
 
 sub check {
-    my ( $self, %args ) = @_;
+  my ( $self, %args ) = @_;
 
-    my $path  = delete $args{for};
-    my $input = delete $args{with};
+  my $path  = delete $args{for};
+  my $input = delete $args{with};
 
-    my $verifier = Dive( $self->verifiers, split( /\./, $path ) );
-    my $action   = Dive( $self->actions,   split( /\./, $path ) );
+  my $verifier = Dive( $self->verifiers, split( /\./, $path ) );
+  my $action   = Dive( $self->actions,   split( /\./, $path ) );
 
-    return MyApp::Data::Manager->new(
-        input     => $input,
-        verifiers => { $path => $verifier },
-        actions   => { $path => $action }
-    );
+  return MyApp::Data::Manager->new(
+    input     => $input,
+    verifiers => { $path => $verifier },
+    actions   => { $path => $action }
+  );
 }
 
 sub execute {
-    my ( $self, $c, %args ) = @_;
+  my ( $self, $c, %args ) = @_;
 
-    my $dm     = $self->check(%args);
-    my $result = $dm->apply;
+  my $dm = $self->check(%args);
 
-    unless ( $dm->success ) {
-        my $errors = $dm->errors;
-        $c->stash->{rest} = [
-            map { $c->build_api_error( form_field => $_, msg_id => $_ . '_' . $errors->{$_} ) }
-              keys %$errors
-        ];
+  my $result = $dm->apply;
 
-        $c->res->code(400);
-        $c->detach();
-    }
+  unless ( $dm->success ) {
+    my $errors = $dm->errors;
+    $c->stash->{rest} = [
+      map {
+        $c->build_api_error(
+          form_field => $_,
+          msg_id     => $_ . '_' . $errors->{$_}
+          )
+        }
+        keys %$errors
+    ];
 
-    return wantarray ? ( $dm, $result ) : $result;
+    $c->res->code(400);
+    $c->detach();
+  }
+
+  return wantarray ? ( $dm, $result ) : $result;
 }
 
 1;
