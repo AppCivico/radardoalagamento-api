@@ -12,7 +12,7 @@ requires 'Safe::Isa';
 requires 'Authen::Passphrase::RejectAll';
 requires 'Plack::App::File';
 requires 'IO::Handle';
-requires 'Plack::Middleware::ReverseProxy'
+requires 'Plack::Middleware::ReverseProxy';
 requires 'FindBin::libs';
 requires 'DBIx::Class::ParameterizedJoinHack';
 requires 'DateTimeX::Easy';
