@@ -17,4 +17,6 @@ requires 'FindBin::libs';
 requires 'DBIx::Class::ParameterizedJoinHack';
 requires 'DateTimeX::Easy';
 requires 'Monkey::Patch::Action';
+requires 'List::MoreUtils';
+requires 'HTTP::Tiny';
 

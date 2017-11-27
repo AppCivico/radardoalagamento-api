@@ -63,12 +63,17 @@ sub action_specs {
     oi     => sub { },
     create => sub {
       my %values = shift->valid_values;
-      $self->create(
+
+      my $alert = $self->create(
         {
           reporter => ( delete $values{__user} )->{obj},
           %values
         }
       );
+      eval { $alert->notify };
+      warn $@ if $@;
+      $alert->update( { pushed_to_users => 1 } );
+      $alert;
     },
   };
 }

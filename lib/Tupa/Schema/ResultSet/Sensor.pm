@@ -27,5 +27,6 @@ sub with_geojson {
 sub summary {
   shift->search_rs( undef, { prefetch => 'source' } );
 }
+
 1;
 

@@ -47,6 +47,10 @@ db_transaction {
       ),
       'sensor ok'
     );
+    ok(
+      $session->user->follow($district),
+      'user followed district ' . $district->name
+    );
 
     ok(
       my $sample = $sensor->samples->create(
