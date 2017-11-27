@@ -18,11 +18,14 @@ sub with_geojson {
     undef,
     {
       'columns' => [ grep { !/location/ } $self->result_source->columns ],
-      '+columns' => [ { location => \"ST_AsGeoJSON($me.location)" } ]
+      '+columns' => [ { location => \"ST_AsGeoJSON($me.location)" } ],
+
     }
   );
 }
-sub summary { shift }
 
+sub summary {
+  shift->search_rs( undef, { prefetch => 'source' } );
+}
 1;
 

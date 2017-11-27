@@ -29,7 +29,7 @@ sub list : Chained(base) PathPart('') Args(0) GET {
   $self->status_ok(
     $c,
     entity => {
-      results => [ $c->stash->{collection}->as_hashref->all ]
+      results => [ $c->stash->{collection}->summary->with_geojson->as_hashref->all ]
     }
   );
 }

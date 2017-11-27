@@ -10,15 +10,26 @@ use JSON qw(encode_json);
 use Tupa::Test;
 use DDP;
 
-binmode STDIN,  ":encoding(UTF-8)";
-binmode STDOUT, ":encoding(UTF-8)";
-binmode STDERR, ":encoding(UTF-8)";
+# binmode STDIN,  ":encoding(UTF-8)";
+# binmode STDOUT, ":encoding(UTF-8)";
+# binmode STDERR, ":encoding(UTF-8)";
 
 my $schema = Tupa::Web::App->model('DB')->schema;
 
 db_transaction {
   {
     my $session = __new_session($schema);
+
+    $schema->resultset('Sensor')->create(
+      {
+        "name"        => "900007765",
+        "location"    => "0101000020E61000000F01D1DDBF6347C0E5F7EC6FBF9237C0",
+        "type"        => "0 PLU(mm)",
+        "description" => "Córrego Itaim -  Rua Joaquim L. Veiga",
+        "source"      => $schema->resultset('SensorSource')
+          ->find_or_create( { "name" => "SAISP" } )
+      },
+    );
 
     diag('Listing sensors');
     {
