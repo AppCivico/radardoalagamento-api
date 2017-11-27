@@ -1,129 +1,206 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "Tupã API",
-    "version": "v0.0.1"
-  },
-  "host": "dtupa.eokoe.com",
-  "schemes": [
-    "http",
-    "https"
-  ],
-  "basePath": "/",
-  "paths": {
-    "/signup": {
-      "post": {
-        "summary": "Cadastro de usuário",
-        "description": "Cadastrando novo usário na API",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "201": {
-            "description": "Usuário cadastrado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "api_key": {
-                      "type": "uuid",
-                      "description": "Chave da API"
+    "swagger": "2.0",
+    "info": {
+        "title": "Tupã API",
+        "version": "v0.0.1"
+    },
+    "host": "dtupa.eokoe.com",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "basePath": "/",
+    "paths": {
+        "/signup": {
+            "post": {
+                "summary": "Cadastro de usuário",
+                "description": "Cadastrando novo usário na API",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Usuário cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "api_key": {
+                                            "type": "uuid",
+                                            "description": "Chave da API"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
-                }
-              }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "description": "Nome do usuário",
+                                    "type": "string",
+                                    "example": "Enéas Carneiro",
+                                    "required": true
+                                },
+                                "email": {
+                                    "description": "Email do usuário",
+                                    "type": "email",
+                                    "example": "email@email.com",
+                                    "required": true
+                                },
+                                "password": {
+                                    "description": "Senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "password_confirmation": {
+                                    "description": "Confirmação de senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "phone_number": {
+                                    "description": "Telefone do usuário",
+                                    "type": "string",
+                                    "example": "+5511987651122",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ]
             }
-          }
         },
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "description": "Nome do usuário",
-                  "type": "string",
-                  "example": "Enéas Carneiro",
-                  "required": true
-                },
-                "email": {
-                  "description": "Email do usuário",
-                  "type": "email",
-                  "example": "email@email.com",
-                  "required": true
-                },
-                "password": {
-                  "description": "Senha do usuário",
-                  "type": "password",
-                  "example": "123segredo$$",
-                  "required": true,
-                  "minLength": 8
-                },
-                "password_confirmation": {
-                  "description": "Confirmação de senha do usuário",
-                  "type": "password",
-                  "example": "123segredo$$",
-                  "required": true,
-                  "minLength": 8
-                },
-                "phone_number": {
-                  "description": "Telefone do usuário",
-                  "type": "string",
-                  "example": "+5511987651122",
-                  "required": true
+        "/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Logando na API",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "description": "Email do usuário",
+                                    "type": "email",
+                                    "example": "email@email.com",
+                                    "required": true
+                                },
+                                "password": {
+                                    "description": "Senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "no response description was provided for this operation"
+                    }
                 }
-              }
             }
-          }
-        ]
-      }
-    },
-    "/login": {
-      "post": {
-        "summary": "Login",
-        "description": "Logando na API",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "description": "Email do usuário",
-                  "type": "email",
-                  "example": "email@email.com",
-                  "required": true
-                },
-                "password": {
-                  "description": "Senha do usuário",
-                  "type": "password",
-                  "example": "123segredo$$",
-                  "required": true
+        },
+        "/admin/alert": {
+            "post": {
+                "summary": "Endpoint para criação de alertas",
+                "description": "Depois de criados os alertas, os usuário inscritos nos distritos correspondentes receberão notificações em seus dispositivos",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "description": "Descrição simples do alerta",
+                                    "type": "text",
+                                    "example": "Transbordamento de córrego",
+                                    "required": true
+                                },
+                                "level": {
+                                    "description": "Nível de alerta",
+                                    "type": "string",
+                                    "enum": [
+                                        "attention",
+                                        "alert",
+                                        "emergency",
+                                        "overflow"
+                                    ],
+                                    "required": true,
+                                    "example": "emergency"
+                                },
+                                "sensor_sample_id": {
+                                    "description": "ID correspondente da leitura do sensor",
+                                    "type": "integer",
+                                    "required": true,
+                                    "example": 654321
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Usuário cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "level": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "sensor_sample_id": {
+                                            "type": "integer"
+                                        },
+                                        "reporter_id": {
+                                            "type": "integer",
+                                            "description": "ID do usuário que reportou o alerta"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "ID do alerta gerado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
-          }
         }
-      }
-    },
-    "tags": []
-  }
+    }
 }
