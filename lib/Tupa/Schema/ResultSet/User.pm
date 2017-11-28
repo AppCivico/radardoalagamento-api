@@ -110,7 +110,7 @@ sub verifiers_specs {
       filters => [qw(trim)],
       profile => {
         email => {
-          required   => 0,
+          required   => 1,
           type       => EmailAddress,
           filters    => [qw(lower trim)],
           post_check => sub {
