@@ -92,6 +92,29 @@ db_transaction {
   }
 
   {
+    diag('no password - OK');
+    my ( $res, $ctx ) = ctx_request(
+      POST '/signup',
+      Content_Type => 'application/json',
+      Content      => encode_json(
+        {
+          token => {
+            value => 'no-password-user-token',
+          },
+          user => {
+            name         => 'Foo',
+            email        => 'email.nopassword@email.com',
+            phone_number => '+5511899911121',
+          },
+        }
+      )
+    );
+    ok( $res->is_success, 'success' );
+    is( $res->code, 201, '201 created' );
+
+  }
+
+  {
     diag('create admin');
     my ( $res, $ctx ) = ctx_request(
       POST '/admin/signup',

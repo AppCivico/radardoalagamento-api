@@ -74,7 +74,7 @@ sub verifiers_specs {
       },
       districts => {
         required   => 0,
-        type       => 'ArrayRef[Int]',
+        type       => 'Maybe[ArrayRef[Int]]',
         post_check => sub {
           my $r   = shift;
           my $ids = $r->get_value('districts');
@@ -201,7 +201,6 @@ sub verifiers_specs {
           },
           post_check => sub {
             my $r = shift;
-            warn $r->get_value('password');
             return $r->get_value('password') eq
               $r->get_value('password_confirmation');
           },
@@ -210,6 +209,7 @@ sub verifiers_specs {
     )
   };
 }
+use Authen::Passphrase::AcceptAll;
 
 sub action_specs {
   my $self = shift;
@@ -217,9 +217,10 @@ sub action_specs {
     create => sub {
       my %values = shift->valid_values;
       delete $values{password_confirmation};
-      my $districts = delete $values{districts};
+      my $districts = delete $values{districts} || [];      
       my $token     = delete $values{token};
-      my $user      = $self->create( \%values );
+      $values{password} ||= Authen::Passphrase::AcceptAll->new;
+      my $user = $self->create( \%values );
 
       $user->follow( $self->schema->resultset('District')
           ->search_rs( { id => { -in => $districts } } )->all )
@@ -232,15 +233,16 @@ sub action_specs {
 
       delete $values{password_confirmation};
       my $districts = delete $values{districts} || [];
-      my $token     = delete $values{token};
-      my $user      = $self->create( \%values );
+      my $token = delete $values{token};
+      $values{password} ||= Authen::Passphrase::AcceptAll->new;
+      my $user = $self->create( \%values );
 
       $user->follow( $self->schema->resultset('District')
           ->search_rs( { id => { -in => $districts } } )->all )
         if @$districts;
 
       $user->add_to_roles( { name => 'admin' } );
-      
+
       return $user->reset_session;
     },
 

@@ -16,10 +16,8 @@ sub create : Chained(base) PathPart('') Args(0) POST {
   my $data = $c->req->data || {};
   my $user = $data->{user} || {};
   my $token   = $data->{token}->{value};
-  my $p = { %$user, push_token => $token } ;
-  use DDP;p($p);
   my $session = $c->stash->{collection}->execute( $c,
-    for => create_admin => with => $p);
+    for => create_admin => with => { %$user, push_token => $token } );
 
   $self->status_created(
     $c,
