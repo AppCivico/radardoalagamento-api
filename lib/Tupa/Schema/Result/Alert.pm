@@ -167,9 +167,7 @@ use feature 'state';
 sub affected_users_keys {
   my ($self) = @_;
   $self->sensor_sample->sensor->districts->related_resultset('user_districts')
-    ->related_resultset('user')->related_resultset('user_sessions')
-    ->valid->get_column('api_key')->all
-
+    ->related_resultset('user')->get_column('push_token')->all;
 }
 
 sub notify {
@@ -178,8 +176,9 @@ sub notify {
   return if $ENV{HARNESS_ACTIVE} || ( $0 =~ /forkprove/ );
 
   state $http = HTTP::Tiny->new( timeout => 5 );
-  
-  my @all_keys = $self->affected_users_keys;
+
+  my @all_keys = grep { defined } $self->affected_users_keys;
+
   my $it = natatime 100, @all_keys;
   while ( my @hundred_keys = $it->() ) {
     my $res = $http->post(
