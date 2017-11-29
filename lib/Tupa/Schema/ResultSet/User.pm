@@ -69,8 +69,22 @@ sub verifiers_specs {
         }
       },
       phone_number => {
-        required => 1,
-        type     => MobileNumber,
+        required   => 1,
+        type       => MobileNumber,
+        post_check => sub {
+          my $r = shift;
+          return 0
+            if (
+            $self->find(
+              {
+                active => 1,
+                email  => $r->get_value('phone_number')
+              }
+            )
+            );
+          return 1;
+        }
+
       },
       districts => {
         required   => 0,
@@ -172,8 +186,22 @@ sub verifiers_specs {
           }
         },
         phone_number => {
-          required => 1,
-          type     => MobileNumber,
+          required   => 1,
+          type       => MobileNumber,
+          post_check => sub {
+            my $r = shift;
+            return 0
+              if (
+              $self->find(
+                {
+                  active => 1,
+                  email  => $r->get_value('phone_number')
+                }
+              )
+              );
+            return 1;
+          }
+
         },
         districts => {
           required   => 0,
@@ -217,8 +245,8 @@ sub action_specs {
     create => sub {
       my %values = shift->valid_values;
       delete $values{password_confirmation};
-      my $districts = delete $values{districts} || [];      
-      my $token     = delete $values{token};
+      my $districts = delete $values{districts} || [];
+      my $token = delete $values{token};
       $values{password} ||= Authen::Passphrase::AcceptAll->new;
       my $user = $self->create( \%values );
 
