@@ -242,6 +242,154 @@
             }
         },
         "/admin/alert": {
+            "get": {
+                "tags": [
+                    {
+                        "name": "admin",
+                        "description": "Admin"
+                    },
+                    {
+                        "name": "Alert",
+                        "description": "Alerta"
+                    }
+                ],
+                "summary": "Endpoint para listagem de alertas criados pelo operador",
+                "description": "Listando alertas, junto com sensor de origem e distritos",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de alertas criados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "level": {
+                                                        "type": "string"
+                                                    },
+                                                    "sensor_sample": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "number"
+                                                            },
+                                                            "sensor_id": {
+                                                                "type": "number"
+                                                            },
+                                                            "event_ts": {
+                                                                "type": "string"
+                                                            },
+                                                            "sensor": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "location": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "id": {
+                                                                        "type": "number"
+                                                                    },
+                                                                    "districts": {
+                                                                        "items": {
+                                                                            "type": "object",
+                                                                            "properties": {
+                                                                                "geom": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "number"
+                                                                                },
+                                                                                "zone_id": {
+                                                                                    "type": "number"
+                                                                                },
+                                                                                "slug": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "type": "array"
+                                                                    },
+                                                                    "type": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "description": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "created_at": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "source_id": {
+                                                                        "type": "number"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "description",
+                                                                    "districts",
+                                                                    "source_id",
+                                                                    "type",
+                                                                    "created_at",
+                                                                    "name",
+                                                                    "location",
+                                                                    "id"
+                                                                ]
+                                                            },
+                                                            "value": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "location",
+                                                            "event_ts",
+                                                            "id",
+                                                            "sensor_id",
+                                                            "value",
+                                                            "sensor",
+                                                            "extra"
+                                                        ]
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string"
+                                                    },
+                                                    "sensor_sample_id": {
+                                                        "type": "number"
+                                                    },
+                                                    "pushed_to_users": {
+                                                        "type": "number"
+                                                    },
+                                                    "id": {
+                                                        "type": "number"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "reporter_id": {
+                                                        "type": "number"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "results"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     {

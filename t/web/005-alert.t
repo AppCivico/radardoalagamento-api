@@ -154,6 +154,19 @@ db_transaction {
     is( $res->code, 200, '200 Created' );
   }
 
+  {
+    diag('listing alert');
+    my ( $res, $ctx ) =
+
+      ctx_request(
+      GET '/alert',
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok( $res->is_success, 'Success' );
+    is( $res->code, 200, '200 OK' );
+  }
+
 };
 
 done_testing;
