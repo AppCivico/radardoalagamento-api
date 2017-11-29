@@ -1,477 +1,459 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "title": "Tupã API",
-        "version": "v0.0.2"
-    },
-    "host": "dtupa.eokoe.com",
-    "schemes": [
-        "http",
-        "https"
-    ],
-    "basePath": "/",
-    "paths": {
-        "/signup": {
-            "post": {
-                "tags": [
-                    {
-                        "name": "user",
-                        "description": "Usuário"
+  "swagger": "2.0",
+  "info": {
+    "title": "Tupã API",
+    "version": "v0.0.2"
+  },
+  "host": "dtupa.eokoe.com",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "basePath": "/",
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Cadastro de usuário",
+        "description": "Cadastrando novo usário na API",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "api_key": {
+                      "type": "uuid",
+                      "description": "Chave da API"
                     }
-                ],
-                "summary": "Cadastro de usuário",
-                "description": "Cadastrando novo usário na API",
-                "produces": [
-                    "application/json"
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Usuário cadastrado com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "api_key": {
-                                            "type": "uuid",
-                                            "description": "Chave da API"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "token": {
-                                    "type": "object",
-                                    "properties": {
-                                        "value": {
-                                            "description": "Token de push",
-                                            "type": "string",
-                                            "example": "012ABCC1-5C19-435D-B95A-652BCE6D15E9",
-                                            "required": true
-                                        }
-                                    }
-                                },
-                                "districts": {
-                                    "description": "IDs dos distritos que o usuário deseja seguir",
-                                    "type": "array",
-                                    "required": true,
-                                    "example": [
-                                        67,
-                                        89,
-                                        11
-                                    ]
-                                },
-                                "user": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {
-                                            "description": "Nome do usuário",
-                                            "type": "string",
-                                            "example": "Enéas Carneiro",
-                                            "required": true
-                                        },
-                                        "email": {
-                                            "description": "Email do usuário",
-                                            "type": "email",
-                                            "example": "email@email.com",
-                                            "required": true
-                                        },
-                                        "password": {
-                                            "description": "Senha do usuário",
-                                            "type": "password",
-                                            "example": "123segredo$$",
-                                            "required": true,
-                                            "minLength": 8
-                                        },
-                                        "password_confirmation": {
-                                            "description": "Confirmação de senha do usuário",
-                                            "type": "password",
-                                            "example": "123segredo$$",
-                                            "required": true,
-                                            "minLength": 8
-                                        },
-                                        "phone_number": {
-                                            "description": "Telefone do usuário",
-                                            "type": "string",
-                                            "example": "+5511987651122",
-                                            "required": true
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        "/login": {
-            "post": {
-                "tags": [
-                    {
-                        "name": "user",
-                        "description": "Usuário"
-                    }
-                ],
-                "summary": "Login",
-                "description": "Logando na API",
-                "produces": [
-                    "application/json"
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "description": "Email do usuário",
-                                    "type": "email",
-                                    "example": "email@email.com",
-                                    "required": true
-                                },
-                                "password": {
-                                    "description": "Senha do usuário",
-                                    "type": "password",
-                                    "example": "123segredo$$",
-                                    "required": true
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "default": {
-                        "description": "no response description was provided for this operation"
-                    }
+                  }
                 }
+              }
             }
+          }
         },
-        "/admin/signup": {
-            "post": {
-                "tags": [
-                    {
-                        "name": "admin",
-                        "description": "Admin"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "description": "Token de push",
+                      "type": "string",
+                      "example": "012ABCC1-5C19-435D-B95A-652BCE6D15E9",
+                      "required": true
                     }
-                ],
-                "summary": "Cadastro de usuário administrador",
-                "description": "Cadastrando usuário admin na API",
-                "produces": [
-                    "application/json"
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Usuário cadastrado com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "api_key": {
-                                            "type": "uuid",
-                                            "description": "Chave da API"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                  }
                 },
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "description": "Nome do usuário",
-                                    "type": "string",
-                                    "example": "Enéas Carneiro",
-                                    "required": true
-                                },
-                                "email": {
-                                    "description": "Email do usuário",
-                                    "type": "email",
-                                    "example": "email@email.com",
-                                    "required": true
-                                },
-                                "password": {
-                                    "description": "Senha do usuário",
-                                    "type": "password",
-                                    "example": "123segredo$$",
-                                    "required": true,
-                                    "minLength": 8
-                                },
-                                "password_confirmation": {
-                                    "description": "Confirmação de senha do usuário",
-                                    "type": "password",
-                                    "example": "123segredo$$",
-                                    "required": true,
-                                    "minLength": 8
-                                },
-                                "phone_number": {
-                                    "description": "Telefone do usuário",
-                                    "type": "string",
-                                    "example": "+5511987651122",
-                                    "required": true
-                                }
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        "/admin/alert": {
-            "get": {
-                "tags": [
-                    {
-                        "name": "admin",
-                        "description": "Admin"
+                "districts": {
+                  "description": "IDs dos distritos que o usuário deseja seguir",
+                  "type": "array",
+                  "required": true,
+                  "example": [
+                    67,
+                    89,
+                    11
+                  ]
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "Nome do usuário",
+                      "type": "string",
+                      "example": "Enéas Carneiro",
+                      "required": true
                     },
-                    {
-                        "name": "Alert",
-                        "description": "Alerta"
+                    "email": {
+                      "description": "Email do usuário",
+                      "type": "email",
+                      "example": "email@email.com",
+                      "required": true
+                    },
+                    "password": {
+                      "description": "Senha do usuário",
+                      "type": "password",
+                      "example": "123segredo$$",
+                      "required": true,
+                      "minLength": 8
+                    },
+                    "password_confirmation": {
+                      "description": "Confirmação de senha do usuário",
+                      "type": "password",
+                      "example": "123segredo$$",
+                      "required": true,
+                      "minLength": 8
+                    },
+                    "phone_number": {
+                      "description": "Telefone do usuário",
+                      "type": "string",
+                      "example": "+5511987651122",
+                      "required": true
                     }
-                ],
-                "summary": "Endpoint para listagem de alertas criados pelo operador",
-                "description": "Listando alertas, junto com sensor de origem e distritos",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de alertas criados",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "results": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "level": {
-                                                        "type": "string"
-                                                    },
-                                                    "sensor_sample": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "number"
-                                                            },
-                                                            "sensor_id": {
-                                                                "type": "number"
-                                                            },
-                                                            "event_ts": {
-                                                                "type": "string"
-                                                            },
-                                                            "sensor": {
-                                                                "type": "object",
-                                                                "properties": {
-                                                                    "name": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "location": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "id": {
-                                                                        "type": "number"
-                                                                    },
-                                                                    "districts": {
-                                                                        "items": {
-                                                                            "type": "object",
-                                                                            "properties": {
-                                                                                "geom": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "id": {
-                                                                                    "type": "number"
-                                                                                },
-                                                                                "zone_id": {
-                                                                                    "type": "number"
-                                                                                },
-                                                                                "slug": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "name": {
-                                                                                    "type": "string"
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        "type": "array"
-                                                                    },
-                                                                    "type": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "description": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "created_at": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "source_id": {
-                                                                        "type": "number"
-                                                                    }
-                                                                },
-                                                                "required": [
-                                                                    "description",
-                                                                    "districts",
-                                                                    "source_id",
-                                                                    "type",
-                                                                    "created_at",
-                                                                    "name",
-                                                                    "location",
-                                                                    "id"
-                                                                ]
-                                                            },
-                                                            "value": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "location",
-                                                            "event_ts",
-                                                            "id",
-                                                            "sensor_id",
-                                                            "value",
-                                                            "sensor",
-                                                            "extra"
-                                                        ]
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string"
-                                                    },
-                                                    "sensor_sample_id": {
-                                                        "type": "number"
-                                                    },
-                                                    "pushed_to_users": {
-                                                        "type": "number"
-                                                    },
-                                                    "id": {
-                                                        "type": "number"
-                                                    },
-                                                    "description": {
-                                                        "type": "string"
-                                                    },
-                                                    "reporter_id": {
-                                                        "type": "number"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "required": [
-                                        "results"
-                                    ]
-                                }
-                            }
-                        }
-                    }
+                  }
                 }
-            },
-            "post": {
-                "tags": [
-                    {
-                        "name": "admin",
-                        "description": "Admin"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Login",
+        "description": "Logando na API",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "Email do usuário",
+                  "type": "email",
+                  "example": "email@email.com",
+                  "required": true
+                },
+                "password": {
+                  "description": "Senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
+          }
+        }
+      }
+    },
+    "/admin/signup": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Cadastro de usuário administrador",
+        "description": "Cadastrando usuário admin na API",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "api_key": {
+                      "type": "uuid",
+                      "description": "Chave da API"
                     }
-                ],
-                "summary": "Endpoint para criação de alertas",
-                "description": "Depois de criados os alertas, os usuário inscritos nos distritos correspondentes receberão notificações em seus dispositivos",
-                "produces": [
-                    "application/json"
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Nome do usuário",
+                  "type": "string",
+                  "example": "Enéas Carneiro",
+                  "required": true
+                },
+                "email": {
+                  "description": "Email do usuário",
+                  "type": "email",
+                  "example": "email@email.com",
+                  "required": true
+                },
+                "password": {
+                  "description": "Senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true,
+                  "minLength": 8
+                },
+                "password_confirmation": {
+                  "description": "Confirmação de senha do usuário",
+                  "type": "password",
+                  "example": "123segredo$$",
+                  "required": true,
+                  "minLength": 8
+                },
+                "phone_number": {
+                  "description": "Telefone do usuário",
+                  "type": "string",
+                  "example": "+5511987651122",
+                  "required": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/admin/alert": {
+      "get": {
+        "tags": [
+          "admin",
+          "alert"
+        ],
+        "summary": "Endpoint para listagem de alertas criados pelo operador",
+        "description": "Listando alertas, junto com sensor de origem e distritos",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de alertas criados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "level": {
+                            "type": "string"
+                          },
+                          "sensor_sample": {
                             "type": "object",
                             "properties": {
-                                "description": {
-                                    "description": "Descrição simples do alerta",
-                                    "type": "text",
-                                    "example": "Transbordamento de córrego",
-                                    "required": true
-                                },
-                                "level": {
-                                    "description": "Nível de alerta",
-                                    "type": "string",
-                                    "enum": [
-                                        "attention",
-                                        "alert",
-                                        "emergency",
-                                        "overflow"
-                                    ],
-                                    "required": true,
-                                    "example": "emergency"
-                                },
-                                "sensor_sample_id": {
-                                    "description": "ID correspondente da leitura do sensor",
-                                    "type": "integer",
-                                    "required": true,
-                                    "example": 654321
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Usuário cadastrado com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "level": {
-                                            "type": "string"
-                                        },
-                                        "description": {
-                                            "type": "string"
-                                        },
-                                        "sensor_sample_id": {
-                                            "type": "integer"
-                                        },
-                                        "reporter_id": {
-                                            "type": "integer",
-                                            "description": "ID do usuário que reportou o alerta"
+                              "id": {
+                                "type": "number"
+                              },
+                              "sensor_id": {
+                                "type": "number"
+                              },
+                              "event_ts": {
+                                "type": "string"
+                              },
+                              "sensor": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "location": {
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "type": "number"
+                                  },
+                                  "districts": {
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "geom": {
+                                          "type": "string"
                                         },
                                         "id": {
-                                            "type": "integer",
-                                            "description": "ID do alerta gerado"
+                                          "type": "number"
+                                        },
+                                        "zone_id": {
+                                          "type": "number"
+                                        },
+                                        "slug": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
                                         }
-                                    }
-                                }
-                            }
-                        }
+                                      }
+                                    },
+                                    "type": "array"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "created_at": {
+                                    "type": "string"
+                                  },
+                                  "source_id": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "description",
+                                  "districts",
+                                  "source_id",
+                                  "type",
+                                  "created_at",
+                                  "name",
+                                  "location",
+                                  "id"
+                                ]
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "location",
+                              "event_ts",
+                              "id",
+                              "sensor_id",
+                              "value",
+                              "sensor",
+                              "extra"
+                            ]
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "sensor_sample_id": {
+                            "type": "number"
+                          },
+                          "pushed_to_users": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "number"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "reporter_id": {
+                            "type": "number"
+                          }
+                        },
+                        "type": "object"
+                      }
                     }
+                  },
+                  "required": [
+                    "results"
+                  ]
                 }
+              }
             }
+          }
         }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Endpoint para criação de alertas",
+        "description": "Depois de criados os alertas, os usuário inscritos nos distritos correspondentes receberão notificações em seus dispositivos",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição simples do alerta",
+                  "type": "text",
+                  "example": "Transbordamento de córrego",
+                  "required": true
+                },
+                "level": {
+                  "description": "Nível de alerta",
+                  "type": "string",
+                  "enum": [
+                    "attention",
+                    "alert",
+                    "emergency",
+                    "overflow"
+                  ],
+                  "required": true,
+                  "example": "emergency"
+                },
+                "sensor_sample_id": {
+                  "description": "ID correspondente da leitura do sensor",
+                  "type": "integer",
+                  "required": true,
+                  "example": 654321
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "level": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "sensor_sample_id": {
+                      "type": "integer"
+                    },
+                    "reporter_id": {
+                      "type": "integer",
+                      "description": "ID do usuário que reportou o alerta"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "description": "ID do alerta gerado"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
