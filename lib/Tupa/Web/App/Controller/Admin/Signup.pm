@@ -13,11 +13,8 @@ sub base : Chained(/) PathPart(admin/signup) CaptureArgs(0) {
 sub create : Chained(base) PathPart('') Args(0) POST {
   my ( $self, $c ) = @_;
 
-  my $data = $c->req->data || {};
-  my $user = $data->{user} || {};
-  my $token   = $data->{token}->{value};
-  my $session = $c->stash->{collection}->execute( $c,
-    for => create_admin => with => { %$user, push_token => $token } );
+  my $session = $c->stash->{collection}
+    ->execute( $c, for => create_admin => with => $c->req->data || {} );
 
   $self->status_created(
     $c,

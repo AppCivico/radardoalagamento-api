@@ -121,16 +121,11 @@ db_transaction {
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          token => {
-            value => 'admin_token__abcdefg1234',
-          },
-          user => {
-            name                  => 'Foo',
-            email                 => 'admin@email.com',
-            password              => 'me_admin123',
-            password_confirmation => 'me_admin123',
-            phone_number          => '+5512899911111',
-          },
+          name                  => 'Foo',
+          email                 => 'admin@email.com',
+          password              => 'me_admin123',
+          password_confirmation => 'me_admin123',
+          phone_number          => '+5512899911111',
         }
       )
     );

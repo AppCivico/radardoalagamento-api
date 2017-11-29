@@ -15,9 +15,9 @@ builder {
   enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
   "Plack::Middleware::ReverseProxy";
 
-  enable q{CrossOrigin},
-    origins => q{*},
-    methods => [qw(GET POST OPTIONS PUT HEAD DELETE PATCH)];
+  # enable q{CrossOrigin},
+  #   origins => q{*},
+  #   methods => [qw(GET POST OPTIONS PUT HEAD DELETE PATCH)];
 
   #  enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
 
