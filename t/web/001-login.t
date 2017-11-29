@@ -25,7 +25,7 @@ db_transaction {
       POST '/login',
       Content_Type => 'application/json',
       Content      => encode_json( {} )
-    );
+   );
     ok( !$res->is_success, 'error' );
     is( $res->code, 400, '400 error' );
   }

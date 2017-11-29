@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
@@ -137,10 +138,9 @@ Related object: L<Tupa::Schema::Result::Alert>
 =cut
 
 __PACKAGE__->has_many(
-  "alerts",
-  "Tupa::Schema::Result::Alert",
+  "alerts", "Tupa::Schema::Result::Alert",
   { "foreign.reporter_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  { cascade_copy          => 0, cascade_delete => 0 },
 );
 
 =head2 user_districts
@@ -155,7 +155,22 @@ __PACKAGE__->has_many(
   "user_districts",
   "Tupa::Schema::Result::UserDistrict",
   { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  { cascade_copy      => 0, cascade_delete => 0 },
+);
+
+=head2 user_roles
+
+Type: has_many
+
+Related object: L<Tupa::Schema::Result::UserRole>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_roles",
+  "Tupa::Schema::Result::UserRole",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy      => 0, cascade_delete => 0 },
 );
 
 =head2 user_sessions
@@ -170,14 +185,15 @@ __PACKAGE__->has_many(
   "user_sessions",
   "Tupa::Schema::Result::UserSession",
   { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  { cascade_copy      => 0, cascade_delete => 0 },
 );
 
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-24 18:36:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rgsgvxvig62ZvkK3gojkfQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-29 10:19:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vj8e5CjhdC4N1uWY8IxwyA
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+__PACKAGE__->many_to_many( roles => user_roles => 'role' );
 
 __PACKAGE__->remove_column('password');
 

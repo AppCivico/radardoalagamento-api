@@ -129,8 +129,85 @@ sub verifiers_specs {
         },
       }
     ),
-    create       => $create,
-    create_admin => $create,
+    create => $create,
+
+    create_admin => Data::Verifier->new(
+      filters => [qw(trim)],
+      profile => {
+        push_token => {
+          required   => 0,
+          type       => 'Str',
+          post_check => sub {
+            my $r = shift;
+            !$self->search_rs(
+              {
+                push_token => $r->get_value('push_token'),
+                active     => 1,
+              },
+              { rows => 1 }
+            )->count;
+
+          }
+        },
+        name => {
+          required => 1,
+          type     => 'Str',
+        },
+        email => {
+          required   => 0,
+          type       => EmailAddress,
+          filters    => [qw(lower trim flatten)],
+          post_check => sub {
+            my $r = shift;
+            return 0
+              if (
+              $self->find(
+                {
+                  active => 1,
+                  email  => $r->get_value('email')
+                }
+              )
+              );
+            return 1;
+          }
+        },
+        phone_number => {
+          required => 1,
+          type     => MobileNumber,
+        },
+        districts => {
+          required   => 0,
+          type       => 'Maybe[ArrayRef[Int]]',
+          post_check => sub {
+            my $r   = shift;
+            my $ids = $r->get_value('districts');
+            return 1 unless scalar @$ids;
+            return $self->schema->resultset('District')
+              ->search_rs( { id => { -in => $ids } } )->count == scalar @$ids;
+
+          }
+        },
+
+        password => {
+          required   => 1,
+          type       => 'Str',
+          min_length => 8,
+          dependent  => {
+            password_confirmation => {
+              required   => 1,
+              min_length => 8,
+              type       => 'Str',
+            },
+          },
+          post_check => sub {
+            my $r = shift;
+            warn $r->get_value('password');
+            return $r->get_value('password') eq
+              $r->get_value('password_confirmation');
+          },
+        }
+      }
+    )
   };
 }
 
@@ -152,9 +229,18 @@ sub action_specs {
     },
     create_admin => sub {
       my %values = shift->valid_values;
-      delete $values{password_confirmation};
-      my $user = $self->find_or_create( \%values );
 
+      delete $values{password_confirmation};
+      my $districts = delete $values{districts} || [];
+      my $token     = delete $values{token};
+      my $user      = $self->create( \%values );
+
+      $user->follow( $self->schema->resultset('District')
+          ->search_rs( { id => { -in => $districts } } )->all )
+        if @$districts;
+
+      $user->add_to_roles( { name => 'admin' } );
+      
       return $user->reset_session;
     },
 

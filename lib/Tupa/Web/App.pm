@@ -28,6 +28,26 @@ __PACKAGE__->config(
   enable_catalyst_header => 0,
   utf8                   => 1,
   encoding               => 'UTF-8',
+  plugin                 => {
+    Authentication => {
+      default_realm => 'default',
+      realms        => {
+        default => {
+          credential => {
+            class          => 'Password',
+            password_field => 'password',
+            password_type  => 'self_check'
+          },
+          store => {
+            class         => 'DBIx::Class',
+            user_model    => 'DB::User',
+            role_relation => 'roles',
+            role_field    => 'name'
+          }
+        }
+      }
+    }
+  }
 );
 
 # after setup_finalize => sub {

@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::Sensor;
 
 # Created by DBIx::Class::Schema::Loader
@@ -133,7 +132,7 @@ __PACKAGE__->set_primary_key("id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint( "sensor_name_key", ["name"] );
+__PACKAGE__->add_unique_constraint("sensor_name_key", ["name"]);
 
 =head1 RELATIONS
 
@@ -149,7 +148,7 @@ __PACKAGE__->has_many(
   "sensor_samples",
   "Tupa::Schema::Result::SensorSample",
   { "foreign.sensor_id" => "self.id" },
-  { cascade_copy        => 0, cascade_delete => 0 },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 source
@@ -163,12 +162,13 @@ Related object: L<Tupa::Schema::Result::SensorSource>
 __PACKAGE__->belongs_to(
   "source",
   "Tupa::Schema::Result::SensorSource",
-  { id            => "source_id" },
+  { id => "source_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-23 19:00:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nFDo2zv4AzMeB/HNgfS/9Q
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-29 10:19:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgi02NtKc1NWysEYWlYMQg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

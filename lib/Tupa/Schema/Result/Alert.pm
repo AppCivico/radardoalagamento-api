@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::Alert;
 
 # Created by DBIx::Class::Schema::Loader
@@ -133,8 +132,9 @@ Related object: L<Tupa::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-  "reporter", "Tupa::Schema::Result::User",
-  { id            => "reporter_id" },
+  "reporter",
+  "Tupa::Schema::Result::User",
+  { id => "reporter_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
@@ -149,12 +149,13 @@ Related object: L<Tupa::Schema::Result::SensorSample>
 __PACKAGE__->belongs_to(
   "sensor_sample",
   "Tupa::Schema::Result::SensorSample",
-  { id            => "sensor_sample_id" },
+  { id => "sensor_sample_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-24 10:41:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lBjdSKlTRk8PQZASaAMIkg
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-29 10:19:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AVKovBmUnDg79S5cl2+YJw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

@@ -94,6 +94,13 @@ sub error_404 : Private {
   $c->response->status(404);
   $c->res->body('');
 }
+
+sub error_403 : Private {
+  my ( $self, $c ) = @_;
+  $c->response->status(403);
+  $c->res->body('');
+}
+
 sub end : ActionClass('RenderView') { }
 
 __PACKAGE__->meta->make_immutable;

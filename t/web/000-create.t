@@ -91,6 +91,32 @@ db_transaction {
 
   }
 
+  {
+    diag('create admin');
+    my ( $res, $ctx ) = ctx_request(
+      POST '/admin/signup',
+      Content_Type => 'application/json',
+      Content      => encode_json(
+        {
+          token => {
+            value => 'admin_token__abcdefg1234',
+          },
+          user => {
+            name                  => 'Foo',
+            email                 => 'admin@email.com',
+            password              => 'me_admin123',
+            password_confirmation => 'me_admin123',
+            phone_number          => '+5512899911111',
+          },
+        }
+      )
+    );
+
+    ok( $res->is_success, 'success' );
+    is( $res->code, 201, '201 created' );
+
+  }
+
 };
 
 done_testing;

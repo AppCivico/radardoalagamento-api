@@ -60,6 +60,29 @@ db_transaction {
     );
 
     {
+      diag('create alert - unauthorized');
+      my ( $res, $ctx ) =
+
+        ctx_request(
+        POST '/admin/alert',
+        Content => encode_json(
+          {
+            sensor_sample_id => $sample->id,
+            description      => 'foobar',
+            level            => 'overflow'
+          }
+        ),
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+        );
+      ok( !$res->is_success, 'Error' );
+      is( $res->code, 403, 'Unauthorized' );
+    }
+
+    ok( $session->user->add_to_roles( { name => 'admin' } ),
+      'user is now an admin' );
+
+    {
       diag('create alert');
       my ( $res, $ctx ) =
 
@@ -119,6 +142,7 @@ db_transaction {
       is( $res->code, 400, '400 Bad Request' );
     }
 
+## Please see file perltidy.ERR
   }
 };
 
