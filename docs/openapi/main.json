@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "Tupã API",
-        "version": "v0.0.1"
+        "version": "v0.0.2"
     },
     "host": "dtupa.eokoe.com",
     "schemes": [
@@ -15,6 +15,145 @@
             "post": {
                 "summary": "Cadastro de usuário",
                 "description": "Cadastrando novo usário na API",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Usuário cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "api_key": {
+                                            "type": "uuid",
+                                            "description": "Chave da API"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "object",
+                                    "properties": {
+                                        "value": {
+                                            "description": "Token de push",
+                                            "type": "string",
+                                            "example": "012ABCC1-5C19-435D-B95A-652BCE6D15E9",
+                                            "required": true
+                                        }
+                                    }
+                                },
+                                "districts": {
+                                    "description": "IDs dos distritos que o usuário deseja seguir",
+                                    "type": "array",
+                                    "required": true,
+                                    "example": [
+                                        67,
+                                        89,
+                                        11
+                                    ]
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "description": "Nome do usuário",
+                                            "type": "string",
+                                            "example": "Enéas Carneiro",
+                                            "required": true
+                                        },
+                                        "email": {
+                                            "description": "Email do usuário",
+                                            "type": "email",
+                                            "example": "email@email.com",
+                                            "required": true
+                                        },
+                                        "password": {
+                                            "description": "Senha do usuário",
+                                            "type": "password",
+                                            "example": "123segredo$$",
+                                            "required": true,
+                                            "minLength": 8
+                                        },
+                                        "password_confirmation": {
+                                            "description": "Confirmação de senha do usuário",
+                                            "type": "password",
+                                            "example": "123segredo$$",
+                                            "required": true,
+                                            "minLength": 8
+                                        },
+                                        "phone_number": {
+                                            "description": "Telefone do usuário",
+                                            "type": "string",
+                                            "example": "+5511987651122",
+                                            "required": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Logando na API",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "description": "Email do usuário",
+                                    "type": "email",
+                                    "example": "email@email.com",
+                                    "required": true
+                                },
+                                "password": {
+                                    "description": "Senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "no response description was provided for this operation"
+                    }
+                }
+            }
+        },
+        "/admin/signup": {
+            "post": {
+                "summary": "Cadastro de usuário administrador",
+                "description": "Cadastrando usuário admin na API",
                 "produces": [
                     "application/json"
                 ],
@@ -82,46 +221,6 @@
                         }
                     }
                 ]
-            }
-        },
-        "/login": {
-            "post": {
-                "summary": "Login",
-                "description": "Logando na API",
-                "produces": [
-                    "application/json"
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "description": "Email do usuário",
-                                    "type": "email",
-                                    "example": "email@email.com",
-                                    "required": true
-                                },
-                                "password": {
-                                    "description": "Senha do usuário",
-                                    "type": "password",
-                                    "example": "123segredo$$",
-                                    "required": true
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "default": {
-                        "description": "no response description was provided for this operation"
-                    }
-                }
             }
         },
         "/admin/alert": {
