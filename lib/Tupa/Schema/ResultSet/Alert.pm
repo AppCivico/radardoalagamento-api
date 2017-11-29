@@ -79,13 +79,16 @@ sub action_specs {
 }
 
 sub summary {
+
   my ($self) = @_;
   my $me = $self->current_source_alias;
   $self->search_rs(
     undef,
     {
-      prefetch => { sensor_sample => 'sensor' },
-      order_by => { -desc         => "$me.created_at" }
+      prefetch => {
+        sensor_sample => { 'sensor' => 'districts' }
+      },
+      order_by => { -desc => "$me.created_at" }
     }
   );
 }
