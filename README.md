@@ -4,6 +4,6 @@ API REST do "Radar do Alagamento". Um projeto da W3C em parceria com a Prefeitur
 
 
 ## Documentação
-* [OpenApi](http://rebilly.github.io/ReDoc/?url=https://dtupa.eokoe.com/openapi?v=1512050853) - Documentação on formato OpenApi 2.0 
+* [OpenApi](http://rebilly.github.io/ReDoc/?url=https://raw.githubusercontent.com/AppCivico/radardoalagamento-api/develop/docs/openapi/main.json) - Documentação on formato OpenApi 2.0 
 
 
