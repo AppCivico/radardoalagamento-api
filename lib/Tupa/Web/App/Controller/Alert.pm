@@ -21,6 +21,14 @@ sub list : Chained(base) PathPart('') Args(0) GET {
       { results => [ $c->stash->{collection}->summary->as_hashref->all ] } );
 }
 
+sub all : Chained(base) Args(0) GET {
+  my ( $self, $c ) = @_;
+
+  $self->status_ok( $c,
+    entity =>
+      { results => [ $c->model('DB::Alert')->summary->as_hashref->all ] } );
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
