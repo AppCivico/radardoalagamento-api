@@ -169,295 +169,126 @@
                     "200": {
                         "description": "Lista de alertas",
                         "schema": {
-                            "definitions": {
-                            },
-                            "$schema": "http://json-schema.org/draft-06/schema#",
-                            "$id": "http://example.com/example.json",
                             "type": "object",
                             "properties": {
                                 "results": {
-                                    "$id": "/properties/results",
                                     "type": "array",
                                     "items": {
-                                        "$id": "/properties/results/items",
-                                        "type": "object",
                                         "properties": {
+                                            "sensor_sample_id": {
+                                                "type": "number"
+                                            },
+                                            "pushed_to_users": {
+                                                "type": "number"
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "number"
+                                            },
+                                            "created_at": {
+                                                "type": "string"
+                                            },
+                                            "reporter_id": {
+                                                "type": "number"
+                                            },
                                             "sensor_sample": {
-                                                "$id": "/properties/results/items/properties/sensor_sample",
+                                                "required": [
+                                                    "event_ts",
+                                                    "sensor_id",
+                                                    "extra",
+                                                    "value",
+                                                    "id",
+                                                    "sensor",
+                                                    "location"
+                                                ],
                                                 "type": "object",
                                                 "properties": {
-                                                    "event_ts": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/event_ts",
-                                                        "type": "string",
-                                                        "title": "The Event_ts Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": "",
-                                                        "examples": [
-                                                            "2017-11-30 14:01:19"
-                                                        ]
-                                                    },
-                                                    "sensor_id": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/sensor_id",
-                                                        "type": "integer",
-                                                        "title": "The Sensor_id Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": 0,
-                                                        "examples": [
-                                                            35
-                                                        ]
-                                                    },
-                                                    "extra": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/extra",
-                                                        "type": "null",
-                                                        "title": "The Extra Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": null,
-                                                        "examples": [
-                                                            null
-                                                        ]
-                                                    },
                                                     "value": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/value",
-                                                        "type": "string",
-                                                        "title": "The Value Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": "",
-                                                        "examples": [
-                                                            "1212"
-                                                        ]
-                                                    },
-                                                    "id": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/id",
-                                                        "type": "integer",
-                                                        "title": "The Id Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": 0,
-                                                        "examples": [
-                                                            23
-                                                        ]
+                                                        "type": "string"
                                                     },
                                                     "sensor": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/sensor",
                                                         "type": "object",
+                                                        "required": [
+                                                            "description",
+                                                            "source_id",
+                                                            "created_at",
+                                                            "location",
+                                                            "districts",
+                                                            "id",
+                                                            "name",
+                                                            "type"
+                                                        ],
                                                         "properties": {
-                                                            "description": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/description",
-                                                                "type": "string",
-                                                                "title": "The Description Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": "",
-                                                                "examples": [
-                                                                    "excepturi reprehenderit placeat voluptatem"
-                                                                ]
+                                                            "id": {
+                                                                "type": "number"
                                                             },
                                                             "source_id": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/source_id",
-                                                                "type": "integer",
-                                                                "title": "The Source_id Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": 0,
-                                                                "examples": [
-                                                                    39
-                                                                ]
+                                                                "type": "number"
                                                             },
-                                                            "created_at": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/created_at",
-                                                                "type": "string",
-                                                                "title": "The Created_at Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": "",
-                                                                "examples": [
-                                                                    "2017-11-30 14:01:18.912308"
-                                                                ]
-                                                            },
-                                                            "location": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/location",
-                                                                "type": "string",
-                                                                "title": "The Location Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": "",
-                                                                "examples": [
-                                                                    "0101000020E6100000D03AB22CFD5447C0BA0F406A139137C0"
-                                                                ]
+                                                            "description": {
+                                                                "type": "string"
                                                             },
                                                             "districts": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts",
                                                                 "type": "array",
                                                                 "items": {
-                                                                    "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items",
                                                                     "type": "object",
                                                                     "properties": {
-                                                                        "id": {
-                                                                            "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items/properties/id",
-                                                                            "type": "integer",
-                                                                            "title": "The Id Schema.",
-                                                                            "description": "An explanation about the purpose of this instance.",
-                                                                            "default": 0,
-                                                                            "examples": [
-                                                                                17
-                                                                            ]
+                                                                        "zone_id": {
+                                                                            "type": "number"
                                                                         },
-                                                                        "geom": {
-                                                                            "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items/properties/geom",
-                                                                            "type": "string",
-                                                                            "title": "The Geom Schema.",
-                                                                            "description": "An explanation about the purpose of this instance.",
-                                                                            "default": "",
-                                                                            "examples": [
-                                                                                "0103000020E6100000010000002B0000009A249694BB5547C06552431B809537C08B355CE49E5447C00261A758359437C0B1A206D3305447C07EC51A2E729337C09F7422C1545347C045B9347EE19137C06553AEF02E5347C0813D26529A9137C002F04FA9125347C0240C03965C9137C0A0C37C79015447C0C5591135D18F37C099107349D55447C07880272D5C8E37C0836DC493DD5447C0732B84D5588E37C060394206F25447C01CEA77616B8E37C003EACDA8F95447C039B874CC798E37C02F36AD14025547C0F20BAF24798E37C0272EC72B105547C059BE2EC37F8E37C04E0E9F74225547C04FAC53E57B8E37C06B10E6762F5547C06C4084B8728E37C0F6984869365547C043AD69DE718E37C0F790F0BDBF5547C074435376FA8D37C0952A51F6965647C06FD39FFD488D37C04F3DD2E0B65647C0315D88D51F8D37C0E54526E0D75647C0E8305F5E808D37C05BB05417F05647C04F57772CB68D37C078616BB6F25647C0F06B2409C28D37C0412C9B39245747C0FE9DEDD11B8E37C0971B0C75585747C0F2D1E28C618E37C08E5A61FA5E5747C0D9AF3BDD798E37C04C6BD3D85E5747C043041C42958E37C04ED367075C5747C0F44F70B1A28E37C05001309E415747C0F7EAE3A1EF8E37C0EC6987BF265747C05473B9C1508F37C075CC79C6BE5647C08FE21C75749037C028D192C7D35647C060CC96AC8A9037C097E315889E5647C051137D3ECA9037C0D86322A5D95647C0058BC3995F9137C01B81785DBF5647C01D5BCF108E9137C0910BCEE0EF5547C0C58EC6A17E9337C07BFA08FCE15547C0B1C1C2499A9337C0CA501553E95547C0056D72F8A49337C09D685721E55547C09012BBB6B79337C0DD239BABE65547C099D9E731CA9337C0A29A92ACC35547C0263ACB2C429537C0484F9143C45547C057941282559537C0A30227DBC05547C0384D9F1D709537C09A249694BB5547C06552431B809537C0"
-                                                                            ]
+                                                                        "id": {
+                                                                            "type": "number"
                                                                         },
                                                                         "slug": {
-                                                                            "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items/properties/slug",
-                                                                            "type": "string",
-                                                                            "title": "The Slug Schema.",
-                                                                            "description": "An explanation about the purpose of this instance.",
-                                                                            "default": "",
-                                                                            "examples": [
-                                                                                "jardim-paulista"
-                                                                            ]
+                                                                            "type": "string"
                                                                         },
                                                                         "name": {
-                                                                            "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items/properties/name",
-                                                                            "type": "string",
-                                                                            "title": "The Name Schema.",
-                                                                            "description": "An explanation about the purpose of this instance.",
-                                                                            "default": "",
-                                                                            "examples": [
-                                                                                "Jardim Paulista"
-                                                                            ]
+                                                                            "type": "string"
                                                                         },
-                                                                        "zone_id": {
-                                                                            "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/districts/items/properties/zone_id",
-                                                                            "type": "integer",
-                                                                            "title": "The Zone_id Schema.",
-                                                                            "description": "An explanation about the purpose of this instance.",
-                                                                            "default": 0,
-                                                                            "examples": [
-                                                                                4
-                                                                            ]
+                                                                        "geom": {
+                                                                            "type": "string"
                                                                         }
                                                                     }
                                                                 }
                                                             },
-                                                            "id": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/id",
-                                                                "type": "integer",
-                                                                "title": "The Id Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": 0,
-                                                                "examples": [
-                                                                    35
-                                                                ]
-                                                            },
                                                             "name": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/name",
-                                                                "type": "string",
-                                                                "title": "The Name Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": "",
-                                                                "examples": [
-                                                                    "incidunt molestias facilis porro"
-                                                                ]
+                                                                "type": "string"
                                                             },
                                                             "type": {
-                                                                "$id": "/properties/results/items/properties/sensor_sample/properties/sensor/properties/type",
-                                                                "type": "string",
-                                                                "title": "The Type Schema.",
-                                                                "description": "An explanation about the purpose of this instance.",
-                                                                "default": "",
-                                                                "examples": [
-                                                                    "assumenda saepe minima"
-                                                                ]
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string"
+                                                            },
+                                                            "location": {
+                                                                "type": "string"
                                                             }
                                                         }
                                                     },
-                                                    "location": {
-                                                        "$id": "/properties/results/items/properties/sensor_sample/properties/location",
-                                                        "type": "null",
-                                                        "title": "The Location Schema.",
-                                                        "description": "An explanation about the purpose of this instance.",
-                                                        "default": null,
-                                                        "examples": [
-                                                            null
-                                                        ]
+                                                    "event_ts": {
+                                                        "type": "string"
+                                                    },
+                                                    "id": {
+                                                        "type": "number"
+                                                    },
+                                                    "sensor_id": {
+                                                        "type": "number"
                                                     }
                                                 }
                                             },
-                                            "id": {
-                                                "$id": "/properties/results/items/properties/id",
-                                                "type": "integer",
-                                                "title": "The Id Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": 0,
-                                                "examples": [
-                                                    20
-                                                ]
-                                            },
-                                            "created_at": {
-                                                "$id": "/properties/results/items/properties/created_at",
-                                                "type": "string",
-                                                "title": "The Created_at Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": "",
-                                                "examples": [
-                                                    "2017-11-30 14:01:18.912308"
-                                                ]
-                                            },
-                                            "pushed_to_users": {
-                                                "$id": "/properties/results/items/properties/pushed_to_users",
-                                                "type": "integer",
-                                                "title": "The Pushed_to_users Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": 0,
-                                                "examples": [
-                                                    1
-                                                ]
-                                            },
                                             "level": {
-                                                "$id": "/properties/results/items/properties/level",
-                                                "type": "string",
-                                                "title": "The Level Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": "",
-                                                "examples": [
-                                                    "overflow"
-                                                ]
-                                            },
-                                            "description": {
-                                                "$id": "/properties/results/items/properties/description",
-                                                "type": "string",
-                                                "title": "The Description Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": "",
-                                                "examples": [
-                                                    "foobar"
-                                                ]
-                                            },
-                                            "reporter_id": {
-                                                "$id": "/properties/results/items/properties/reporter_id",
-                                                "type": "integer",
-                                                "title": "The Reporter_id Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": 0,
-                                                "examples": [
-                                                    115
-                                                ]
-                                            },
-                                            "sensor_sample_id": {
-                                                "$id": "/properties/results/items/properties/sensor_sample_id",
-                                                "type": "integer",
-                                                "title": "The Sensor_sample_id Schema.",
-                                                "description": "An explanation about the purpose of this instance.",
-                                                "default": 0,
-                                                "examples": [
-                                                    23
-                                                ]
+                                                "type": "string"
                                             }
-                                        }
+                                        },
+                                        "type": "object"
                                     }
                                 }
-                            }
+                            },
+                            "required": [
+                                "results"
+                            ]
                         }
                     }
                 }
