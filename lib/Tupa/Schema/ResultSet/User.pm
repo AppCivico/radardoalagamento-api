@@ -77,8 +77,8 @@ sub verifiers_specs {
             if (
             $self->find(
               {
-                active => 1,
-                email  => $r->get_value('phone_number')
+                active       => 1,
+                phone_number => $r->get_value('phone_number')
               }
             )
             );
@@ -194,8 +194,8 @@ sub verifiers_specs {
               if (
               $self->find(
                 {
-                  active => 1,
-                  email  => $r->get_value('phone_number')
+                  active       => 1,
+                  phone_number => $r->get_value('phone_number')
                 }
               )
               );
@@ -212,7 +212,6 @@ sub verifiers_specs {
             return 1 unless scalar @$ids;
             return $self->schema->resultset('District')
               ->search_rs( { id => { -in => $ids } } )->count == scalar @$ids;
-
           }
         },
 
