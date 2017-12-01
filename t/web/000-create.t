@@ -65,7 +65,7 @@ db_transaction {
     is( $res->code, 201, '201 created' );
   }
 
-    {
+  {
     diag('same phone -- ERROR');
     my ( $res, $ctx ) = ctx_request(
       POST '/signup',
@@ -91,8 +91,8 @@ db_transaction {
     );
     ok( !$res->is_success, 'success' );
     is( $res->code, 400, '400 Bad request' );
+    like( $res->content, qr/phone_number_already_exists/, 'message ok' );
   }
-
 
   {
     diag('valid');
