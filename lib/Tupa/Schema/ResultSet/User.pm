@@ -17,6 +17,7 @@ use MooseX::Types::Email qw/EmailAddress/;
 use Tupa::Types qw(MobileNumber);
 use Data::Verifier;
 use Safe::Isa;
+use Authen::Passphrase::AcceptAll;
 
 has schema => ( is => 'ro', lazy => 1, builder => '__build_schema' );
 
@@ -32,19 +33,8 @@ sub verifiers_specs {
     filters => [qw(trim)],
     profile => {
       push_token => {
-        required   => 1,
-        type       => 'Str',
-        post_check => sub {
-          my $r = shift;
-          !$self->search_rs(
-            {
-              push_token => $r->get_value('push_token'),
-              active     => 1,
-            },
-            { rows => 1 }
-          )->count;
-
-        }
+        required => 1,
+        type     => 'Str',
       },
       name => {
         required => 1,
@@ -149,19 +139,8 @@ sub verifiers_specs {
       filters => [qw(trim)],
       profile => {
         push_token => {
-          required   => 0,
-          type       => 'Str',
-          post_check => sub {
-            my $r = shift;
-            !$self->search_rs(
-              {
-                push_token => $r->get_value('push_token'),
-                active     => 1,
-              },
-              { rows => 1 }
-            )->count;
-
-          }
+          required => 0,
+          type     => 'Str',
         },
         name => {
           required => 1,
@@ -236,7 +215,6 @@ sub verifiers_specs {
     )
   };
 }
-use Authen::Passphrase::AcceptAll;
 
 sub action_specs {
   my $self = shift;
@@ -247,6 +225,9 @@ sub action_specs {
       my $districts = delete $values{districts} || [];
       my $token = delete $values{token};
       $values{password} ||= Authen::Passphrase::AcceptAll->new;
+
+      $self->kick_push_token( $values{push_token} ) if $values{push_token};
+
       my $user = $self->create( \%values );
 
       $user->follow( $self->schema->resultset('District')
@@ -260,8 +241,11 @@ sub action_specs {
 
       delete $values{password_confirmation};
       my $districts = delete $values{districts} || [];
-      my $token = delete $values{token};
+
       $values{password} ||= Authen::Passphrase::AcceptAll->new;
+
+      $self->kick_push_token( $values{push_token} ) if $values{push_token};
+
       my $user = $self->create( \%values );
 
       $user->follow( $self->schema->resultset('District')
@@ -294,6 +278,13 @@ sub action_specs {
       return $user->reset_session;
     },
   };
+}
+
+sub kick_push_token {
+  my ( $self, $token ) = @_;
+  my $me = $self->current_source_alias;
+  $self->search_rs( { "$me.push_token" => $token } )
+    ->update( { push_token => undef } );
 }
 
 1;
