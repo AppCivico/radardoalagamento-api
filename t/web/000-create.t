@@ -65,6 +65,35 @@ db_transaction {
     is( $res->code, 201, '201 created' );
   }
 
+    {
+    diag('same phone -- ERROR');
+    my ( $res, $ctx ) = ctx_request(
+      POST '/signup',
+      Content_Type => 'application/json',
+      Content      => encode_json(
+        {
+          token => {
+            value => 'oh!token111',
+          },
+          user => {
+            name                  => 'Foo',
+            email                 => 'email11@email.com',
+            password              => '1234567890',
+            password_confirmation => '1234567890',
+            phone_number          => '+5511999911111',
+            districts             => [
+              $schema->resultset('District')->search_rs( undef, { rows => 4 } )
+                ->get_column('id')->all
+            ]
+          },
+        }
+      )
+    );
+    ok( !$res->is_success, 'success' );
+    is( $res->code, 400, '400 Bad request' );
+  }
+
+
   {
     diag('valid');
     my ( $res, $ctx ) = ctx_request(
