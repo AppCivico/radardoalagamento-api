@@ -172,7 +172,7 @@ db_transaction {
     my ( $res, $ctx ) = ctx_request(
       PUT '/me',
       Content_Type => 'application/json',
-      X_Api_Key    => $session->api_key,
+      'X-Api-Key'  => $session->api_key,
       Content      => encode_json(
         {
           name => ( my $new_name = 'Name ' . time ),
