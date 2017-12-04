@@ -215,6 +215,113 @@ __PACKAGE__->add_column(
 
 __PACKAGE__->many_to_many( districts => user_districts => 'district' );
 
+with 'MyApp::Role::Verification';
+with 'MyApp::Role::Verification::TransactionalActions::DBIC';
+
+use MooseX::Types::Email qw/EmailAddress/;
+use Tupa::Types qw(MobileNumber);
+use Data::Verifier;
+use Authen::Passphrase::AcceptAll;
+
+has schema => ( is => 'ro', lazy => 1, builder => '__build_schema' );
+
+sub __build_schema {
+  shift->result_source->schema;
+}
+
+sub verifiers_specs {
+  my $self = shift;
+
+  return {
+    update => Data::Verifier->new(
+      filters => [qw(trim)],
+      profile => {
+        push_token => {
+          required => 0,
+          type     => 'Str',
+        },
+        name => {
+          required => 0,
+          type     => 'Str',
+        },
+        phone_number => {
+          required   => 0,
+          type       => MobileNumber,
+          post_check => sub {
+            my $r = shift;
+            die { msg_id => 'phone_number_already_exists', type => 'deafult' }
+              if (
+              $self->find(
+                {
+                  active       => 1,
+                  phone_number => $r->get_value('phone_number')
+                }
+              )
+              );
+            return 1;
+          }
+        },
+        districts => {
+          required   => 0,
+          type       => 'Maybe[ArrayRef[Int]]',
+          post_check => sub {
+            my $r   = shift;
+            my $ids = $r->get_value('districts');
+            return 1 unless scalar @$ids;
+            return $self->schema->resultset('District')
+              ->search_rs( { id => { -in => $ids } } )->count == scalar @$ids;
+
+          }
+        },
+        password => {
+          required   => 0,
+          type       => 'Str',
+          min_length => 8,
+          dependent  => {
+            password_confirmation => {
+              required   => 0,
+              min_length => 8,
+              type       => 'Str',
+            },
+          },
+          post_check => sub {
+            my $r = shift;
+            return $r->get_value('password') eq
+              $r->get_value('password_confirmation');
+          },
+        }
+      }
+      )
+
+  };
+}
+
+sub action_specs {
+  my $self = shift;
+  return {
+    update => sub {
+      my %values = shift->valid_values;
+
+      not defined $values{$_} and delete $values{$_} for keys %values;
+
+      delete $values{password_confirmation};
+      my $districts = delete $values{districts} || [];
+
+      $values{password} ||= Authen::Passphrase::AcceptAll->new;
+
+      $self->set_districts( $self->schema->resultset('District')
+          ->search_rs( { id => { -in => $districts } } )->all )
+        if @$districts;
+
+      $self->result_source->resultset->kick_push_token( $values{push_token} )
+        if $values{push_token};
+      $self->update( \%values );
+      $self->discard_changes;
+      $self;
+    }
+  };
+}
+
 sub reset_session {
   my ($self) = @_;
   $self->user_sessions->update( { valid_until => \q|now()| } );
@@ -229,6 +336,14 @@ sub follow {
 sub unfollow {
   my ( $self, $district ) = @_;
   $self->remove_from_districts($district);
+}
+
+sub TO_JSON {
+  my %data = shift->get_columns;
+  delete $data{password};
+  delete $data{push_token};
+
+  \%data;
 }
 
 __PACKAGE__->meta->make_immutable;

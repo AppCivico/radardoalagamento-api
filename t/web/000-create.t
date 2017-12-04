@@ -5,7 +5,7 @@ use Test::More;
 use lib "t/lib";
 use Catalyst::Test 'Tupa::Web::App';
 use HTTP::Request::Common qw(GET POST PUT DELETE);
-use JSON qw(encode_json);
+use JSON qw(encode_json decode_json);
 use Tupa::Test;
 use DDP;
 
@@ -92,6 +92,7 @@ db_transaction {
     ok( !$res->is_success, 'success' );
     is( $res->code, 400, '400 Bad request' );
     like( $res->content, qr/phone_number_already_exists/, 'message ok' );
+    warn $res->as_string;
   }
 
   {
@@ -161,6 +162,27 @@ db_transaction {
 
     ok( $res->is_success, 'success' );
     is( $res->code, 201, '201 created' );
+
+  }
+
+  {
+    my $session = __new_session();
+    diag('update self');
+    my $old_name = $session->user->name;
+    my ( $res, $ctx ) = ctx_request(
+      PUT '/me',
+      Content_Type => 'application/json',
+      X_Api_Key    => $session->api_key,
+      Content      => encode_json(
+        {
+          name => ( my $new_name = 'Name ' . time ),
+        }
+      )
+    );
+    ok( $res->is_success, 'success' );
+    is( $res->code, 202, '202 Accepted' );
+    isnt( $new_name, $old_name, 'name changed' );
+    is( decode_json( $res->content )->{name}, $new_name, 'name matches' );
 
   }
 

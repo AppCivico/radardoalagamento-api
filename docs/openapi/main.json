@@ -152,6 +152,80 @@
                 }
             }
         },
+        "/me": {
+            "put": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Atualizando dados do usuário",
+                "description": "Atualizando dados do usuário",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Usuário atualizado com sucesso",
+                        "schema": "#/definitions/User"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "description": "Nome do usuário",
+                                    "type": "string",
+                                    "example": "Enéas Carneiro",
+                                    "required": false
+                                },
+                                "phone_number": {
+                                    "description": "Telefone do usuário",
+                                    "type": "string",
+                                    "example": "+5544911113333",
+                                    "required": false
+                                },
+                                "push_token": {
+                                    "description": "Token de push",
+                                    "type": "string",
+                                    "example": "[ABCD-10FE3B7C-7035-4699-90C4-0CC99317C914]",
+                                    "required": false
+                                },
+                                "password": {
+                                    "description": "Senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "password_confirmation": {
+                                    "description": "Confirmação de senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "districts": {
+                                    "description": "IDs dos distritos que o usuário deseja seguir [remove todos os anteriores]",
+                                    "type": "array",
+                                    "required": true,
+                                    "example": [
+                                        67,
+                                        89,
+                                        11
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
         "/alert": {
             "get": {
                 "tags": [
@@ -628,6 +702,44 @@
                             }
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "required": [
+                "active",
+                "phone_number",
+                "email",
+                "name",
+                "create_ts",
+                "id"
+            ],
+            "properties": {
+                "active": {
+                    "type": "number",
+                    "example": 1
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+653279751111"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "hezekiah.cooper@adipiscirerum.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Yusuf Alfred Richmond"
+                },
+                "create_ts": {
+                    "type": "string",
+                    "example": "2017-12-04 18:26:56.961642"
+                },
+                "id": {
+                    "type": "number",
+                    "example": 243
                 }
             }
         }
