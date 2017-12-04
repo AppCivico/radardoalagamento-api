@@ -325,8 +325,8 @@
                 "tags": [
                     "district"
                 ],
-                "summary": "Seguindo distritos",
-                "description": "Seguindo alertas do distrito",
+                "summary": "Deixando de seguir distritos",
+                "description": "Deixando de seguir alertas do distrito",
                 "produces": [
                     "application/json"
                 ],
