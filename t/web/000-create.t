@@ -170,7 +170,7 @@ db_transaction {
     diag('update self');
     my $old_name = $session->user->name;
     my ( $res, $ctx ) = ctx_request(
-      PUT '/me',
+      PUT '/me?api_key=' . $session->api_key,
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key,
       Content      => encode_json(
