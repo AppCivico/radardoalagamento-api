@@ -168,7 +168,9 @@
                 "responses": {
                     "202": {
                         "description": "Usuário atualizado com sucesso",
-                        "schema": "#/definitions/User"
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
                     }
                 },
                 "parameters": [
