@@ -59,6 +59,9 @@
                                 "districts": {
                                     "description": "IDs dos distritos que o usuário deseja seguir",
                                     "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    },
                                     "required": true,
                                     "example": [
                                         67,
@@ -215,6 +218,9 @@
                                 "districts": {
                                     "description": "IDs dos distritos que o usuário deseja seguir [remove todos os anteriores]",
                                     "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    },
                                     "required": true,
                                     "example": [
                                         67,
