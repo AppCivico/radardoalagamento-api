@@ -309,13 +309,15 @@
                 "consumes": [
                     "application/json"
                 ],
-                "parameters": {
-                    "in": "path",
-                    "name": "districtId",
-                    "type": "integer",
-                    "required": true,
-                    "description": "ID do distrito"
-                }
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "districtId",
+                        "type": "integer",
+                        "required": true,
+                        "description": "ID do distrito"
+                    }
+                ]
             }
         },
         "/district/{districtId}/unfollow": {
@@ -331,13 +333,15 @@
                 "consumes": [
                     "application/json"
                 ],
-                "parameters": {
-                    "in": "path",
-                    "name": "districtId",
-                    "type": "integer",
-                    "required": true,
-                    "description": "ID do distrito"
-                }
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "districtId",
+                        "type": "integer",
+                        "required": true,
+                        "description": "ID do distrito"
+                    }
+                ]
             }
         },
         "/admin/signup": {
