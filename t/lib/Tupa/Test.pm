@@ -5,6 +5,7 @@ use warnings;
 use Monkey::Patch::Action qw(patch_package);
 use feature 'say';
 use File::Slurp qw(read_file);
+use Data::Fake qw(Core Names Internet);
 
 sub import {
 
@@ -43,18 +44,24 @@ sub db_transaction (&) {
 }
 
 sub __new_user {
-  my $schema = shift;
-  $schema->resultset('User')->create(
+  my $schema = shift || Tupa::Web::App->model('DB')->schema;
+  my $fake_user = fake_hash(
     {
-      name     => 'Foo ' . rand(),
-      email    => 'email.' . ( int( rand(100000) ) ) . '@emailfake.com',
-      password => 1234,
+      name         => fake_name(),
+      email        => fake_email(),
+      password     => fake_digits('a###########b'),
+      phone_number => fake_digits('+############'),
     }
   );
+  my $user =   $schema->resultset('User')->create( $fake_user->() );
+  $user->discard_changes;
+  $user;
+
 }
 
 sub __new_session {
-  my $schema = shift;
+  my $schema = shift || Tupa::Web::App->model('DB')->schema;
+
   __new_user($schema)->reset_session;
 }
 
@@ -63,6 +70,8 @@ our ( $in, $out );
 if ( $ENV{TRACE} ) {
   use HTTP::Request;
   use HTTP::Response;
+  use Term::ANSIColor qw(:constants);
+  local $Term::ANSIColor::AUTORESET = 1;
   $out = patch_package(
     'Catalyst::Engine',
     finalize_body => wrap => sub {
@@ -72,11 +81,13 @@ if ( $ENV{TRACE} ) {
       my $req = $c->req;
       my $res = $c->res;
 
-      say '------------REQUEST-------------';
+      print BOLD BLUE "------------REQUEST-------------\n";
 
       say HTTP::Request->new( $req->method, $req->uri, $req->headers,
-        ref $req->body eq 'File::Temp' ? read_file( $req->body->filename ) : $req->body )->as_string;
-      say '------------RESPONSE------------';
+        ref $req->body eq 'File::Temp'
+        ? read_file( $req->body->filename )
+        : $req->body )->as_string;
+      print BOLD RED "------------RESPONSE------------\n";
       say HTTP::Response->new( $res->code, $res->status, $res->headers,
         $res->body )->as_string;
       return $ret;

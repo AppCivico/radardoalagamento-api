@@ -20,3 +20,5 @@ requires 'Monkey::Patch::Action';
 requires 'List::MoreUtils';
 requires 'HTTP::Tiny';
 
+test_requires 'Data::Fake';
+test_requires 'Term::ANSIColor';
