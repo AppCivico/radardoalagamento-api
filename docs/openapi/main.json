@@ -294,6 +294,52 @@
                 }
             }
         },
+        "/district": {
+        },
+        "/district/{districtId}/follow": {
+            "post": {
+                "tags": [
+                    "district"
+                ],
+                "summary": "Seguindo distritos",
+                "description": "Seguindo alertas do distrito",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": {
+                    "in": "path",
+                    "name": "districtId",
+                    "type": "integer",
+                    "required": true,
+                    "description": "ID do distrito"
+                }
+            }
+        },
+        "/district/{districtId}/unfollow": {
+            "post": {
+                "tags": [
+                    "district"
+                ],
+                "summary": "Seguindo distritos",
+                "description": "Seguindo alertas do distrito",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": {
+                    "in": "path",
+                    "name": "districtId",
+                    "type": "integer",
+                    "required": true,
+                    "description": "ID do distrito"
+                }
+            }
+        },
         "/admin/signup": {
             "post": {
                 "tags": [
