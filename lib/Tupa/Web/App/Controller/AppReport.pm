@@ -12,8 +12,20 @@ sub base : Chained(/logged_in) PathPart('app-report') CaptureArgs(0) {
 
 sub report : Chained(base) : PathPart('') Args(0) POST {
   my ( $self, $c ) = @_;
-  $c->stash->{collection}->execute($c, for => create => with => $c->req->data);
+  $c->stash->{collection}
+    ->execute( $c, for => create => with => $c->req->data );
   $self->status_no_content($c);
+}
+
+sub list : Chained(base) : PathPart('') Args(0) GET {
+  my ( $self, $c ) = @_;
+  $self->status_ok(
+    $c,
+    entity => {
+      results => [ $c->stash->{collection}->summary->as_hashref->all ]
+    }
+  );
+
 }
 
 __PACKAGE__->meta->make_immutable;

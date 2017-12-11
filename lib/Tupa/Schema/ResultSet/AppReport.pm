@@ -61,6 +61,7 @@ sub summary {
   $self->search_rs(
     undef,
     {
+      rows     => 100,
       order_by => { -desc => "$me.create_ts" }
     }
   );

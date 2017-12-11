@@ -27,8 +27,8 @@ db_transaction {
       POST '/app-report',
       Content => encode_json(
         {
-	  payload => 'Foo',
-	  status => 'error',
+          payload => 'Foo',
+          status  => 'error',
         }
       ),
       Content_Type => 'application/json',
@@ -46,16 +46,16 @@ db_transaction {
       POST '/app-report',
       Content => encode_json(
         {
-	  payload => '',
-	  status => 'info',
+          payload => '',
+          status  => 'info',
         }
       ),
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success,'Error' );
+    ok( !$res->is_success, 'Error' );
     is( $res->code, 400, '400 - Bad request' );
-    like($res->content, qr/payload.*?invalid/, 'message ok');    
+    like( $res->content, qr/payload.*?invalid/, 'message ok' );
   }
   {
     diag('create report - error');
@@ -65,16 +65,16 @@ db_transaction {
       POST '/app-report',
       Content => encode_json(
         {
-	  payload => 'Foobar',
-	  status => '',
+          payload => 'Foobar',
+          status  => '',
         }
       ),
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success,'Error' );
+    ok( !$res->is_success, 'Error' );
     is( $res->code, 400, '400 - Bad request' );
-    like($res->content, qr/status.*?invalid/, 'message ok');
+    like( $res->content, qr/status.*?invalid/, 'message ok' );
   }
 
   {
@@ -85,19 +85,30 @@ db_transaction {
       POST '/app-report',
       Content => encode_json(
         {
-	  payload => 'Foobar',
-	  status => 'XXXXXX',
+          payload => 'Foobar',
+          status  => 'XXXXXX',
         }
       ),
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success,'Error' );
+    ok( !$res->is_success, 'Error' );
     is( $res->code, 400, '400 - Bad request' );
-    like($res->content, qr/status.*?invalid/, 'message ok');
+    like( $res->content, qr/status.*?invalid/, 'message ok' );
   }
-  
-  
+
+  {
+    diag('list reports');
+    my ( $res, $ctx ) =
+
+      ctx_request(
+      GET '/app-report',
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok( $res->is_success, 'OK' );
+    is( $res->code, 200, '200 ok' );
+  }
 
 };
 
