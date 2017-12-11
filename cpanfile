@@ -1,4 +1,5 @@
 requires 'Catalyst::Controller::REST';
+requires 'Catalyst::Devel';
 requires 'DBIx::Class::PassphraseColumn';
 requires 'Authen::Passphrase::BlowfishCrypt';
 requires 'MooseX::Types::Email';
@@ -19,6 +20,19 @@ requires 'DateTimeX::Easy';
 requires 'Monkey::Patch::Action';
 requires 'List::MoreUtils';
 requires 'HTTP::Tiny';
+requires 'Catalyst::Plugin::I18N';
+requires 'Catalyst::Plugin::EnableMiddleware';
+requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Plugin::ConfigLoader';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
+requires 'MooseX::NonMoose';
+requires 'Data::Verifier';
+requires 'Data::Manager';
+requires 'Data::Diver';
+requires 'DBIx::Class::Helper::ResultSet::AutoRemoveColumns';
+requires 'DDP';
+requires 'DBD::Pg';
 
 test_requires 'Data::Fake';
+test_requires 'File::Slurp';
 test_requires 'Term::ANSIColor';

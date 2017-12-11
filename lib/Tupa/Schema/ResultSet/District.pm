@@ -11,6 +11,8 @@ use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::ResultSet';
 with 'MyApp::Schema::Role::InflateAsHashRef';
 
+__PACKAGE__->load_components('Helper::ResultSet::AutoRemoveColumns');
+
 sub summary {
   my $self = shift;
   my $me   = $self->current_source_alias;

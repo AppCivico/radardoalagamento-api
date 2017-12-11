@@ -132,10 +132,21 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-23 19:05:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:THWbMdcRJp6JfLrOmgYDfg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-11 11:13:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qr5BpdnIny574BBjAUaD6Q
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->remove_column('geom');
+
+__PACKAGE__->add_column(
+  "geom",
+  {
+    data_type     => "geometry",
+    is_nullable   => 1,
+    size          => "58888,16",
+    remove_column => 1,
+  }
+);
 
 __PACKAGE__->has_many(
   "sensors",

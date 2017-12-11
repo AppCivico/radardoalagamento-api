@@ -17,6 +17,7 @@ use Tupa::Types qw(MobileNumber AlertLevel);
 use Data::Verifier;
 use Safe::Isa;
 
+
 has schema => ( is => 'ro', lazy => 1, builder => '__build_schema' );
 
 sub __build_schema {
@@ -85,7 +86,7 @@ sub summary {
   $self->search_rs(
     undef,
     {
-      prefetch => {
+      prefetch       => {
         sensor_sample => { 'sensor' => 'districts' }
       },
       order_by => { -desc => "$me.created_at" }
