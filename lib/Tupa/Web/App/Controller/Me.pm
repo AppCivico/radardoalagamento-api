@@ -14,10 +14,13 @@ sub base : Chained(/logged_in) PathPart(me) CaptureArgs(0) {
 
 sub update : Chained(base) PathPart('') Args(0) PUT {
   my ( $self, $c ) = @_;
+  my $data = $c->req->data || {};
+  my $user = delete $data->{user} || {};
+  
   $self->status_accepted( $c,
     entity =>
       scalar $c->{stash}->{me}
-      ->execute( $c, for => update => with => $c->req->data ) );
+      ->execute( $c, for => update => with => {%$user, %$data} ) );
 }
 
 __PACKAGE__->meta->make_immutable;
