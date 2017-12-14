@@ -101,6 +101,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 alerts
+
+Type: has_many
+
+Related object: L<Tupa::Schema::Result::Alert>
+
+=cut
+
+__PACKAGE__->has_many(
+  "alerts",
+  "Tupa::Schema::Result::Alert",
+  { "foreign.district_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_districts
 
 Type: has_many
@@ -132,8 +147,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-11 11:13:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qr5BpdnIny574BBjAUaD6Q
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-14 11:49:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7gHfc5EoWsQQJ3Tc73M6dA
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->remove_column('geom');

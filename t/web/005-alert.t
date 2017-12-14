@@ -27,7 +27,7 @@ db_transaction {
           grep { !/geom/ }
             $schema->resultset('District')->result_source->columns
         ],
-        '+columns' => { 'center' => \'ST_PointOnSurface(geom)' },
+        '+columns' => {'center' => \'ST_PointOnSurface(geom)'},
         rows       => 1
       }
       )->next,
@@ -40,27 +40,25 @@ db_transaction {
         description => 'excepturi reprehenderit placeat voluptatem',
         type        => 'assumenda saepe minima',
         source      => $schema->resultset('SensorSource')
-          ->find_or_create( { name => 'Reprehenderit' } ),
+          ->find_or_create({name => 'Reprehenderit'}),
         location => $district->get_column('center')
       }
     ),
     'sensor ok'
   );
-  ok(
-    $session->user->follow($district),
-    'user followed district ' . $district->name
-  );
+  ok($session->user->follow($district),
+    'user followed district ' . $district->name);
 
   ok(
     my $sample = $sensor->samples->create(
-      { value => 1212, event_ts => DateTime->now->iso8601 }
+      {value => 1212, event_ts => DateTime->now->iso8601}
     ),
     'sample ok'
   );
 
   {
     diag('create alert - unauthorized');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       POST '/admin/alert',
@@ -74,16 +72,15 @@ db_transaction {
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success, 'Error' );
-    is( $res->code, 403, 'Unauthorized' );
+    ok(!$res->is_success, 'Error');
+    is($res->code, 403, 'Unauthorized');
   }
 
-  ok( $session->user->add_to_roles( { name => 'admin' } ),
-    'user is now an admin' );
+  ok($session->user->add_to_roles({name => 'admin'}), 'user is now an admin');
 
   {
     diag('create alert');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       POST '/admin/alert',
@@ -97,13 +94,34 @@ db_transaction {
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( $res->is_success, 'Success' );
-    is( $res->code, 201, '201 Created' );
+    ok($res->is_success, 'Success');
+    is($res->code, 201, '201 Created');
   }
 
   {
+    diag('create alert using district');
+    my ($res, $ctx) =
+
+      ctx_request(
+      POST '/admin/alert',
+      Content => encode_json(
+        {
+          district_id => $district->id,
+          description => 'bzzzzz',
+          level       => 'alert'
+        }
+      ),
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 201, '201 Created');
+  }
+
+
+  {
     diag('create alert - missing required parameter');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       POST '/admin/alert',
@@ -117,13 +135,28 @@ db_transaction {
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success, 'Success' );
-    is( $res->code, 400, '400 Bad Request' );
+    ok(!$res->is_success, 'Success');
+    is($res->code, 400, '400 Bad Request');
+  }
+
+  {
+    diag('create alert - missing source parameter');
+    my ($res, $ctx) =
+
+      ctx_request(
+      POST '/admin/alert',
+      Content => encode_json({description => 'foobar', level => 'overflow'}),
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok(!$res->is_success, 'Success');
+    is($res->code, 400, '400 Bad Request');
+    like($res->content, qr/alert_source_invalid/, 'message matches');
   }
 
   {
     diag('create alert - invalid level parameter');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       POST '/admin/alert',
@@ -137,48 +170,48 @@ db_transaction {
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( !$res->is_success, 'Success' );
-    is( $res->code, 400, '400 Bad Request' );
+    ok(!$res->is_success, 'Success');
+    is($res->code, 400, '400 Bad Request');
   }
 
   {
     diag('listing alert');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       GET '/admin/alert',
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( $res->is_success, 'Success' );
-    is( $res->code, 200, '200 Created' );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 Created');
   }
 
   {
     diag('listing alert');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       GET '/alert',
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( $res->is_success, 'Success' );
-    is( $res->code, 200, '200 OK' );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
   }
 
-  
+
   {
     diag('listing alert');
-    my ( $res, $ctx ) =
+    my ($res, $ctx) =
 
       ctx_request(
       GET '/alert/all',
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );
-    ok( $res->is_success, 'Success' );
-    is( $res->code, 200, '200 OK' );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
   }
 
 
