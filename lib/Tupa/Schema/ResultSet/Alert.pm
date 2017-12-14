@@ -90,9 +90,8 @@ sub action_specs {
       $alert->set_districts($self->schema->resultset('District')
           ->search_rs({id => {-in => $districts}})->all)
         if scalar @$districts;
-      warn 99;
+
       eval { $alert->notify };
-      warn $@ if $@;
       $alert->update({pushed_to_users => 1});
       $alert;
     },
