@@ -32,6 +32,8 @@ requires 'Data::Diver';
 requires 'DBIx::Class::Helper::ResultSet::AutoRemoveColumns';
 requires 'DDP';
 requires 'DBD::Pg';
+requires 'IO::Socket::SSL';
+requires 'Net::SSLeay';
 
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';

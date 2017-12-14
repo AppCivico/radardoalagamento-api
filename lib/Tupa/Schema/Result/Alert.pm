@@ -81,12 +81,6 @@ __PACKAGE__->table("alert");
   is_nullable: 1
   original: {default_value => \"now()"}
 
-=head2 district_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -114,8 +108,6 @@ __PACKAGE__->add_columns(
     is_nullable   => 1,
     original      => {default_value => \"now()"},
   },
-  "district_id",
-  {data_type => "integer", is_foreign_key => 1, is_nullable => 1},
 );
 
 =head1 PRIMARY KEY
@@ -132,24 +124,17 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 district
+=head2 alert_districts
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<Tupa::Schema::Result::District>
+Related object: L<Tupa::Schema::Result::AlertDistrict>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "district",
-  "Tupa::Schema::Result::District",
-  {id => "district_id"},
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
+__PACKAGE__->has_many(
+  "alert_districts", "Tupa::Schema::Result::AlertDistrict",
+  {"foreign.alert_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
 );
 
 =head2 reporter
@@ -187,10 +172,11 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-14 11:49:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YNYrywps9n+SWt8Y076Bkg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-14 15:08:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0Qpdy2pxIkeM27ybnD6XJQ
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->many_to_many(districts => 'alert_districts' => 'district');
 
 use HTTP::Tiny;
 use JSON qw(encode_json);
@@ -203,10 +189,11 @@ sub affected_users_keys {
   return $self->sensor_sample->sensor->districts->related_resultset(
     'user_districts')->related_resultset('user')->get_column('push_token')->all
     if $self->sensor_sample_id;
-  
-  return $self->district->user_districts_rs->related_resultset('user')
+
+  return $self->alert_districts->related_resultset('district')
+    ->related_resultset('user_districts')->related_resultset('user')
     ->get_column('push_token')->all
-    if $self->district_id;
+    if $self->districts->count;
 }
 
 sub notify {

@@ -34,12 +34,12 @@ sub verifiers_specs {
       derived => {
         source => {
           required => 1,
-          fields   => [qw(sensor_sample_id district_id)],
+          fields   => [qw(sensor_sample_id districts)],
           deriver  => sub {
             my $r = shift;
             die {msg_id => 'alert_source_missing', type => 'default'}
               unless $r->get_value('sensor_sample_id')
-              || $r->get_value('district_id');
+              || $r->get_value('districts');
             return 1;
           }
         }
@@ -56,13 +56,16 @@ sub verifiers_specs {
               ->find($r->get_value('sensor_sample_id'));
           }
         },
-        district_id => {
+        districts => {
           required   => 0,
-          type       => 'Int',
+          type       => 'Maybe[ArrayRef[Int]]',
           post_check => sub {
-            my $r = shift;
+            my $r   = shift;
+            my $ids = $r->get_value('districts');
+            return 1 unless scalar @$ids;
             return $self->schema->resultset('District')
-              ->find($r->get_value('district_id'));
+              ->search_rs({id => {-in => $ids}})->count == scalar @$ids;
+
           }
         },
         level =>
@@ -78,9 +81,16 @@ sub action_specs {
     oi     => sub { },
     create => sub {
       my %values = shift->valid_values;
+      my $districts = delete $values{districts} || [];
+
       delete $values{source};
       my $alert
         = $self->create({reporter => (delete $values{__user})->{obj}, %values});
+
+      $alert->set_districts($self->schema->resultset('District')
+          ->search_rs({id => {-in => $districts}})->all)
+        if scalar @$districts;
+      warn 99;
       eval { $alert->notify };
       warn $@ if $@;
       $alert->update({pushed_to_users => 1});
@@ -96,7 +106,10 @@ sub summary {
   $self->search_rs(
     undef,
     {
-      prefetch => ['district', {sensor_sample => {'sensor' => 'districts'}}],
+      prefetch => [
+        {alert_districts => 'district'},
+        {sensor_sample   => {'sensor' => 'districts'}}
+      ],
       order_by => {-desc => "$me.created_at"}
     }
   );

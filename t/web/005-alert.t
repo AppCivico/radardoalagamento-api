@@ -18,7 +18,7 @@ my $schema = Tupa::Web::App->model('DB')->schema;
 
 db_transaction {
   my $session = __new_session($schema);
-
+  $session->user->update({push_token => 'abc' . rand()});
   ok(
     my $district = $schema->resultset('District')->search(
       undef,
@@ -106,7 +106,7 @@ db_transaction {
       POST '/admin/alert',
       Content => encode_json(
         {
-          district_id => $district->id,
+          districts   => [$district->id],
           description => 'bzzzzz',
           level       => 'alert'
         }
@@ -117,7 +117,6 @@ db_transaction {
     ok($res->is_success, 'Success');
     is($res->code, 201, '201 Created');
   }
-
 
   {
     diag('create alert - missing required parameter');

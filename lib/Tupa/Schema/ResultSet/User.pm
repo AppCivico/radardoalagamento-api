@@ -229,7 +229,7 @@ sub action_specs {
       $self->kick_push_token( $values{push_token} ) if $values{push_token};
 
       my $user = $self->create( \%values );
-
+            
       $user->follow( $self->schema->resultset('District')
           ->search_rs( { id => { -in => $districts } } )->all )
         if @$districts;
