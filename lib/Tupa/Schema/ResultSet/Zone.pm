@@ -10,6 +10,7 @@ use MooseX::MarkAsMethods autoclean => 1;
 
 extends 'DBIx::Class::ResultSet';
 with 'MyApp::Schema::Role::InflateAsHashRef';
+with 'MyApp::Schema::Role::Paging';
 
 sub with_district_count {
   my ($self) = @_;

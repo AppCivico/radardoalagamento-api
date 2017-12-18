@@ -12,6 +12,7 @@ extends 'DBIx::Class::ResultSet';
 with 'MyApp::Role::Verification';
 with 'MyApp::Role::Verification::TransactionalActions::DBIC';
 with 'MyApp::Schema::Role::InflateAsHashRef';
+with 'MyApp::Schema::Role::Paging';
 
 use MooseX::Types::Email qw/EmailAddress/;
 use Tupa::Types qw(MobileNumber);

@@ -205,7 +205,7 @@ db_transaction {
     my ($res, $ctx) =
 
       ctx_request(
-      GET '/alert/all',
+      GET '/alert/all?page=1',
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );

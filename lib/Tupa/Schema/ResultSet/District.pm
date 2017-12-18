@@ -10,7 +10,7 @@ use MooseX::MarkAsMethods autoclean => 1;
 
 extends 'DBIx::Class::ResultSet';
 with 'MyApp::Schema::Role::InflateAsHashRef';
-
+with 'MyApp::Schema::Role::Paging';
 __PACKAGE__->load_components('Helper::ResultSet::AutoRemoveColumns');
 
 sub summary {

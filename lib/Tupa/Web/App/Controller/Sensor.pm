@@ -8,40 +8,41 @@ use namespace::autoclean -except => 'Int';
 BEGIN { extends 'Tupa::Web::App::Controller'; }
 
 sub base : Chained(/base) PathPart(sensor) CaptureArgs(0) {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
   $c->stash->{collection} = $c->model('DB::Sensor');
 }
 
 sub object : Chained(base) : PathPart('') : CaptureArgs(Int) {
-  my ( $self, $c, $id ) = @_;
+  my ($self, $c, $id) = @_;
   $c->stash->{object} = $c->stash->{collection}->find($id)
     or $c->detach('/error_404');
 }
 
 sub view : Chained(object) : PathPart('') : Args(0) : GET {
-  my ( $self, $c ) = @_;
-  $self->status_ok( $c, entity => $c->stash->{object} );
+  my ($self, $c) = @_;
+  $self->status_ok($c, entity => $c->stash->{object});
 }
 
 sub list : Chained(base) PathPart('') Args(0) GET {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
 
   $self->status_ok(
     $c,
-    entity => {
-      results => [ $c->stash->{collection}->summary->with_geojson->as_hashref->all ]
-    }
+    entity => $c->forward(
+      _build_results =>
+        [$c->stash->{collection}->summary->with_geojson->as_hashref]
+    )
   );
 }
 
 sub sample : Chained(object) Args(0) GET {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
 
   $self->status_ok(
     $c,
-    entity => {
-      results => [ $c->stash->{object}->samples->summary->as_hashref->all ]
-    }
+    entity => $c->forward(
+      _build_results => [$c->stash->{object}->samples->summary->as_hashref]
+    )
   );
 }
 

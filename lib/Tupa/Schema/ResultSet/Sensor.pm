@@ -10,6 +10,7 @@ use MooseX::MarkAsMethods autoclean => 1;
 
 extends 'DBIx::Class::ResultSet';
 with 'MyApp::Schema::Role::InflateAsHashRef';
+with 'MyApp::Schema::Role::Paging';
 
 sub with_geojson {
   my $self = shift;

@@ -12,13 +12,14 @@ extends 'DBIx::Class::ResultSet';
 with 'MyApp::Role::Verification';
 with 'MyApp::Role::Verification::TransactionalActions::DBIC';
 with 'MyApp::Schema::Role::InflateAsHashRef';
+with 'MyApp::Schema::Role::Paging';
 
 use Tupa::Types qw( AppReportStatus);
 use MooseX::Types::Common::String qw(NonEmptyStr);
 use Data::Verifier;
 use Safe::Isa;
 
-has schema => ( is => 'ro', lazy => 1, builder => '__build_schema' );
+has schema => (is => 'ro', lazy => 1, builder => '__build_schema');
 
 sub __build_schema {
   shift->result_source->schema;
@@ -32,14 +33,8 @@ sub verifiers_specs {
     create => Data::Verifier->new(
       filters => [qw(trim)],
       profile => {
-        payload => {
-          required => 1,
-          type     => NonEmptyStr,
-        },
-        status => {
-          required => 1,
-          type     => AppReportStatus,
-        }
+        payload => {required => 1, type => NonEmptyStr,},
+        status  => {required => 1, type => AppReportStatus,}
       }
     )
   };
@@ -49,7 +44,7 @@ sub action_specs {
   my $self = shift;
   return +{
     create => sub {
-      $self->create( { shift->valid_values } );
+      $self->create({shift->valid_values});
     },
   };
 }
@@ -58,13 +53,8 @@ sub summary {
 
   my ($self) = @_;
   my $me = $self->current_source_alias;
-  $self->search_rs(
-    undef,
-    {
-      rows     => 100,
-      order_by => { -desc => "$me.create_ts" }
-    }
-  );
+  $self->search_rs(undef,
+    {rows => 100, order_by => {-desc => "$me.create_ts"}});
 }
 
 1;

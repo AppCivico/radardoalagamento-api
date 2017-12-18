@@ -9,43 +9,41 @@ BEGIN { extends 'Catalyst::Controller::REST' }
 
 __PACKAGE__->config(
   default => 'application/json',
-  'map'   => {
-    'application/json' => 'JSON::XS',
-  },
+  'map'   => {'application/json' => 'JSON::XS',},
 );
 
 sub end : Private {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
   my $code = $c->res->status;
 
   my $err;
-  if ( scalar @{ $c->error } ) {
+  if (scalar @{$c->error}) {
     $code = 500;
     $c->stash->{errors} = $c->error;
-    my ( $top, @others ) = @{ $c->error };
+    my ($top, @others) = @{$c->error};
 
-    if ( ref $top eq 'HASH' and scalar @{$top}{qw(type msg_id)} ) {
-      $c->stash->{rest} = [ $c->build_api_error(%$top) ];
+    if (ref $top eq 'HASH' and scalar @{$top}{qw(type msg_id)}) {
+      $c->stash->{rest} = [$c->build_api_error(%$top)];
       $code = 400;
-      $c->log->error( Dumper( $c->req->data ) );
+      $c->log->error(Dumper($c->req->data));
     }
 
     $err = '';
-    foreach my $error ( $top, @others ) {
+    foreach my $error ($top, @others) {
       $err .= Dumper $error;
     }
-    ( $err = substr $err, 0, 5000 . "\n" ),
-      $err =~
-s|^(\s+)| my $x = length($1); $x /= 6; $x = $x ? $x : 0; $x = ' ' x $x; $x |emg
+    ($err = substr $err, 0, 5000 . "\n"),
+      $err
+      =~ s|^(\s+)| my $x = length($1); $x /= 6; $x = $x ? $x : 0; $x = ' ' x $x; $x |emg
       if $err =~ /InvalidBaseTypeGivenToCreateParameterizedTypeConstraint/;
     $c->log->error($err)
-      unless $code == 400 && ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ );
+      unless $code == 400 && ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/);
     $c->clear_errors;
 
     #    $c->detach('/error_500');
   }
 
-  if ( $code =~ /^5/ && !$c->res->body && !$c->stash->{rest} ) {
+  if ($code =~ /^5/ && !$c->res->body && !$c->stash->{rest}) {
     $code = 500;
 
     # eval {
@@ -68,6 +66,23 @@ s|^(\s+)| my $x = length($1); $x /= 6; $x = $x ? $x : 0; $x = ' ' x $x; $x |emg
   $c->res->status($code);
 
   $c->forward('serialize');
+}
+
+sub _build_results : Private {
+  my ($self, $c, $rs) = @_;
+  warn ref $rs;
+  my %results = ();
+  $rs = $rs->with_paging(%{$c->req->params || {}},
+    %{+eval { $c->req->data } || {}});
+
+  if (my $pager = $rs->pager) {
+    $results{total_entries}    = $pager->total_entries;
+    $results{next_page}        = $pager->next_page;
+    $results{previous_page}    = $pager->previous_page;
+    $results{entries_per_page} = $pager->entries_per_page;
+  }
+  $results{results} = [$rs->all];
+  return \%results;
 }
 
 sub serialize : ActionClass('Serialize') {
