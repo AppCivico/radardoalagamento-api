@@ -40,18 +40,17 @@ db_transaction {
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          push_token => 'oh!token',
-          user       => {
-            name                  => 'Foo',
-            email                 => 'email@email.com',
-            password              => '1234567890',
-            password_confirmation => '1234567890',
-            phone_number          => '+5511999911111',
-            districts             => [
-              $schema->resultset('District')->search_rs(undef, {rows => 4})
-                ->get_column('id')->all
+          push_token            => 'oh!token',
+          name                  => 'Foo',
+          email                 => 'email@email.com',
+          password              => '1234567890',
+          password_confirmation => '1234567890',
+          phone_number          => '+5511999911111',
+          districts             => [
+            $schema->resultset('District')->search_rs(undef, {rows => 4})
+              ->get_column('id')->all
             ]
-          },
+
         }
       )
     );
@@ -66,18 +65,16 @@ db_transaction {
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          push_token => 'oh!token111',
-          user       => {
-            name                  => 'Foo',
-            email                 => 'email11@email.com',
-            password              => '1234567890',
-            password_confirmation => '1234567890',
-            phone_number          => '+5511999911111',
-            districts             => [
-              $schema->resultset('District')->search_rs(undef, {rows => 4})
-                ->get_column('id')->all
-            ]
-          },
+          push_token            => 'oh!token111',
+          name                  => 'Foo',
+          email                 => 'email11@email.com',
+          password              => '1234567890',
+          password_confirmation => '1234567890',
+          phone_number          => '+5511999911111',
+          districts             => [
+            $schema->resultset('District')->search_rs(undef, {rows => 4})
+              ->get_column('id')->all
+          ]
         }
       )
     );
@@ -94,15 +91,13 @@ db_transaction {
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          push_token => 'oh!token2',
-          user       => {
-            name                  => 'Foo',
-            email                 => 'email2@email.com',
-            password              => '1234567890',
-            password_confirmation => '1234567890',
-            phone_number          => '+5511899911111',
-            districts             => []
-          },
+          push_token            => 'oh!token2',
+          name                  => 'Foo',
+          email                 => 'email2@email.com',
+          password              => '1234567890',
+          password_confirmation => '1234567890',
+          phone_number          => '+5511899911111',
+          districts             => []
         }
       )
     );
@@ -118,12 +113,10 @@ db_transaction {
       Content_Type => 'application/json',
       Content      => encode_json(
         {
-          push_token => 'no-password-user-token',
-          user       => {
-            name         => 'Foo',
-            email        => 'email.nopassword@email.com',
-            phone_number => '+5511899911121',
-          },
+          push_token   => 'no-password-user-token',
+          name         => 'Foo',
+          email        => 'email.nopassword@email.com',
+          phone_number => '+5511899911121',
         }
       )
     );

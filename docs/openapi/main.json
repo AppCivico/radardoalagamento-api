@@ -56,6 +56,38 @@
                                         }
                                     }
                                 },
+                                "name": {
+                                    "description": "Nome do usuário",
+                                    "type": "string",
+                                    "example": "Enéas Carneiro",
+                                    "required": true
+                                },
+                                "email": {
+                                    "description": "Email do usuário",
+                                    "type": "email",
+                                    "example": "email@email.com",
+                                    "required": true
+                                },
+                                "password": {
+                                    "description": "Senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "password_confirmation": {
+                                    "description": "Confirmação de senha do usuário",
+                                    "type": "password",
+                                    "example": "123segredo$$",
+                                    "required": true,
+                                    "minLength": 8
+                                },
+                                "phone_number": {
+                                    "description": "Telefone do usuário",
+                                    "type": "string",
+                                    "example": "+5511987651122",
+                                    "required": true
+                                },
                                 "districts": {
                                     "description": "IDs dos distritos que o usuário deseja seguir",
                                     "type": "array",
@@ -68,43 +100,6 @@
                                         89,
                                         11
                                     ]
-                                },
-                                "user": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {
-                                            "description": "Nome do usuário",
-                                            "type": "string",
-                                            "example": "Enéas Carneiro",
-                                            "required": true
-                                        },
-                                        "email": {
-                                            "description": "Email do usuário",
-                                            "type": "email",
-                                            "example": "email@email.com",
-                                            "required": true
-                                        },
-                                        "password": {
-                                            "description": "Senha do usuário",
-                                            "type": "password",
-                                            "example": "123segredo$$",
-                                            "required": true,
-                                            "minLength": 8
-                                        },
-                                        "password_confirmation": {
-                                            "description": "Confirmação de senha do usuário",
-                                            "type": "password",
-                                            "example": "123segredo$$",
-                                            "required": true,
-                                            "minLength": 8
-                                        },
-                                        "phone_number": {
-                                            "description": "Telefone do usuário",
-                                            "type": "string",
-                                            "example": "+5511987651122",
-                                            "required": true
-                                        }
-                                    }
                                 }
                             }
                         }
