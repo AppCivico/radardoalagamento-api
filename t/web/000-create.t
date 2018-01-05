@@ -41,16 +41,16 @@ db_transaction {
       Content      => encode_json(
         {
           push_token => 'oh!token',
-          user       => {
+          districts  => [
+            $schema->resultset('District')->search_rs(undef, {rows => 4})
+              ->get_column('id')->all
+          ],
+          user => {
             name                  => 'Foo',
             email                 => 'email@email.com',
             password              => '1234567890',
             password_confirmation => '1234567890',
             phone_number          => '+5511999911111',
-            districts             => [
-              $schema->resultset('District')->search_rs(undef, {rows => 4})
-                ->get_column('id')->all
-            ]
           },
         }
       )
@@ -67,16 +67,17 @@ db_transaction {
       Content      => encode_json(
         {
           push_token => 'oh!token111',
-          user       => {
+          districts  => [
+            $schema->resultset('District')->search_rs(undef, {rows => 4})
+              ->get_column('id')->all
+          ],
+
+          user => {
             name                  => 'Foo',
             email                 => 'email11@email.com',
             password              => '1234567890',
             password_confirmation => '1234567890',
             phone_number          => '+5511999911111',
-            districts             => [
-              $schema->resultset('District')->search_rs(undef, {rows => 4})
-                ->get_column('id')->all
-            ]
           },
         }
       )
@@ -95,13 +96,14 @@ db_transaction {
       Content      => encode_json(
         {
           push_token => 'oh!token2',
+          districts  => [],
           user       => {
             name                  => 'Foo',
             email                 => 'email2@email.com',
             password              => '1234567890',
             password_confirmation => '1234567890',
             phone_number          => '+5511899911111',
-            districts             => []
+
           },
         }
       )

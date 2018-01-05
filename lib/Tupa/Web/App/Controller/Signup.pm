@@ -15,7 +15,6 @@ sub create : Chained(base) PathPart('') Args(0) POST {
 
   my $data = $c->req->data        || {};
   my $user = delete $data->{user} || {};
-  my $token   = $data->{token}->{value};
   my $session = $c->stash->{collection}
     ->execute($c, for => create => with => {%$user, %$data});
   $self->status_created(
