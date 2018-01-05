@@ -45,11 +45,16 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "push_token": {
-                                    "description": "Token de push",
-                                    "type": "string",
-                                    "example": "[ABCD-10FE3B7C-7035-4699-90C4-0CC99317C914]",
-                                    "required": false
+                                "token": {
+                                    "type": "object",
+                                    "properties": {
+                                        "value": {
+                                            "description": "Token de push",
+                                            "type": "string",
+                                            "example": "012ABCC1-5C19-435D-B95A-652BCE6D15E9",
+                                            "required": true
+                                        }
+                                    }
                                 },
                                 "name": {
                                     "description": "Nome do usuário",
