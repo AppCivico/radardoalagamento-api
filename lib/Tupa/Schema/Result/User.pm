@@ -267,7 +267,7 @@ sub verifiers_specs {
             my $r = shift;
             die { msg_id => 'phone_number_already_exists', type => 'deafult' }
               if (
-              $self->find(
+              $self->result_source->resultset->find(
                 {
                   active       => 1,
                   phone_number => $r->get_value('phone_number')

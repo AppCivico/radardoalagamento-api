@@ -163,9 +163,16 @@ db_transaction {
       PUT '/me?api_key=' . $session->api_key,
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key,
-      Content =>
-        encode_json({user => {name => (my $new_name = 'Name ' . time),}})
+      Content      => encode_json(
+        {
+          user => {
+            phone_number => "+5511998674263",
+            name         => (my $new_name = 'Name ' . time),
+          }
+        }
+      )
     );
+    warn $res->as_string;
     ok($res->is_success, 'success');
     is($res->code, 202, '202 Accepted');
     isnt($new_name, $old_name, 'name changed');
