@@ -674,6 +674,19 @@
                                     "required": true,
                                     "example": "emergency"
                                 },
+                                "districts": {
+                                    "description": "IDs dos distritos notificados",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "required": true,
+                                    "example": [
+                                        67,
+                                        89,
+                                        11
+                                    ]
+                                },
                                 "sensor_sample_id": {
                                     "description": "ID correspondente da leitura do sensor",
                                     "type": "integer",
