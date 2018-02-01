@@ -70,10 +70,12 @@ sub end : Private {
 
 sub _build_results : Private {
   my ($self, $c, $rs) = @_;
-  warn ref $rs;
   my %results = ();
-  $rs = $rs->with_paging(%{$c->req->params || {}},
-    %{+eval { $c->req->data } || {}});
+  my %args = (%{$c->req->params || {}}, %{+eval { $c->req->data } || {}});
+
+  $rs = $rs->filter(%args) if $rs->can('filter');
+
+  $rs = $rs->with_paging(%args);
 
   if (my $pager = $rs->pager) {
     $results{total_entries}    = $pager->total_entries;
