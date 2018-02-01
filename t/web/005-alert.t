@@ -5,7 +5,7 @@ use Test::More;
 use lib "t/lib";
 use Catalyst::Test 'Tupa::Web::App';
 use HTTP::Request::Common qw(GET POST);
-use JSON qw(encode_json);
+use JSON qw(encode_json decode_json);
 use DateTime;
 use Tupa::Test;
 use DDP;
@@ -211,6 +211,40 @@ db_transaction {
       );
     ok($res->is_success, 'Success');
     is($res->code, 200, '200 OK');
+  }
+
+
+  {
+    diag('search alert');
+    my ($res, $ctx) =
+
+      ctx_request(
+      GET '/alert/all?level=overflow&page=1',
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
+    ok(my $json = decode_json($res->content), 'body ok');
+    is(scalar @{$json->{results}}, 1, 'count ok');
+    is($json->{results}->[0]->{level}, 'overflow', 'level matches');
+  }
+
+  {
+    diag('search alert');
+    my ($res, $ctx) =
+
+      ctx_request(
+      GET '/alert/all?description=bzz&page=1',
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
+    ok(my $json = decode_json($res->content), 'body ok');
+    is(scalar @{$json->{results}}, 1, 'count ok');
+    like($json->{results}->[0]->{description}, qr/bzz/, 'description matches');
+
   }
 
 
