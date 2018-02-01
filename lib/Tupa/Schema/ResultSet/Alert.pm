@@ -99,6 +99,23 @@ sub action_specs {
   };
 }
 
+sub filter {
+  my ($self, %args) = @_;
+  my $rs = $self->search_rs({});
+  my $me = $self->current_source_alias;
+  $rs = $rs->search_rs(
+    {
+      "$me.description" =>
+        {-ilike => \[q{'%' || ? || '%'}, [_q => $args{description}]]}
+    }
+  ) if $args{description} && length($args{description}) > 0;
+
+  $rs = $rs->search_rs({"$me.level" => $args{level}})
+    if $args{level} && scalar grep { $args{level} eq $_ }
+    ('attention', 'alert', 'emergency', 'overflow');
+  $rs;
+}
+
 sub summary {
 
   my ($self) = @_;
