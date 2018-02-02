@@ -27,13 +27,13 @@ db_transaction {
         "type"        => "0 PLU(mm)",
         "description" => "Córrego Itaim -  Rua Joaquim L. Veiga",
         "source"      => $schema->resultset('SensorSource')
-          ->find_or_create( { "name" => "SAISP" } )
+          ->find_or_create({"name" => "SAISP"})
       },
     );
 
     diag('Listing sensors');
     {
-      my ( $res, $ctx ) =
+      my ($res, $ctx) =
 
         ctx_request(
         GET '/sensor',
@@ -41,8 +41,8 @@ db_transaction {
         'X-Api-Key'  => $session->api_key
         );
 
-      ok( $res->is_success, 'Success' );
-      is( $res->code, 200, '200 OK' );
+      ok($res->is_success, 'Success');
+      is($res->code, 200, '200 OK');
     }
 
     ok(
@@ -53,7 +53,7 @@ db_transaction {
             grep { !/geom/ }
               $schema->resultset('District')->result_source->columns
           ],
-          '+columns' => { 'center' => \'ST_PointOnSurface(geom)' },
+          '+columns' => {'center' => \'ST_PointOnSurface(geom)'},
           rows       => 1
         }
         )->next,
@@ -66,7 +66,7 @@ db_transaction {
           description => 'excepturi reprehenderit placeat voluptatem',
           type        => 'assumenda saepe minima',
           source      => $schema->resultset('SensorSource')
-            ->find_or_create( { name => 'Reprehenderit' } ),
+            ->find_or_create({name => 'Reprehenderit'}),
           location => $district->get_column('center')
         }
       ),
@@ -74,7 +74,7 @@ db_transaction {
     );
 
     {
-      my ( $res, $ctx ) =
+      my ($res, $ctx) =
 
         ctx_request(
         GET '/sensor/' . $sensor->id,
@@ -82,12 +82,12 @@ db_transaction {
         'X-Api-Key'  => $session->api_key
         );
 
-      ok( $res->is_success, 'Success' );
-      is( $res->code, 200, '200 OK' );
+      ok($res->is_success, 'Success');
+      is($res->code, 200, '200 OK');
     }
 
     {
-      my ( $res, $ctx ) =
+      my ($res, $ctx) =
 
         ctx_request(
         GET '/sensor/' . $sensor->id . '/sample',
@@ -95,8 +95,28 @@ db_transaction {
         'X-Api-Key'  => $session->api_key
         );
 
-      ok( $res->is_success, 'Success' );
-      is( $res->code, 200, '200 OK' );
+      ok($res->is_success, 'Success');
+      is($res->code, 200, '200 OK');
+    }
+
+
+    {
+      my ($res, $ctx) =
+
+        ctx_request(
+        GET '/sensor?name=007765',
+        Content_Type => 'application/json',
+        'X-Api-Key'  => $session->api_key
+        );
+
+      ok($res->is_success, 'Success');
+      is($res->code, 200, '200 OK');
+
+
+      ok(my $json = decode_json($res->content), 'body ok');
+      is(scalar @{$json->{results}}, 1, 'count ok');
+      like($json->{results}->[0]->{name}, qr/007765/, 'name matches');
+
     }
 
   }

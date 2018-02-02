@@ -19,12 +19,25 @@ sub summary {
   $self->search_rs(
     undef,
     {
-      columns => [ grep { !/geom/ } $self->result_source->columns ],
-      '+columns' => [ { geom => \'ST_AsGeoJSON(geom)' } ],
+      columns    => [grep  { !/geom/ } $self->result_source->columns],
+      '+columns' => [{geom => \'ST_AsGeoJSON(geom)'}],
     }
   );
 
 }
+
+
+sub filter {
+  my ($self, %args) = @_;
+  my $rs = $self->search_rs({});
+  my $me = $self->current_source_alias;
+  $rs
+    = $rs->search_rs(
+    {"$me.name" => {-ilike => \[q{'%' || ? || '%'}, [_q => $args{name}]]}})
+    if $args{name} && length($args{name}) > 0;
+  $rs;
+}
+
 
 1;
 
