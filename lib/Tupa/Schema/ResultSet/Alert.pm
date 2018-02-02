@@ -113,6 +113,14 @@ sub filter {
   $rs = $rs->search_rs({"$me.level" => $args{level}})
     if $args{level} && scalar grep { $args{level} eq $_ }
     ('attention', 'alert', 'emergency', 'overflow');
+
+  $rs = $rs->search_rs(
+    {
+      "sensor.name" =>
+        {-ilike => \[q{'%' || ? || '%'}, [_q => $args{'sensor.name'}]]}
+    },
+    {join => {sensor_sample => 'sensor'}}
+  ) if $args{'sensor.name'};
   $rs;
 }
 

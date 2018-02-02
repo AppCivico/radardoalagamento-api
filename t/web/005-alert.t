@@ -226,7 +226,7 @@ db_transaction {
     ok($res->is_success, 'Success');
     is($res->code, 200, '200 OK');
     ok(my $json = decode_json($res->content), 'body ok');
-    is(scalar @{$json->{results}}, 1, 'count ok');
+    is(scalar @{$json->{results}},     1,          'count ok');
     is($json->{results}->[0]->{level}, 'overflow', 'level matches');
   }
 
@@ -244,6 +244,25 @@ db_transaction {
     ok(my $json = decode_json($res->content), 'body ok');
     is(scalar @{$json->{results}}, 1, 'count ok');
     like($json->{results}->[0]->{description}, qr/bzz/, 'description matches');
+
+  }
+
+  {
+    diag('search alert sensor');
+    my $sensor_name = $sensor->name;
+    my ($res, $ctx) =
+
+      ctx_request(
+      GET "/alert/all?sensor.name=$sensor_name&page=1",
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
+    ok(my $json = decode_json($res->content), 'body ok');
+    is(scalar @{$json->{results}}, 1, 'count ok');
+    like($json->{results}->[0]->{sensor_sample}->{sensor}->{name},
+      qr/\Q$sensor_name\E/, 'sensor name matches');
 
   }
 
