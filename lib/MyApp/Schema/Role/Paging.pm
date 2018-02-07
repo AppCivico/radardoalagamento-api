@@ -14,8 +14,8 @@ sub with_paging {
     = $rs->__rows($args{rows}
       && is_Int($args{rows})
       && $args{rows} > 0 ? $args{rows} : 20);
-  $rs = $rs->__order_by($args{order_by})
-    if exists $args{order_by}->{desc} || exists $args{order_by}->{asc};
+  
+  $rs = $rs->__order_by(\%args) if exists $args{desc} || exists $args{asc};
 
   return $rs;
 }
