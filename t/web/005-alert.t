@@ -253,7 +253,7 @@ db_transaction {
     my ($res, $ctx) =
 
       ctx_request(
-      GET "/alert/all?sensor.name=$sensor_name&page=1",
+      GET "/alert/all?sensor.name=$sensor_name&page=1&asc=level",
       Content_Type => 'application/json',
       'X-Api-Key'  => $session->api_key
       );

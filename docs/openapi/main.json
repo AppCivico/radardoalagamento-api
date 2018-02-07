@@ -253,6 +253,12 @@
           },
           {
             "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
           }
         ],
         "responses": {
@@ -523,6 +529,12 @@
           },
           {
             "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
           }
         ],
         "responses": {
@@ -768,6 +780,28 @@
           "schema": {
             "type": "integer",
             "minimum": 0
+          }
+        },
+        "asc": {
+          "name": "asc",
+          "in": "query",
+          "description": "Ordena campo especificado em ordem crescente",
+          "type": "string",
+          "required": false,
+          "example": "timestamp",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "desc": {
+          "name": "desc",
+          "in": "query",
+          "description": "Ordena campo especificado em ordem decrescente",
+          "type": "string",
+          "required": false,
+          "example": "name",
+          "schema": {
+            "type": "string"
           }
         }
       }
