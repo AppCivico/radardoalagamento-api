@@ -234,6 +234,162 @@
         ]
       }
     },
+    "/alert/reported": {
+      "get": {
+        "tags": [
+          "alert"
+        ],
+        "summary": "Listando alertas criados pelo usuário",
+        "description": "Alertas que foram reportados pelo usuário atual",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/rows"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de alertas",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "sensor_sample_id": {
+                        "type": "number"
+                      },
+                      "pushed_to_users": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      },
+                      "reporter_id": {
+                        "type": "number"
+                      },
+                      "sensor_sample": {
+                        "required": [
+                          "event_ts",
+                          "sensor_id",
+                          "extra",
+                          "value",
+                          "id",
+                          "sensor",
+                          "location"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "sensor": {
+                            "type": "object",
+                            "required": [
+                              "description",
+                              "source_id",
+                              "created_at",
+                              "location",
+                              "districts",
+                              "id",
+                              "name",
+                              "type"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "source_id": {
+                                "type": "number"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "districts": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "zone_id": {
+                                      "type": "number"
+                                    },
+                                    "id": {
+                                      "type": "number"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "geom": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "event_ts": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "number"
+                          },
+                          "sensor_id": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "level": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "results"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/alert": {
       "get": {
         "tags": [
@@ -518,7 +674,7 @@
           "admin",
           "alert"
         ],
-        "summary": "Endpoint para listagem de alertas criados pelo operador",
+        "summary": "Endpoint para listagem de todos os alertas criados no sistema",
         "description": "Listando alertas, junto com sensor de origem e distritos",
         "produces": [
           "application/json"
