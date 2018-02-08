@@ -215,6 +215,21 @@ db_transaction {
 
 
   {
+    diag('listing alert reported by current user');
+    my ($res, $ctx) =
+
+      ctx_request(
+      GET '/alert/reported',
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
+  }
+  
+
+
+  {
     diag('search alert');
     my ($res, $ctx) =
 
