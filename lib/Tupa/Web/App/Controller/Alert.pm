@@ -23,6 +23,18 @@ sub list : Chained(base) PathPart('') Args(0) GET {
   );
 }
 
+sub reported : Chained(base) Args(0) GET {
+  my ($self, $c) = @_;
+
+  $self->status_ok(
+    $c,
+    entity => $c->forward(
+      _build_results => [$c->user->obj->alerts->summary->as_hashref]
+    )
+  );
+}
+
+
 sub all : Chained(base) Args(0) GET {
   my ($self, $c) = @_;
 
