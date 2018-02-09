@@ -64,7 +64,7 @@ sub verifiers_specs {
         type       => MobileNumber,
         post_check => sub {
           my $r = shift;
-          die { msg_id => 'phone_number_already_exists', type => 'deafult' }
+          die { msg_id => 'phone_number_already_exists', type => 'default' }
             if (
             $self->find(
               {
@@ -170,7 +170,7 @@ sub verifiers_specs {
           type       => MobileNumber,
           post_check => sub {
             my $r = shift;
-            die { msg_id => 'phone_number_already_exists', type => 'deafult' }
+            die { msg_id => 'phone_number_already_exists', type => 'default' }
               if (
               $self->find(
                 {
