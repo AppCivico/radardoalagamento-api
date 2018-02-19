@@ -93,6 +93,7 @@ sub action_specs {
         if scalar @$districts;
 
       eval { $alert->notify };
+      warn $@ if $@;
       $alert->update({pushed_to_users => 1});
       $alert;
     },

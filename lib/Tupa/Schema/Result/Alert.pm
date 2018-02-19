@@ -186,14 +186,16 @@ use feature 'state';
 
 sub affected_users_keys {
   my ($self) = @_;
-  return $self->sensor_sample->sensor->districts->related_resultset(
-    'user_districts')->related_resultset('user')->get_column('push_token')->all
-    if $self->sensor_sample_id;
 
   return $self->alert_districts->related_resultset('district')
     ->related_resultset('user_districts')->related_resultset('user')
     ->get_column('push_token')->all
     if $self->districts->count;
+
+  return $self->sensor_sample->sensor->districts->related_resultset(
+    'user_districts')->related_resultset('user')->get_column('push_token')->all
+    if $self->sensor_sample_id;
+
 }
 
 sub notify {
@@ -204,7 +206,8 @@ sub notify {
   state $http = HTTP::Tiny->new(timeout => 5);
 
   my @all_keys = grep {defined} $self->affected_users_keys;
-
+  use Data::Dumper;
+  warn Dumper(\@all_keys);
   my $it = natatime 100, @all_keys;
   while (my @hundred_keys = $it->()) {
     my $res = $http->post(
@@ -230,6 +233,10 @@ sub notify {
     if (!$res->{success}) {
       warn 'Failed: ' . $res->{content};
     }
+    else {
+      warn 'OK => ' . $res->{content};
+    }
+
   }
 
 }
