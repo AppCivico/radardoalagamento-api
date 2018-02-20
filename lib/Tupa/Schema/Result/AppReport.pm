@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::AppReport;
 
 # Created by DBIx::Class::Schema::Loader
@@ -45,12 +46,6 @@ __PACKAGE__->table("app_report");
   is_nullable: 0
   sequence: 'app_report_id_seq'
 
-=head2 user_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
 =head2 create_ts
 
   data_type: 'timestamp'
@@ -58,15 +53,15 @@ __PACKAGE__->table("app_report");
   is_nullable: 0
   original: {default_value => \"now()"}
 
-=head2 status
-
-  data_type: 'text'
-  is_nullable: 0
-
 =head2 payload
 
   data_type: 'text'
   is_nullable: 0
+
+=head2 solved_at
+
+  data_type: 'timestamp'
+  is_nullable: 1
 
 =cut
 
@@ -78,19 +73,17 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "app_report_id_seq",
   },
-  "user_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "create_ts",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    original      => { default_value => \"now()" },
+    original      => {default_value => \"now()"},
   },
-  "status",
-  { data_type => "text", is_nullable => 0 },
   "payload",
-  { data_type => "text", is_nullable => 0 },
+  {data_type => "text", is_nullable => 0},
+  "solved_at",
+  {data_type => "timestamp", is_nullable => 1},
 );
 
 =head1 PRIMARY KEY
@@ -105,28 +98,16 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
 
-=head2 user
-
-Type: belongs_to
-
-Related object: L<Tupa::Schema::Result::User>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "user",
-  "Tupa::Schema::Result::User",
-  { id => "user_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-11 11:50:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vjwg6DFam5IsncMIp3DDuA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:26:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aOlhIyMDA0XaIzQ4Au6VPA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
+
+sub TO_JSON {
+  +{shift->get_columns};
+}
+
 1;
