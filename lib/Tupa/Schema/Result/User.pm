@@ -143,21 +143,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 app_reports
-
-Type: has_many
-
-Related object: L<Tupa::Schema::Result::AppReport>
-
-=cut
-
-__PACKAGE__->has_many(
-  "app_reports",
-  "Tupa::Schema::Result::AppReport",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 user_districts
 
 Type: has_many
@@ -204,8 +189,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-11 11:50:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2P3SCvPFSv5cBDADydGICQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:23:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/7Y8k6EHh6GNAGJxse9zsw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 

@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::Alert;
 
 # Created by DBIx::Class::Schema::Loader
@@ -92,21 +91,21 @@ __PACKAGE__->add_columns(
     sequence          => "alert_id_seq",
   },
   "sensor_sample_id",
-  {data_type => "integer", is_foreign_key => 1, is_nullable => 1},
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "description",
-  {data_type => "text", is_nullable => 1},
+  { data_type => "text", is_nullable => 1 },
   "level",
-  {data_type => "text", is_nullable => 0},
+  { data_type => "text", is_nullable => 0 },
   "pushed_to_users",
-  {data_type => "boolean", default_value => \"false", is_nullable => 1},
+  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
   "reporter_id",
-  {data_type => "integer", is_foreign_key => 1, is_nullable => 0},
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "created_at",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 1,
-    original      => {default_value => \"now()"},
+    original      => { default_value => \"now()" },
   },
 );
 
@@ -133,8 +132,10 @@ Related object: L<Tupa::Schema::Result::AlertDistrict>
 =cut
 
 __PACKAGE__->has_many(
-  "alert_districts", "Tupa::Schema::Result::AlertDistrict",
-  {"foreign.alert_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
+  "alert_districts",
+  "Tupa::Schema::Result::AlertDistrict",
+  { "foreign.alert_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 reporter
@@ -146,9 +147,10 @@ Related object: L<Tupa::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-  "reporter", "Tupa::Schema::Result::User",
-  {id            => "reporter_id"},
-  {is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION"},
+  "reporter",
+  "Tupa::Schema::Result::User",
+  { id => "reporter_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 sensor_sample
@@ -162,7 +164,7 @@ Related object: L<Tupa::Schema::Result::SensorSample>
 __PACKAGE__->belongs_to(
   "sensor_sample",
   "Tupa::Schema::Result::SensorSample",
-  {id => "sensor_sample_id"},
+  { id => "sensor_sample_id" },
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -172,8 +174,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-12-14 15:08:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0Qpdy2pxIkeM27ybnD6XJQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:23:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YOEqf42qSVkvkMI1SsjHjA
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->many_to_many(districts => 'alert_districts' => 'district');

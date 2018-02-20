@@ -32,10 +32,7 @@ sub verifiers_specs {
   return +{
     create => Data::Verifier->new(
       filters => [qw(trim)],
-      profile => {
-        payload => {required => 1, type => NonEmptyStr,},
-        status  => {required => 1, type => AppReportStatus,}
-      }
+      profile => {payload => {required => 1, type => NonEmptyStr,},}
     )
   };
 }
@@ -53,8 +50,13 @@ sub summary {
 
   my ($self) = @_;
   my $me = $self->current_source_alias;
-  $self->search_rs(undef,
-    {rows => 100, order_by => {-desc => "$me.create_ts"}});
+  $self->search_rs(
+    undef,
+    {
+      rows     => 100,
+      order_by => [{-desc => "$me.create_ts"}, \"$me.solved_at NULLS FIRST"]
+    }
+  );
 }
 
 1;
