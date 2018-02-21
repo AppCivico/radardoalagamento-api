@@ -173,7 +173,6 @@ while (1) {
         )
       );
       my $res = $http->get( $uri->as_string );
-      use DDP;
 
       $sensor->samples->find_or_create( build_sample($_) )
         for grep {

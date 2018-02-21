@@ -34,7 +34,7 @@ requires 'DDP';
 requires 'DBD::Pg';
 requires 'IO::Socket::SSL';
 requires 'Net::SSLeay';
-
+requires 'Daemon::Control';
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';
 test_requires 'Term::ANSIColor';
