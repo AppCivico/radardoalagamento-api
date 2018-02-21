@@ -240,7 +240,11 @@ sub verifiers_specs {
             die {msg_id => 'phone_number_already_exists', type => 'deafult'}
               if (
               $self->result_source->resultset->find(
-                {active => 1, phone_number => $r->get_value('phone_number')}
+                {
+                  id           => {'!=' => $self->id},
+                  active       => 1,
+                  phone_number => $r->get_value('phone_number')
+                }
               )
               );
             return 1;
