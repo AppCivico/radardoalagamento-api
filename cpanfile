@@ -35,6 +35,10 @@ requires 'DBD::Pg';
 requires 'IO::Socket::SSL';
 requires 'Net::SSLeay';
 requires 'Daemon::Control';
+requires 'Email::Sender::Simple';
+requires 'Email::Sender::Transport::SMTP::TLS';
+requires 'MIME::Lite';
+
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';
 test_requires 'Term::ANSIColor';
