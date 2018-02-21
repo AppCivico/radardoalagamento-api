@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
@@ -94,24 +95,24 @@ __PACKAGE__->add_columns(
     sequence          => "user_id_seq",
   },
   "name",
-  { data_type => "text", is_nullable => 0 },
+  {data_type => "text", is_nullable => 0},
   "email",
-  { data_type => "text", is_nullable => 0 },
+  {data_type => "text", is_nullable => 0},
   "phone_number",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
   "password",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
   "create_ts",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    original      => { default_value => \"now()" },
+    original      => {default_value => \"now()"},
   },
   "active",
-  { data_type => "boolean", default_value => \"true", is_nullable => 1 },
+  {data_type => "boolean", default_value => \"true", is_nullable => 1},
   "push_token",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
 );
 
 =head1 PRIMARY KEY
@@ -137,10 +138,9 @@ Related object: L<Tupa::Schema::Result::Alert>
 =cut
 
 __PACKAGE__->has_many(
-  "alerts",
-  "Tupa::Schema::Result::Alert",
-  { "foreign.reporter_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "alerts", "Tupa::Schema::Result::Alert",
+  {"foreign.reporter_id" => "self.id"},
+  {cascade_copy          => 0, cascade_delete => 0},
 );
 
 =head2 user_districts
@@ -152,10 +152,8 @@ Related object: L<Tupa::Schema::Result::UserDistrict>
 =cut
 
 __PACKAGE__->has_many(
-  "user_districts",
-  "Tupa::Schema::Result::UserDistrict",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "user_districts", "Tupa::Schema::Result::UserDistrict",
+  {"foreign.user_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
 );
 
 =head2 user_roles
@@ -169,8 +167,8 @@ Related object: L<Tupa::Schema::Result::UserRole>
 __PACKAGE__->has_many(
   "user_roles",
   "Tupa::Schema::Result::UserRole",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {"foreign.user_id" => "self.id"},
+  {cascade_copy      => 0, cascade_delete => 0},
 );
 
 =head2 user_sessions
@@ -182,10 +180,8 @@ Related object: L<Tupa::Schema::Result::UserSession>
 =cut
 
 __PACKAGE__->has_many(
-  "user_sessions",
-  "Tupa::Schema::Result::UserSession",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "user_sessions", "Tupa::Schema::Result::UserSession",
+  {"foreign.user_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
 );
 
 
@@ -194,7 +190,7 @@ __PACKAGE__->has_many(
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
-__PACKAGE__->many_to_many( roles => user_roles => 'role' );
+__PACKAGE__->many_to_many(roles => user_roles => 'role');
 
 __PACKAGE__->remove_column('password');
 
@@ -202,19 +198,16 @@ __PACKAGE__->load_components(qw(PassphraseColumn));
 
 __PACKAGE__->add_column(
   password => {
-    data_type        => "text",
-    passphrase       => 'crypt',
-    passphrase_class => 'BlowfishCrypt',
-    passphrase_args  => {
-      cost        => 8,
-      salt_random => 1,
-    },
+    data_type               => "text",
+    passphrase              => 'crypt',
+    passphrase_class        => 'BlowfishCrypt',
+    passphrase_args         => {cost => 8, salt_random => 1,},
     passphrase_check_method => 'check_password',
     is_nullable             => 0
   },
 );
 
-__PACKAGE__->many_to_many( districts => user_districts => 'district' );
+__PACKAGE__->many_to_many(districts => user_districts => 'district');
 
 with 'MyApp::Role::Verification';
 with 'MyApp::Role::Verification::TransactionalActions::DBIC';
@@ -224,7 +217,7 @@ use Tupa::Types qw(MobileNumber);
 use Data::Verifier;
 use Authen::Passphrase::AcceptAll;
 
-has schema => ( is => 'ro', lazy => 1, builder => '__build_schema' );
+has schema => (is => 'ro', lazy => 1, builder => '__build_schema');
 
 sub __build_schema {
   shift->result_source->schema;
@@ -237,26 +230,17 @@ sub verifiers_specs {
     update => Data::Verifier->new(
       filters => [qw(trim)],
       profile => {
-        push_token => {
-          required => 0,
-          type     => 'Str',
-        },
-        name => {
-          required => 0,
-          type     => 'Str',
-        },
+        push_token   => {required => 0, type => 'Str',},
+        name         => {required => 0, type => 'Str',},
         phone_number => {
           required   => 0,
           type       => MobileNumber,
           post_check => sub {
             my $r = shift;
-            die { msg_id => 'phone_number_already_exists', type => 'deafult' }
+            die {msg_id => 'phone_number_already_exists', type => 'deafult'}
               if (
               $self->result_source->resultset->find(
-                {
-                  active       => 1,
-                  phone_number => $r->get_value('phone_number')
-                }
+                {active => 1, phone_number => $r->get_value('phone_number')}
               )
               );
             return 1;
@@ -270,7 +254,7 @@ sub verifiers_specs {
             my $ids = $r->get_value('districts');
             return 1 unless scalar @$ids;
             return $self->schema->resultset('District')
-              ->search_rs( { id => { -in => $ids } } )->count == scalar @$ids;
+              ->search_rs({id => {-in => $ids}})->count == scalar @$ids;
 
           }
         },
@@ -279,11 +263,8 @@ sub verifiers_specs {
           type       => 'Str',
           min_length => 8,
           dependent  => {
-            password_confirmation => {
-              required   => 0,
-              min_length => 8,
-              type       => 'Str',
-            },
+            password_confirmation =>
+              {required => 0, min_length => 8, type => 'Str',},
           },
           post_check => sub {
             my $r = shift;
@@ -310,13 +291,16 @@ sub action_specs {
 
       $values{password} ||= Authen::Passphrase::AcceptAll->new;
 
-      $self->set_districts( $self->schema->resultset('District')
-          ->search_rs( { id => { -in => $districts } } )->all )
-        if @$districts;
+      $self->set_districts(
+        [
+          $self->schema->resultset('District')
+            ->search_rs({id => {-in => $districts}})->all
+        ]
+      ) if @$districts;
 
-      $self->result_source->resultset->kick_push_token( $values{push_token} )
+      $self->result_source->resultset->kick_push_token($values{push_token})
         if $values{push_token};
-      $self->update( \%values );
+      $self->update(\%values);
       $self->discard_changes;
       $self;
     }
@@ -325,17 +309,17 @@ sub action_specs {
 
 sub reset_session {
   my ($self) = @_;
-  $self->user_sessions->update( { valid_until => \q|now()| } );
-  $self->user_sessions->create( {} )->discard_changes;
+  $self->user_sessions->update({valid_until => \q|now()|});
+  $self->user_sessions->create({})->discard_changes;
 }
 
 sub follow {
-  my ( $self, $district ) = @_;
+  my ($self, $district) = @_;
   $self->add_to_districts($district);
 }
 
 sub unfollow {
-  my ( $self, $district ) = @_;
+  my ($self, $district) = @_;
   $self->remove_from_districts($district);
 }
 

@@ -165,6 +165,10 @@ db_transaction {
       'X-Api-Key'  => $session->api_key,
       Content      => encode_json(
         {
+          districts => [
+            $schema->resultset('District')->search_rs(undef, {rows => 2})
+              ->get_column('id')->all
+          ],
           user => {
             phone_number => "+5511998674263",
             name         => (my $new_name = 'Name ' . time),
