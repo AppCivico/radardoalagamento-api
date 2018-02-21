@@ -41,7 +41,15 @@ sub action_specs {
   my $self = shift;
   return +{
     create => sub {
-      $self->create({shift->valid_values});
+      my $report = $self->create({shift->valid_values});
+      $self->result_source->schema->storage->dbh_do(
+        sub {
+          my (undef, $dbh) = @_;
+          eval { $dbh->do("NOTIFY mailer, ?", undef, $report->payload) };
+          warn $@ if $@;
+        }
+      );
+      return $report;
     },
   };
 }
