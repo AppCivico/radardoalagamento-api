@@ -31,7 +31,8 @@ LISTENLOOP: {
       Subject =>
         Encode::encode('MIME-Header', '[Radar Do Alagamento] Erro reportado'),
       Type => 'text/html; charset=UTF-8',
-      Data => "<p> $payload </p>"
+      Data => "<p> $payload </p>",
+      From => 'no-reply@radardoalagamento.org.br',
     );
 
     eval {
