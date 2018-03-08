@@ -12,31 +12,31 @@ use POSIX qw(strftime gmtime);
 use DateTime;
 use DateTimeX::Easy qw(parse);
 
-( $ENV{TUPA_CONFIG_FILE} && -r $ENV{TUPA_CONFIG_FILE} )
+($ENV{TUPA_CONFIG_FILE} && -r $ENV{TUPA_CONFIG_FILE})
   or die 'missing TUPA_CONFIG_FILE';
 
 my $user = $ENV{SAISP_USER} or die 'Missing SAISP_USER env var';
 my $pass = $ENV{SAISP_PASS} or die 'Missing SAISP_PASS env var';
 
-my $config    = do '' . abs_path( $ENV{TUPA_CONFIG_FILE} );
+my $config    = do '' . abs_path($ENV{TUPA_CONFIG_FILE});
 my $db_config = $config->{model}->{DB}->{connect_info};
-my $schema    = Tupa::Schema->connect( $db_config->{dsn}, $db_config->{user},
-  $db_config->{password}, $db_config );
-my $base_uri =
-  URI->new("https://$user:$pass\@www.saisp.br/geral/export_telem.jsp");
+my $schema    = Tupa::Schema->connect($db_config->{dsn}, $db_config->{user},
+  $db_config->{password}, $db_config);
+my $base_uri
+  = URI->new("https://$user:$pass\@www.saisp.br/geral/export_telem.jsp");
 
 my @sensors = (
   {
     code        => 1000946,
     description => 'Córrego Itaim  - Rua Joaquim L. Veiga',
     location    => '-23.5732336,-46.7792928',
-    types       => [ '0 PLU(mm)', '1 FLU(m)' ],
+    types       => ['0 PLU(mm)', '1 FLU(m)'],
   },
   {
     code        => 1000947,
     description => 'Córrego Jaguaré - Rua Jorge Ward',
     location    => '-23.5680505,-46.7591848',
-    types       => [ '0 PLU(mm)', '1 FLU(m)' ],
+    types       => ['0 PLU(mm)', '1 FLU(m)'],
   },
   {
     code        => 1000948,
@@ -62,31 +62,11 @@ my @sensors = (
     location    => '-23.6025189,-46.8174299',
     types       => ['1 FLU(m)'],
   },
-  {
-    code        => 694,
-    description => 'P2 - Nascentes',
-    types       => ['1 FLU(m)'],
-  },
-  {
-    code        => 696,
-    description => 'P4 - Água Podre',
-    types       => ['1 FLU(m)'],
-  },
-  {
-    code        => 697,
-    description => 'P5 - Kenkiti',
-    types       => ['1 FLU(m)'],
-  },
-  {
-    code        => 698,
-    description => 'P6 - Sapê',
-    types       => ['1 FLU(m)']
-  },
-  {
-    code        => 695,
-    description => 'P3 - Jacarezinho',
-    types       => ['1 FLU(m)'],
-  },
+  {code => 694, description => 'P2 - Nascentes',   types => ['1 FLU(m)'],},
+  {code => 696, description => 'P4 - Água Podre', types => ['1 FLU(m)'],},
+  {code => 697, description => 'P5 - Kenkiti',     types => ['1 FLU(m)'],},
+  {code => 698, description => 'P6 - Sapê',       types => ['1 FLU(m)']},
+  {code => 695, description => 'P3 - Jacarezinho', types => ['1 FLU(m)'],},
   {
     code        => 1000949,
     description => 'Precipitação Radar Bacia Jaguaré',
@@ -125,15 +105,15 @@ my @sensors = (
 );
 
 my $http = HTTP::Tiny->new;
-my $source =
-  $schema->resultset('SensorSource')->find_or_create( { name => 'SAISP' } );
+my $source
+  = $schema->resultset('SensorSource')->find_or_create({name => 'SAISP'});
 while (1) {
 
   foreach my $sensor_spec (@sensors) {
 
     #    ?cnt=1&posto_1=1000947&instrum_1=0&dt_1=201701011201
-    foreach my $type_str ( @{ $sensor_spec->{types} || [] } ) {
-      my ( $index, $type ) = $type_str =~ /^(\d+)\s+(.*?)$/;
+    foreach my $type_str (@{$sensor_spec->{types} || []}) {
+      my ($index, $type) = $type_str =~ /^(\d+)\s+(.*?)$/;
 
       $sensor_spec->{location} = \(
         sprintf(
@@ -155,8 +135,8 @@ while (1) {
       my $last_sample = $sensor->samples->last->next;
       my $last_ts;
 
-      $last_ts =
-        $last_sample->event_ts->set_time_zone('America/Sao_Paulo')
+      $last_ts
+        = $last_sample->event_ts->set_time_zone('America/Sao_Paulo')
         ->format_cldr('YMMddHHmm')
         if $last_sample;
 
@@ -172,24 +152,26 @@ while (1) {
           )->format_cldr('YMMddHHmm')
         )
       );
-      my $res = $http->get( $uri->as_string );
-
-      $sensor->samples->find_or_create( build_sample($_) )
+      my $res = $http->get($uri->as_string);
+      my $sample;
+      ($sample = build_sample($_)) && $sensor->samples->find_or_create($sample)
         for grep {
-        my ( undef, undef, $ts ) = split /,/, $_;
-        !$last_ts || ( $ts > $last_ts )
-        } grep { defined } split /\s+/, $res->{content};
+        my (undef, undef, $ts) = split /,/, $_;
+        !$last_ts || ($ts > $last_ts)
+        } grep {defined} split /\s+/, $res->{content};
     }
   }
-  sleep( 10 * 60 );    # 10 minutos
+  sleep(10 * 60);    # 10 minutos
 }
 
 sub build_sample {
   my $line = shift;
-  my ( undef, undef, $ts, $value ) = split /,/, $line;
+  my (undef, undef, $ts, $value) = split /,/, $line;
   $ts =~ s/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/$1-$2-$3 $4:$5/;
+  return unless $ts;
+
   return {
     value    => $value,
-    event_ts => parse( $ts, time_zone => 'America/Sao_Paulo' )->iso8601
+    event_ts => parse($ts, time_zone => 'America/Sao_Paulo')->iso8601
   };
 }
