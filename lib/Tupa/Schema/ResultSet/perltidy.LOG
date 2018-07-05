@@ -1,0 +1,73 @@
+perltidy version 20180220 log file on a darwin system, OLD_PERL_VERSION=5.026001
+Found Configuration File >>> /Users/gabriel/.perltidyrc 
+Configuration and command line parameters for this run:
+-pbp -w -iob -l=80 -mbl=2 -i=2 -ci=2 -vt=0 -pt=2 -bt=2 -sbt=2 -isbc
+To find error messages search for 'WARNING' with your editor
+Indentation will be with 2 spaces
+Line 1 implies starting-indentation-level = 0
+
+########################  WARNING  #########################
+33: return +{
+            ^
+34: create => Data::Verifier->new(
+                                 ^
+43: },}
+      ^
+Found 1 extra '(' between '{' on line 33 and '}' on line 43
+    The most recent un-matched '(' is on line 34
+############################################################
+
+########################  WARNING  #########################
+There is no previous '{' to match a '}' on line 46
+46: }
+    ^
+############################################################
+WARNING: Starting negative indentation
+WARNING: resetting level to 0 at sub action_specs
+The nesting depths in the table below are at the start of the lines.
+The indicated output line numbers are not always exact.
+ci = levels of continuation indentation; bk = 1 if in BLOCK, 0 if not.
+
+in:out indent c b  nesting   code + messages; (messages begin with >>>)
+lines  levels i k            (code begins with one '.' per indent level)
+------  ----- - - --------   -------------------------------------------
+L1:1     i0:0 0 1            package Tupa::Schema::ResultSet::Re ....
+L25:25   i0:0 0 1            sub __build_schema {
+L29:29   i0:0 0 1            sub BUILDARGS { $_[2] }
+L31:31   i0:0 0 1            sub verifiers_specs {
+L44:46   i2:1 1 1 {{(}       >>>Added ';' here
+L45:49   i1:0 0 1 {{(})      >>>Start indentation disagreement: input=1; output=0
+L45:49   i1:0 0 1 {{(})      >>>Deleted unnecessary ';'
+L46:50   i0:-1 0 1 {{(})}     >>>WARNING: Program bug in scan_list: hit nesting error which should have been caught
+L48:52   i0:0 0 1 {{(})}}    sub action_specs {
+L48:52   i0:0 0 1 {{(})}}    >>>End indentation disagreement from input line 45
+L65:69   i0:0 0 1 {{(})}}    sub summary {
+L78:82   i0:0 0 1 {{(})}}    >>>Last line
+
+1 semicolon was added:
+   at input line 44
+  (Use -nasc to prevent semicolon addition)
+
+1 unnecessary semicolon was deleted:
+   at input line 45
+  (Use -ndsc to prevent semicolon deletion)
+
+First indentation disagreement seen at input line 45
+Last indentation disagreement seen at input line 46
+Note: Indentation disagreement detection is not accurate for outdenting and -lp.
+
+No lines exceeded 80 characters
+  Maximum output line length was 76 at line 77
+WARNING: To save a full .LOG file rerun with -g
+WARNING: 
+Oops, you seem to have encountered a bug in perltidy.  Please check the
+BUGS file at http://perltidy.sourceforge.net.  If the problem is not
+listed there, please report it so that it can be corrected.  Include the
+smallest possible script which produces this message, along with the
+.LOG file if appropriate.  See the manual pages for contact information.
+Your efforts are appreciated.  
+Thank you!
+WARNING: 
+The log file shows that perltidy added 1 semicolons.
+Please rerun with -nasc to see if that is the cause of the syntax error.  Even
+if that is the problem, please report it so that it can be fixed.

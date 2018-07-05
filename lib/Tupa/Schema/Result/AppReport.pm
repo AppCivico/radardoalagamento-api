@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::AppReport;
 
 # Created by DBIx::Class::Schema::Loader
@@ -78,12 +77,12 @@ __PACKAGE__->add_columns(
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    original      => {default_value => \"now()"},
+    original      => { default_value => \"now()" },
   },
   "payload",
-  {data_type => "text", is_nullable => 0},
+  { data_type => "text", is_nullable => 0 },
   "solved_at",
-  {data_type => "timestamp", is_nullable => 1},
+  { data_type => "timestamp", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -99,8 +98,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:26:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aOlhIyMDA0XaIzQ4Au6VPA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-03 10:09:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mRhS9/ZylTdsdaY5jJVF/Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

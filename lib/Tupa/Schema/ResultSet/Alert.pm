@@ -14,7 +14,8 @@ with 'MyApp::Role::Verification::TransactionalActions::DBIC';
 with 'MyApp::Schema::Role::InflateAsHashRef';
 with 'MyApp::Schema::Role::Paging';
 
-use Tupa::Types qw(MobileNumber AlertLevel);
+use Tupa::Types qw(AlertLevel Latitude Longitude MobileNumber);
+use MooseX::Types::Common::String qw(NonEmptyStr);
 use Data::Verifier;
 use Safe::Isa;
 
@@ -33,21 +34,40 @@ sub verifiers_specs {
     create => Data::Verifier->new(
       filters => [qw(trim)],
       derived => {
+        location => {
+          required => 0,
+          fields   => [qw(lat lng)],
+          deriver  => sub {
+            my $r = shift;
+            return unless $r->get_value('lng') && $r->get_value('lat');
+            return \(
+              sprintf(
+                qq{'SRID=4326;POINT(%s %s)::geography'},
+                $r->get_value('lng'),
+                $r->get_value('lat')
+              )
+            );
+          }
+        },
+
         source => {
           required => 1,
-          fields   => [qw(sensor_sample_id districts)],
+          fields   => [qw(sensor_sample_id districts lat lng)],
           deriver  => sub {
             my $r = shift;
             die {msg_id => 'alert_source_missing', type => 'default'}
               unless $r->get_value('sensor_sample_id')
-              || $r->get_value('districts');
+              || $r->get_value('districts')
+              || ($r->get_value('lat') && $r->get_value('lng'));
             return 1;
           }
         }
       },
       profile => {
-        description      => {required => 0, type => 'Str',},
-        __user           => {required => 1},
+        description => {required => 0, type => 'Str',},
+        __user      => {required => 1},
+        lat         => {required => 0, type => Latitude, coerce => 1},
+        lng         => {required => 0, type => Longitude, coerce => 1},
         sensor_sample_id => {
           required   => 0,
           type       => 'Int',
@@ -82,15 +102,24 @@ sub action_specs {
     oi     => sub { },
     create => sub {
       my %values = shift->valid_values;
-      my $districts = delete $values{districts} || [];
+      my $district_search_spec;
+      if (my $districts = delete $values{districts}) {
+        $district_search_spec = {id => {-in => $districts}};
+      }
 
       delete $values{source};
+      delete @values{qw(lat lng)};
+      if (my $location = delete $values{location}) {
+        $district_search_spec = {geom => {'&&' => $location}};
+      }
+
       my $alert
         = $self->create({reporter => (delete $values{__user})->{obj}, %values});
 
-      $alert->set_districts($self->schema->resultset('District')
-          ->search_rs({id => {-in => $districts}})->all)
-        if scalar @$districts;
+      $alert->set_districts(
+        $self->schema->resultset('District')->search_rs($district_search_spec)
+          ->all)
+        if scalar $district_search_spec;
 
       eval { $alert->notify };
       warn $@ if $@;

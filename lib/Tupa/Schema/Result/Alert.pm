@@ -80,6 +80,12 @@ __PACKAGE__->table("alert");
   is_nullable: 1
   original: {default_value => \"now()"}
 
+=head2 report_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -107,6 +113,8 @@ __PACKAGE__->add_columns(
     is_nullable   => 1,
     original      => { default_value => \"now()" },
   },
+  "report_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -136,6 +144,26 @@ __PACKAGE__->has_many(
   "Tupa::Schema::Result::AlertDistrict",
   { "foreign.alert_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 report
+
+Type: belongs_to
+
+Related object: L<Tupa::Schema::Result::Report>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "report",
+  "Tupa::Schema::Result::Report",
+  { id => "report_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
 =head2 reporter
@@ -174,8 +202,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:23:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YOEqf42qSVkvkMI1SsjHjA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-03 10:09:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hDt1H8582KBiv+yQ5VQx+g
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->many_to_many(districts => 'alert_districts' => 'district');

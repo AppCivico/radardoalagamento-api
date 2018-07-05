@@ -23,7 +23,7 @@ Daemon::Control->new(
     lsb_sdesc => "Daemon Control $name",
     lsb_desc  => "Daemon Control $name",
 
-    fork    => 2,
+    fork    => 0,
     program => "$Bin/bin/$name.pl",
 
     pid_file     => "/$logdir/$name.pid",

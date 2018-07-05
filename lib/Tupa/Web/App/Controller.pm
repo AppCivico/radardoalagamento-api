@@ -75,7 +75,7 @@ sub _build_results : Private {
 
   $rs = $rs->filter(%args) if $rs->can('filter');
 
-  $rs = $rs->with_paging(%args);
+  $rs = $rs->with_paging(%args) if $rs->can('with_paging');
 
   if (my $pager = $rs->pager) {
     $results{total_entries}    = $pager->total_entries;

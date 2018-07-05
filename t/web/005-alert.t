@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use lib "t/lib";
 use Catalyst::Test 'Tupa::Web::App';
-use HTTP::Request::Common qw(GET POST);
+use HTTP::Request::Common qw(GET POST DELETE);
 use JSON qw(encode_json decode_json);
 use DateTime;
 use Tupa::Test;
@@ -30,7 +30,7 @@ db_transaction {
         '+columns' => {'center' => \'ST_PointOnSurface(geom)'},
         rows       => 1
       }
-      )->next,
+    )->next,
     'district ok'
   );
   ok(
@@ -173,6 +173,50 @@ db_transaction {
     is($res->code, 400, '400 Bad Request');
   }
 
+
+  {
+    diag('create alert');
+    my ($res, $ctx) =
+
+      ctx_request(
+      POST '/admin/alert',
+      Content => encode_json(
+        {
+          description => 'foobar',
+          level       => 'overflow',
+          lat         => -23.5665139290104,
+          lng         => -46.6667556012718,
+        }
+      ),
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 201, '201 Created');
+  }
+
+  {
+    diag('create alert');
+    my ($res, $ctx) =
+
+      ctx_request(
+      POST '/alert',
+      Content => encode_json(
+        {
+          description => 'foobar',
+          level       => 'overflow',
+          lat         => -23.5665139290104,
+          lng         => -46.6667556012718,
+        }
+      ),
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 201, '201 Created');
+  }
+
+
   {
     diag('listing alert');
     my ($res, $ctx) =
@@ -226,7 +270,6 @@ db_transaction {
     ok($res->is_success, 'Success');
     is($res->code, 200, '200 OK');
   }
-  
 
 
   {
@@ -241,10 +284,11 @@ db_transaction {
     ok($res->is_success, 'Success');
     is($res->code, 200, '200 OK');
     ok(my $json = decode_json($res->content), 'body ok');
-    is(scalar @{$json->{results}},     1,          'count ok');
+    is(scalar @{$json->{results}},     3,          'count ok');
     is($json->{results}->[0]->{level}, 'overflow', 'level matches');
   }
 
+  my $alert_to_be_removed;
   {
     diag('search alert');
     my ($res, $ctx) =
@@ -258,9 +302,24 @@ db_transaction {
     is($res->code, 200, '200 OK');
     ok(my $json = decode_json($res->content), 'body ok');
     is(scalar @{$json->{results}}, 1, 'count ok');
+    $alert_to_be_removed = $json->{results}->[0]->{id};
     like($json->{results}->[0]->{description}, qr/bzz/, 'description matches');
 
   }
+
+  {
+    diag('remove alert');
+    my ($res, $ctx) =
+
+      ctx_request(
+      DELETE '/admin/alert/' . $alert_to_be_removed,
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 204, '204 No Content');
+  }
+
 
   {
     diag('search alert sensor');

@@ -33,6 +33,21 @@ sub reported : Chained(base) Args(0) GET {
   );
 }
 
+sub create : Chained(base) PathPart('') Args(0) POST {
+  my ($self, $c) = @_;
+
+  my $alert = $c->stash->{collection}->execute($c,
+    for => create => with =>
+      {__user => {obj => $c->user->obj}, %{$c->req->data || {}}});
+
+  $self->status_created(
+    $c,
+    location => $c->req->uri->as_string,
+    entity   => $alert,
+  );
+}
+
+
 
 sub all : Chained(base) Args(0) GET {
   my ($self, $c) = @_;

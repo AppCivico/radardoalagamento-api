@@ -38,6 +38,8 @@ requires 'Daemon::Control';
 requires 'Email::Sender::Simple';
 requires 'Email::Sender::Transport::SMTP::TLS';
 requires 'MIME::Lite';
+requires 'Types::DateTime';
+requires 'Types::UUID';
 
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';

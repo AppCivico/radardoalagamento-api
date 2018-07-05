@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
@@ -95,24 +94,24 @@ __PACKAGE__->add_columns(
     sequence          => "user_id_seq",
   },
   "name",
-  {data_type => "text", is_nullable => 0},
+  { data_type => "text", is_nullable => 0 },
   "email",
-  {data_type => "text", is_nullable => 0},
+  { data_type => "text", is_nullable => 0 },
   "phone_number",
-  {data_type => "text", is_nullable => 1},
+  { data_type => "text", is_nullable => 1 },
   "password",
-  {data_type => "text", is_nullable => 1},
+  { data_type => "text", is_nullable => 1 },
   "create_ts",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    original      => {default_value => \"now()"},
+    original      => { default_value => \"now()" },
   },
   "active",
-  {data_type => "boolean", default_value => \"true", is_nullable => 1},
+  { data_type => "boolean", default_value => \"true", is_nullable => 1 },
   "push_token",
-  {data_type => "text", is_nullable => 1},
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -138,9 +137,25 @@ Related object: L<Tupa::Schema::Result::Alert>
 =cut
 
 __PACKAGE__->has_many(
-  "alerts", "Tupa::Schema::Result::Alert",
-  {"foreign.reporter_id" => "self.id"},
-  {cascade_copy          => 0, cascade_delete => 0},
+  "alerts",
+  "Tupa::Schema::Result::Alert",
+  { "foreign.reporter_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 reports
+
+Type: has_many
+
+Related object: L<Tupa::Schema::Result::Report>
+
+=cut
+
+__PACKAGE__->has_many(
+  "reports",
+  "Tupa::Schema::Result::Report",
+  { "foreign.reporter_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 user_districts
@@ -152,8 +167,10 @@ Related object: L<Tupa::Schema::Result::UserDistrict>
 =cut
 
 __PACKAGE__->has_many(
-  "user_districts", "Tupa::Schema::Result::UserDistrict",
-  {"foreign.user_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
+  "user_districts",
+  "Tupa::Schema::Result::UserDistrict",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 user_roles
@@ -167,8 +184,8 @@ Related object: L<Tupa::Schema::Result::UserRole>
 __PACKAGE__->has_many(
   "user_roles",
   "Tupa::Schema::Result::UserRole",
-  {"foreign.user_id" => "self.id"},
-  {cascade_copy      => 0, cascade_delete => 0},
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 user_sessions
@@ -180,13 +197,15 @@ Related object: L<Tupa::Schema::Result::UserSession>
 =cut
 
 __PACKAGE__->has_many(
-  "user_sessions", "Tupa::Schema::Result::UserSession",
-  {"foreign.user_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
+  "user_sessions",
+  "Tupa::Schema::Result::UserSession",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 10:23:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/7Y8k6EHh6GNAGJxse9zsw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-03 10:09:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y8cH8x72jckIsBaGTi18XQ
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
