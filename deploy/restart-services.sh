@@ -58,11 +58,11 @@ up_server "script/app.psgi" $TUPA_API_PORT $TUPA_API_WORKERS
 
 cd $TUPA_APP_DIR/script/daemon
 ./mailer restart
-./saisp restart
+#./saisp restart
 sleep 2
 line
 ./mailer status
-./saisp status
+#./saisp status
 
 line
 
