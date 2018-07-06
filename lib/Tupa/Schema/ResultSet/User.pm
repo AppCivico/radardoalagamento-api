@@ -34,7 +34,7 @@ sub verifiers_specs {
     filters => [qw(trim)],
     profile => {
       push_token => {
-        required => 1,
+        required => 0,
         type     => 'Str',
       },
       name => {
