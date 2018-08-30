@@ -280,6 +280,75 @@
         ]
       }
     },
+    "/sensor/{sensorId}/sample": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Lista de leituras do sensor",
+            "schema": {
+              "required": [
+                "results"
+              ],
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string",
+                        "example": "{\"type\":\"Point\",\"coordinates\":[-46.7792928,-23.5732336]}"
+                      },
+                      "value": {
+                        "type": "string",
+                        "example": "200"
+                      },
+                      "id": {
+                        "type": "number",
+                        "example": 214
+                      },
+                      "sensor_id": {
+                        "type": "number",
+                        "example": 76
+                      },
+                      "event_ts": {
+                        "type": "string",
+                        "example": "2018-08-30 17:40:44.229735"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/rows"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Lista de leituras do sensor",
+        "summary": "Leituras",
+        "tags": [
+          "sensor"
+        ]
+      }
+    },
     "/admin/alert/{alertId}": {
       "delete": {
         "responses": {
