@@ -88,6 +88,198 @@
     }
   },
   "paths": {
+    "/sensor": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Lista de sensores",
+            "schema": {
+              "required": [
+                "results"
+              ],
+              "properties": {
+                "results": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "required": [
+                        "source",
+                        "source_id",
+                        "location",
+                        "name",
+                        "description",
+                        "created_at",
+                        "id",
+                        "type"
+                      ],
+                      "properties": {
+                        "source": {
+                          "required": [
+                            "created_at",
+                            "name",
+                            "id"
+                          ],
+                          "properties": {
+                            "created_at": {
+                              "type": "string",
+                              "example": "2018-03-08 17:28:51.710591"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "SAISP"
+                            },
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "source_id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "location": {
+                          "type": "string",
+                          "example": "{\"type\":\"Point\",\"coordinates\":[-46.7792928,-23.5732336]}"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "900007765"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Córrego Itaim -  Rua Joaquim L. Veiga"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "example": "2018-08-30 17:09:11.108918"
+                        },
+                        "id": {
+                          "type": "number",
+                          "example": 65
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "0 PLU(mm)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/rows"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Lista de todos os sensores do sistema",
+        "summary": "Listando sensores",
+        "tags": [
+          "sensor"
+        ]
+      }
+    },
+    "/sensor/{sensorId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Sensor",
+            "schema": {
+              "required": [
+                "created_at",
+                "source_id",
+                "location",
+                "name",
+                "type",
+                "id",
+                "description"
+              ],
+              "properties": {
+                "created_at": {
+                  "type": "string",
+                  "example": "2018-08-30 17:34:40.523882"
+                },
+                "source_id": {
+                  "type": "number",
+                  "example": 45
+                },
+                "location": {
+                  "type": "string",
+                  "example": "{\"type\":\"Point\",\"coordinates\":[-46.6639762754691,-23.5667025]}"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "incidunt molestias facilis porro"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "assumenda saepe minima"
+                },
+                "id": {
+                  "type": "number",
+                  "example": 72
+                },
+                "description": {
+                  "type": "string",
+                  "example": "excepturi reprehenderit placeat voluptatem"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/rows"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
+          },
+          {
+            "description": "ID do sensor",
+            "required": true,
+            "type": "integer",
+            "name": "sensorId",
+            "in": "path"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Informação do sensor",
+        "summary": "Sensor",
+        "tags": [
+          "sensor"
+        ]
+      }
+    },
     "/admin/alert/{alertId}": {
       "delete": {
         "responses": {

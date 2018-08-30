@@ -176,6 +176,7 @@ db_transaction {
 
   {
     diag('create alert');
+    local $ENV{TRACE}=1;
     my ($res, $ctx) =
 
       ctx_request(

@@ -56,7 +56,7 @@ db_transaction {
           '+columns' => {'center' => \'ST_PointOnSurface(geom)'},
           rows       => 1
         }
-        )->next,
+      )->next,
       'district ok'
     );
     ok(
@@ -72,7 +72,12 @@ db_transaction {
       ),
       'center ok'
     );
-
+    $sensor->samples->create(
+      {
+        value      => '200',
+        "location" => "0101000020E61000000F01D1DDBF6347C0E5F7EC6FBF9237C0",
+      }
+    );
     {
       my ($res, $ctx) =
 

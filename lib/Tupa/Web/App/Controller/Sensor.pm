@@ -12,6 +12,18 @@ sub base : Chained(/base) PathPart(sensor) CaptureArgs(0) {
   $c->stash->{collection} = $c->model('DB::Sensor');
 }
 
+sub pluvion : Chained(base) : Args(0) POST {
+  my ($self, $c) = @_;
+  $self->status_created(
+    $c,
+    location => $c->req->uri->as_string,
+    entity =>
+      scalar $c->stash->{collection}
+      ->execute($c, for => pluvion => with => {payload => {%{$c->req->data}}},)
+  );
+}
+
+
 sub object : Chained(base) : PathPart('') : CaptureArgs(Int) {
   my ($self, $c, $id) = @_;
   $c->stash->{object} = $c->stash->{collection}->find($id)
@@ -41,7 +53,7 @@ sub sample : Chained(object) Args(0) GET {
   $self->status_ok(
     $c,
     entity => $c->forward(
-      _build_results => [$c->stash->{object}->samples->summary->as_hashref]
+      _build_results => [$c->stash->{object}->samples->with_geojson->summary->as_hashref]
     )
   );
 }

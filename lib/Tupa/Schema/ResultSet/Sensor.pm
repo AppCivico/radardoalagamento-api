@@ -7,10 +7,49 @@ use feature 'state';
 use Moose;
 
 use MooseX::MarkAsMethods autoclean => 1;
+use namespace::autoclean;
 
 extends 'DBIx::Class::ResultSet';
+with 'MyApp::Role::Verification';
+with 'MyApp::Role::Verification::TransactionalActions::DBIC';
 with 'MyApp::Schema::Role::InflateAsHashRef';
 with 'MyApp::Schema::Role::Paging';
+
+use Data::Verifier;
+use Tupa::Types qw(PluviOnPayload);
+
+has schema => (is => 'ro', lazy => 1, builder => '__build_schema');
+
+sub __build_schema {
+  shift->result_source->schema;
+}
+
+sub BUILDARGS { $_[2] }
+
+sub verifiers_specs {
+  my $self = shift;
+  return +{
+    pluvion => Data::Verifier->new(
+      filters => [qw(trim)],
+      profile =>
+        {payload => {required => 1, coerce => 1, type => PluviOnPayload,},}
+    )
+  };
+}
+
+sub action_specs {
+  my $self = shift;
+  return +{
+    foo     => 1,
+    pluvion => sub {
+      my %values = shift->valid_values;
+
+      my $sensor = $self->update_or_create({});
+
+    }
+  };
+}
+
 
 sub with_geojson {
   my $self = shift;
@@ -18,7 +57,7 @@ sub with_geojson {
   $self->search_rs(
     undef,
     {
-      'columns'  => [grep      { !/location/ } $self->result_source->columns],
+      'columns'  => [grep { !/location/ } $self->result_source->columns],
       '+columns' => [{location => \"ST_AsGeoJSON($me.location)"}],
 
     }

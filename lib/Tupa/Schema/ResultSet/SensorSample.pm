@@ -17,17 +17,28 @@ sub BUILDARGS { $_[2] }
 sub last {
   my $self = shift;
   my $me   = $self->current_source_alias;
-  $self->search_rs( undef,
-    { order_by => { -desc => "$me.event_ts" }, rows => 1 } );
+  $self->search_rs(undef, {order_by => {-desc => "$me.event_ts"}, rows => 1});
+}
+
+sub with_geojson {
+  my $self = shift;
+  my $me   = $self->current_source_alias;
+  $self->search_rs(
+    undef,
+    {
+      'columns'  => [grep { !/location/ } $self->result_source->columns],
+      '+columns' => [{location => \"ST_AsGeoJSON($me.location)"}],
+
+    }
+  );
 }
 
 
 sub summary {
   my $self = shift;
   my $me   = $self->current_source_alias;
-  $self->search_rs( undef,
-    { order_by => { -desc => "$me.event_ts" } } );
-  
+  $self->search_rs(undef, {order_by => {-desc => "$me.event_ts"}});
+
 }
 
 1;

@@ -30,7 +30,6 @@ sub check {
 
   my $verifier = Dive( $self->verifiers, split( /\./, $path ) );
   my $action   = Dive( $self->actions,   split( /\./, $path ) );
-
   return MyApp::Data::Manager->new(
     input     => $input,
     verifiers => { $path => $verifier },
