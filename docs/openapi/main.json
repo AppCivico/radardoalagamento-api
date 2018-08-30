@@ -833,7 +833,7 @@
           "application/json"
         ],
         "description": "Sensores de um distrito",
-        "summary": "Sensores",
+        "summary": "Sensores de um distrito",
         "tags": [
           "district",
           "sensor"
