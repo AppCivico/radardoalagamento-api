@@ -840,7 +840,6 @@
         ]
       }
     },
-    "/district": null,
     "/alert": {
       "get": {
         "responses": {
