@@ -740,6 +740,106 @@
         ]
       }
     },
+    "/district/{districtId}/sensor": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Lista de leituras do sensor",
+            "schema": {
+              "required": [
+                "results"
+              ],
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "required": [
+                          "created_at",
+                          "name",
+                          "id"
+                        ],
+                        "properties": {
+                          "created_at": {
+                            "type": "string",
+                            "example": "2018-08-30 19:10:34.289172"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Reprehenderit"
+                          },
+                          "id": {
+                            "type": "number",
+                            "example": 48
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "source_id": {
+                        "type": "number",
+                        "example": 48
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "{\"type\":\"Point\",\"coordinates\":[-46.6639762754691,-23.5667025]}"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "incidunt molestias facilis porro"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "excepturi reprehenderit placeat voluptatem"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2018-08-30 19:10:34.289172"
+                      },
+                      "id": {
+                        "type": "number",
+                        "example": 77
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "assumenda saepe minima"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/rows"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/page"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/asc"
+          },
+          {
+            "$ref": "#/definitions/Pagination/queryParameters/desc"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Sensores de um distrito",
+        "summary": "Sensores",
+        "tags": [
+          "district",
+          "sensor"
+        ]
+      }
+    },
     "/district": null,
     "/alert": {
       "get": {
