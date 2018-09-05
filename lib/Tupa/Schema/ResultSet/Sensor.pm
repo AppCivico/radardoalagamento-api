@@ -43,8 +43,12 @@ sub action_specs {
     foo     => 1,
     pluvion => sub {
       my %values = shift->valid_values;
-
-      my $sensor = $self->update_or_create({});
+      my $pluvion_source
+        = $self->result_source->schema->resultset('SensorSource')
+        ->find_or_create({name => 'PluviOn'});
+      my $reads  = delete $values{payload}->{reads};
+      my $ts     = delete $values{payload}->{timestamp};
+      my $sensor = $pluvion_source->sensors->update_or_create($values{payload});
 
     }
   };

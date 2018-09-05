@@ -44,7 +44,7 @@ coerce Longitude, from Int, via { $_ + 0.0 };
 
 subtype PluviOnPayload,
   as Dict [
-  id        => NonEmptySimpleStr,
+  #id        => NonEmptySimpleStr,
   name      => NonEmptySimpleStr,
   timestamp => PositiveInt,
   location  => ScalarRef,
@@ -53,8 +53,7 @@ subtype PluviOnPayload,
 
 coerce PluviOnPayload, from HashRef, via {
   +{
-    id       => delete $_->{sttId},
-    name     => delete $_->{sttName},
+    name => (delete $_->{sttId}) . ' - ' . (delete $_->{sttName}),
     location => \(
       sprintf(
         qq{'SRID=4326;POINT(%s %s)::geography'},
