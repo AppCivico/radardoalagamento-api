@@ -38,7 +38,7 @@ db_transaction {
       {
         name        => 'incidunt molestias facilis porro',
         description => 'excepturi reprehenderit placeat voluptatem',
-        type        => 'assumenda saepe minima',
+        sensor_type => 'assumenda saepe minima',
         source      => $schema->resultset('SensorSource')
           ->find_or_create({name => 'Reprehenderit'}),
         location => $district->get_column('center')
@@ -176,7 +176,7 @@ db_transaction {
 
   {
     diag('create alert');
-    local $ENV{TRACE}=1;
+    local $ENV{TRACE} = 1;
     my ($res, $ctx) =
 
       ctx_request(

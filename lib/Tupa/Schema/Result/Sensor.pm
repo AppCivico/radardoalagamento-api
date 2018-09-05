@@ -61,7 +61,7 @@ __PACKAGE__->table("sensor");
   data_type: 'text'
   is_nullable: 1
 
-=head2 type
+=head2 sensor_type
 
   data_type: 'text'
   is_nullable: 1
@@ -95,7 +95,7 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "description",
   { data_type => "text", is_nullable => 1 },
-  "type",
+  "sensor_type",
   { data_type => "text", is_nullable => 1 },
   "location",
   { data_type => "geometry", is_nullable => 1, size => "58880,16" },
@@ -167,8 +167,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2017-11-29 10:19:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgi02NtKc1NWysEYWlYMQg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-09-05 16:07:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FGI6luZvQvdPFG+3JKWe5A
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
@@ -181,7 +181,7 @@ __PACKAGE__->has_many(
 
 sub TO_JSON {
   my $self = shift;
-  +{
+  my $data = +{
     $self->get_from_storage(
       {
         columns => [ grep { !/location/ } $self->result_source->columns ],
@@ -189,6 +189,8 @@ sub TO_JSON {
       }
     )->get_columns
   };
+  $data->{sensor_type} = delete $data->{type};
+  $data;
 }
 
 __PACKAGE__->has_many(

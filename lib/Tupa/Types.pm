@@ -52,7 +52,7 @@ subtype PluviOnPayload,
   ];
 
 coerce PluviOnPayload, from HashRef, via {
-  my $p = +{
+  +{
     id       => delete $_->{sttId},
     name     => delete $_->{sttName},
     location => \(
@@ -65,9 +65,7 @@ coerce PluviOnPayload, from HashRef, via {
     timestamp => delete $_->{timestamp},
     reads     => $_
   };
-  use DDP;
-  p($p);
-  return $p;
+
 };
 
 1;

@@ -24,7 +24,7 @@ db_transaction {
       {
         "name"        => "900007765",
         "location"    => "0101000020E61000000F01D1DDBF6347C0E5F7EC6FBF9237C0",
-        "type"        => "0 PLU(mm)",
+        "sensor_type" => "0 PLU(mm)",
         "description" => "Córrego Itaim -  Rua Joaquim L. Veiga",
         "source"      => $schema->resultset('SensorSource')
           ->find_or_create({"name" => "SAISP"})
@@ -64,7 +64,7 @@ db_transaction {
         {
           name        => 'incidunt molestias facilis porro',
           description => 'excepturi reprehenderit placeat voluptatem',
-          type        => 'assumenda saepe minima',
+          sensor_type => 'assumenda saepe minima',
           source      => $schema->resultset('SensorSource')
             ->find_or_create({name => 'Reprehenderit'}),
           location => $district->get_column('center')

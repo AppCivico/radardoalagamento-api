@@ -45,7 +45,7 @@ db_transaction {
           '+columns' => {'center' => \'ST_PointOnSurface(geom)'},
           rows       => 1
         }
-        )->next,
+      )->next,
       'zone ok'
     );
     ok(
@@ -53,7 +53,7 @@ db_transaction {
         {
           name        => 'incidunt molestias facilis porro',
           description => 'excepturi reprehenderit placeat voluptatem',
-          type        => 'assumenda saepe minima',
+          sensor_type => 'assumenda saepe minima',
           source      => $schema->resultset('SensorSource')
             ->find_or_create({name => 'Reprehenderit'}),
           location => $zone->get_column('center')

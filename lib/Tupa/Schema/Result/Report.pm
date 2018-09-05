@@ -1,5 +1,4 @@
 use utf8;
-
 package Tupa::Schema::Result::Report;
 
 # Created by DBIx::Class::Schema::Loader
@@ -91,22 +90,22 @@ __PACKAGE__->add_columns(
     sequence          => "report_id_seq",
   },
   "description",
-  {data_type => "text", is_nullable => 1},
+  { data_type => "text", is_nullable => 1 },
   "level",
-  {data_type => "text", is_nullable => 0},
+  { data_type => "text", is_nullable => 0 },
   "reported_ts",
-  {data_type => "timestamp", is_nullable => 1},
+  { data_type => "timestamp", is_nullable => 1 },
   "created_at",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 1,
-    original      => {default_value => \"now()"},
+    original      => { default_value => \"now()" },
   },
   "reporter_id",
-  {data_type => "integer", is_foreign_key => 1, is_nullable => 0},
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "location",
-  {data_type => "geometry", is_nullable => 1, size => "58880,16"},
+  { data_type => "geometry", is_nullable => 1, size => "58880,16" },
 );
 
 =head1 PRIMARY KEY
@@ -132,9 +131,10 @@ Related object: L<Tupa::Schema::Result::Alert>
 =cut
 
 __PACKAGE__->has_many(
-  "alerts", "Tupa::Schema::Result::Alert",
-  {"foreign.report_id" => "self.id"},
-  {cascade_copy        => 0, cascade_delete => 0},
+  "alerts",
+  "Tupa::Schema::Result::Alert",
+  { "foreign.report_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 reporter
@@ -146,14 +146,15 @@ Related object: L<Tupa::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-  "reporter", "Tupa::Schema::Result::User",
-  {id            => "reporter_id"},
-  {is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION"},
+  "reporter",
+  "Tupa::Schema::Result::User",
+  { id => "reporter_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-03 10:22:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rOYe25p3b6SSTCkOa07DAQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-09-05 16:07:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rI/sq0m7sVB0szCWYyGEJQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

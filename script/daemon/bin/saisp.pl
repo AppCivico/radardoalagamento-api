@@ -127,7 +127,7 @@ while (1) {
         {
           name        => $sensor_spec->{code},
           description => $sensor_spec->{description},
-          type        => $type_str,
+          sensor_type => $type_str,
           location    => $sensor_spec->{location},
         }
       );
