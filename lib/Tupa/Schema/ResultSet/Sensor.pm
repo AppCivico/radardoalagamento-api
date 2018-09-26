@@ -14,7 +14,7 @@ with 'MyApp::Role::Verification';
 with 'MyApp::Role::Verification::TransactionalActions::DBIC';
 with 'MyApp::Schema::Role::InflateAsHashRef';
 with 'MyApp::Schema::Role::Paging';
-
+use JSON qw(encode_json);
 use Data::Verifier;
 use Tupa::Types qw(PluviOnPayload);
 
@@ -49,6 +49,8 @@ sub action_specs {
       my $reads  = delete $values{payload}->{reads};
       my $ts     = delete $values{payload}->{timestamp};
       my $sensor = $pluvion_source->sensors->update_or_create($values{payload});
+      $sensor->samples->create(
+        {location => $values{payload}{location}, value => encode_json($reads)});
 
     }
   };

@@ -152,4 +152,18 @@ __PACKAGE__->belongs_to(
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
+
+sub TO_JSON {
+  my $self = shift;
+  +{
+    $self->get_from_storage(
+      {
+        columns    => [grep { !/location/ } $self->result_source->columns],
+        '+columns' => [{location => \'ST_AsGeoJSON(location)'}],
+      }
+    )->get_columns
+  };
+}
+
+
 1;
