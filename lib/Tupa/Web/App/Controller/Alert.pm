@@ -48,8 +48,7 @@ sub create : Chained(base) PathPart('') Args(0) POST {
 }
 
 
-
-sub all : Chained(base) Args(0) GET {
+sub all : Chained(/) PathPart('alert/all') Args(0) GET {
   my ($self, $c) = @_;
 
   $self->status_ok(
