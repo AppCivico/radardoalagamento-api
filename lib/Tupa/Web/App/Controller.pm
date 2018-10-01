@@ -75,6 +75,11 @@ sub _build_results : Private {
 
   $rs = $rs->filter(%args) if $rs->can('filter');
 
+  if ($args{no_paging}) {
+    $results{results} = [$rs->all];
+    return \%results;
+  }
+
   $rs = $rs->with_paging(%args) if $rs->can('with_paging');
 
   if (my $pager = $rs->pager) {
