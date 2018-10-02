@@ -19,11 +19,59 @@ use Catalyst qw/
   /;
 
 extends 'Catalyst';
+use JSON qw();
+
+my $json = JSON->new->utf8(1)->pretty(1)->convert_blessed(1)->allow_blessed(1);
 
 __PACKAGE__->config(
   name                   => 'Tupa::Web::App',
-  enable_catalyst_header => 0
+  enable_catalyst_header => 0,
+  utf8                   => 1,
+  encoding               => 'UTF-8',
+  plugin                 => {
+    Authentication => {
+      default_realm => 'default',
+      realms        => {
+        default => {
+          credential => {
+            class          => 'Password',
+            password_field => 'password',
+            password_type  => 'self_check'
+          },
+          store => {
+            class         => 'DBIx::Class',
+            user_model    => 'DB::User',
+            role_relation => 'roles',
+            role_field    => 'name'
+          }
+        }
+      }
+    }
+  }
 );
+
+# after setup_finalize => sub {
+#   my $app = shift;
+#   $_->{map} = {
+
+#     %{ $_->{map} || {} },
+#     'application/json' => [
+#       'Callback',
+#       {
+#         deserialize => sub {
+#           $json->decode(shift);
+#         },
+#         serialize => sub {
+#           my $x = shift;
+#           $json->encode($x);
+#         }
+#       }
+#     ]
+#     }
+#     for grep { $_->isa('Tupa::Web::App::Controller') }
+#     map      { $app->controller($_) } $app->controllers;
+#   }
+#   if $ENV{HARNESS_ACTIVE};
 
 __PACKAGE__->setup();
 
@@ -48,6 +96,7 @@ sub build_api_error {
   $err{message} = $err{short_message} if $err{message} eq $explain_msg_id;
 
   if ( $err{message} eq $explain_msg_id || $err{message} eq $msg_id ) {
+
     # my $hostname = `hostname`;
     # chomp($hostname);
     # eval {
@@ -60,7 +109,7 @@ sub build_api_error {
     #     channel => '#api-error'
     #   );
     # };
-    warn $@ if $@;
+    warn "Error caught while procesing request: $@" if $@;
   }
 
   $err{type} = $args{type} || 'default';

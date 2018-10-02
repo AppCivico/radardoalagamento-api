@@ -2,3 +2,17 @@
 %project=tupa
 
 user-and-session 2017-11-10T14:06:53Z Gabriel Andrade <gabriel.andrade@eokoe.com> # user
+zone-and-districts 2017-11-21T11:48:31Z Gabriel Andrade <gabriel.andrade@eokoe.com> # Zonas e distritos
+sensors 2017-11-22T13:19:47Z Gabriel Andrade <gabriel.andrade@eokoe.com> # sensors
+follow 2017-11-23T21:36:06Z Gabriel Andrade <gabriel.andrade@eokoe.com> # user-follow-district
+alert 2017-11-24T12:07:03Z Gabriel Andrade <gabriel.andrade@eokoe.com> # criação de alertas
+user-push-token 2017-11-24T21:16:28Z Gabriel Andrade <gabriel.andrade@eokoe.com> # token de push-notification
+user-phone-unique 2017-11-24T21:33:09Z Gabriel Andrade <gabriel.andrade@eokoe.com> # telefone unique
+user-role 2017-11-29T13:10:04Z Gabriel Andrade <gabriel.andrade@eokoe.com> # roles de usuário
+app-report 2017-12-11T14:11:17Z Gabriel Andrade <gabriel.andrade@eokoe.com> # tabela para reportar erros da app
+alert-district-option 2017-12-14T14:46:05Z Gabriel Andrade <gabriel.andrade@eokoe.com> # adicionar opção para linkar ao alerta um distrito ao invés de somente uma leitura de sensor
+alert-district-as-list 2017-12-14T18:06:08Z Gabriel Andrade <gabriel.andrade@eokoe.com> # lista de distritos do alerta
+public_app_report 2018-02-20T13:22:42Z Gabriel Andrade <gabriel.andrade@eokoe.com> # Tornando o acesso ao app-report publico
+app_report_pending 2018-02-20T13:25:04Z Gabriel Andrade <gabriel.andrade@eokoe.com> # Marcando app-reports como pendentes
+user-report 2018-07-02T19:21:37Z Gabriel Andrade <gabriel.andrade@eokoe.com> # user-report
+rename_sensor_type 2018-09-05T19:05:35Z Gabriel Andrade <gabriel.andrade@eokoe.com> # rename_sensor_type

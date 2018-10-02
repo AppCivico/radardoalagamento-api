@@ -17,8 +17,21 @@ binmode STDERR, ":encoding(UTF-8)";
 my $schema = Tupa::Web::App->model('DB')->schema;
 
 db_transaction {
+
   {
-    
+
+    diag('Empty object on body request');
+    my ( $res, $ctx ) = ctx_request(
+      POST '/login',
+      Content_Type => 'application/json',
+      Content      => encode_json( {} )
+   );
+    ok( !$res->is_success, 'error' );
+    is( $res->code, 400, '400 error' );
+  }
+
+  {
+
     diag('user does not exist');
     my ( $res, $ctx ) = ctx_request(
       POST '/login',

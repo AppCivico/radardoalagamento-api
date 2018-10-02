@@ -15,11 +15,15 @@ builder {
   enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
   "Plack::Middleware::ReverseProxy";
 
-  enable q{CrossOrigin},
-    origins => q{*},
-    methods => [qw(GET POST OPTIONS PUT HEAD DELETE PATCH)];
+  # enable q{CrossOrigin},
+  #   origins => q{*},
+  #   methods => [qw(GET POST OPTIONS PUT HEAD DELETE PATCH)];
 
-  enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
+  #  enable "Plack::Middleware::XSendfile", variation => 'X-Accel-Redirect';
 
-  mount '/' => $app;
+  mount '/'        => $app;
+  mount '/openapi' => Plack::App::File->new(
+    root => '..',
+    file => Tupa::Web::App->path_to('docs/openapi/main.json')
+    )->to_app
 };
