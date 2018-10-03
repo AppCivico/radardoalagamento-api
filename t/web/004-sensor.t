@@ -103,7 +103,19 @@ db_transaction {
       ok($res->is_success, 'Success');
       is($res->code, 200, '200 OK');
     }
+    {
+      local $ENV{TRACE}=1;
+      my ($res, $ctx) =
 
+        ctx_request(
+        GET '/sensor/' . $sensor->id . '/sample',
+        Content_Type => 'text/csv',
+        'X-Api-Key'  => $session->api_key
+        );
+
+      ok($res->is_success, 'Success');
+      is($res->code, 200, '200 OK');
+    }
 
     {
       my ($res, $ctx) =

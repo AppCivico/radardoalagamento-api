@@ -41,6 +41,8 @@ requires 'Plack::Middleware::ReverseProxy';
 requires 'Safe::Isa';
 requires 'Types::DateTime';
 requires 'Types::UUID';
+requires 'MooX::JSON_LD';
+requires 'Text::CSV::Flatten';
 
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';
