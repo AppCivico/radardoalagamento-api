@@ -31,7 +31,7 @@ sub with_districts {
   $self->search_rs(
     undef,
     {
-      '+columns' => [qw(districts.name districts.id)],
+      '+columns' => [qw(districts.name districts.id districts.slug)],
       collapse   => 1,
       join       => 'districts',
     }
