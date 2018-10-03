@@ -35,6 +35,20 @@ sub view : Chained(object) : PathPart('') : Args(0) : GET {
   $self->status_ok($c, entity => $c->stash->{object});
 }
 
+sub alert : Chained(object) : Args(0) : GET {
+  my ($self, $c) = @_;
+  $self->status_ok(
+    $c,
+    entity => $c->forward(
+      _build_results => [
+        $c->stash->{object}->samples->related_resultset('alerts')
+          ->summary->as_hashref
+      ]
+    )
+  );
+}
+
+
 sub list : Chained(base) PathPart('') Args(0) GET {
   my ($self, $c) = @_;
 
@@ -53,7 +67,8 @@ sub sample : Chained(object) Args(0) GET {
   $self->status_ok(
     $c,
     entity => $c->forward(
-      _build_results => [$c->stash->{object}->samples->with_geojson->summary->as_hashref]
+      _build_results =>
+        [$c->stash->{object}->samples->with_geojson->summary->as_hashref]
     )
   );
 }
