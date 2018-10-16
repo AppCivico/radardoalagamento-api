@@ -28,7 +28,18 @@ __PACKAGE__->config(
   enable_catalyst_header => 0,
   utf8                   => 1,
   encoding               => 'UTF-8',
-  plugin                 => {
+  'Plugin::I18N'         => {
+    maketext_options => {
+      Path   => __PACKAGE__->path_to('lib/Tupa/I18N'),
+      Decode => 1,
+      Style  => 'maketext',
+
+      #       Encoding => 'UTF8'
+    }
+  },
+
+  plugin => {
+
     Authentication => {
       default_realm => 'default',
       realms        => {
@@ -76,26 +87,26 @@ __PACKAGE__->config(
 __PACKAGE__->setup();
 
 sub build_api_error {
-  my ( $app, %args ) = @_;
+  my ($app, %args) = @_;
   my $msg_id         = $args{msg_id};
   my $explain_msg_id = $msg_id . '__explain';
   my %err;
-
+  warn $app->loc($msg_id);
   $err{internal_msg_id} = $msg_id;
-  $err{short_message}   = $app->loc($msg_id);
+  $err{short_message} = $err{message} = $app->loc($msg_id);
 
-  if ( $err{short_message} eq $msg_id ) {
-    if ( $msg_id =~ /_missing$/ ) {
+  if ($err{short_message} eq $msg_id) {
+    if ($msg_id =~ /_missing$/) {
       $msg_id =~ s/_missing/_invalid/;
       $err{internal_msg_id} = $msg_id;
       $err{short_message}   = $app->loc($msg_id);
     }
   }
-  $err{message} = $app->loc($explain_msg_id);
 
-  $err{message} = $err{short_message} if $err{message} eq $explain_msg_id;
+  # $err{message} = $app->loc($explain_msg_id);
+  # $err{message} = $err{short_message} if $err{message} eq $explain_msg_id;
 
-  if ( $err{message} eq $explain_msg_id || $err{message} eq $msg_id ) {
+  if ($err{message} eq $explain_msg_id || $err{message} eq $msg_id) {
 
     # my $hostname = `hostname`;
     # chomp($hostname);
