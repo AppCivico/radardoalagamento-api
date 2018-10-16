@@ -168,8 +168,11 @@ __PACKAGE__->has_many(
   "Tupa::Schema::Result::Sensor",
   sub {
     my $args = shift;
-    return { "$args->{foreign_alias}.location" =>
-        { '&&' => { -ident => "$args->{self_alias}.geom" } }, };
+    return \
+      qq{ST_Intersects($args->{foreign_alias}.location, $args->{self_alias}.geom)};
+    
+    # return { "$args->{foreign_alias}.location" =>
+    #     { '&&' => { -ident => "$args->{self_alias}.geom" } }, };
   },
   { cascade_copy => 0, cascade_delete => 0, join_type => 'LEFT' },
 );
