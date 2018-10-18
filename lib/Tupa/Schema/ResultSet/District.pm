@@ -23,8 +23,13 @@ sub summary {
       distinct   => 1,
       columns    => [grep { !/geom/ } $self->result_source->columns],
       '+columns' => [
-        {geom    => \'ST_AsGeoJSON(geom)'},
-        {sensors => {array_agg => 'sensors.id', -as => 'sensors'}}
+        {geom => \'ST_AsGeoJSON(geom)'},
+        {
+          sensors => {
+            array_remove => [{array_agg => 'sensors.id'}, \'NULL'],
+            -as          => 'sensors'
+          }
+        }
       ],
     }
   );
