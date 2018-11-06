@@ -60,6 +60,7 @@ sub action_specs {
 sub with_geojson {
   my $self = shift;
   my $me   = $self->current_source_alias;
+
   $self->search_rs(
     undef,
     {
@@ -94,6 +95,18 @@ sub filter {
   $rs;
 }
 
+
+sub with_district {
+    my ($self) = @_;
+
+    return $self->search_rs(
+        undef,
+        {
+            join  => 'districts',
+            'columns' => [ qw( districts.name districts.id ) ]
+        }
+    )
+}
 
 1;
 
