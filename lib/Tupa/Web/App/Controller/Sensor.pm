@@ -14,6 +14,7 @@ sub base : Chained(/base) PathPart(sensor) CaptureArgs(0) {
 
 sub pluvion : Chained(base) : Args(0) POST {
   my ($self, $c) = @_;
+
   $self->status_created(
     $c,
     location => $c->req->uri->as_string,

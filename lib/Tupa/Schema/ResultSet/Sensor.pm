@@ -48,6 +48,7 @@ sub action_specs {
         ->find_or_create({name => 'PluviOn'});
       my $reads  = delete $values{payload}->{reads};
       my $ts     = delete $values{payload}->{timestamp};
+
       my $sensor = $pluvion_source->sensors->update_or_create($values{payload});
       $sensor->samples->create(
         {location => $values{payload}{location}, value => encode_json($reads)});
