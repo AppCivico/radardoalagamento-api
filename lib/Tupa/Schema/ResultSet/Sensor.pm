@@ -103,7 +103,7 @@ sub with_district {
         undef,
         {
             join  => 'districts',
-            'columns' => [ qw( districts.name districts.id ) ]
+            '+columns' => [ qw( districts.name districts.id ) ]
         }
     )
 }
