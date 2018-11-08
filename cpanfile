@@ -43,6 +43,7 @@ requires 'Types::DateTime';
 requires 'Types::UUID';
 requires 'MooX::JSON_LD';
 requires 'Text::CSV::Flatten';
+requires 'Server::Starter';
 
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';
