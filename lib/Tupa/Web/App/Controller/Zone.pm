@@ -42,7 +42,7 @@ sub sensor : Chained(object) Args(0) GET {
     $c,
     entity => $c->forward(
       _build_results =>
-        [$c->stash->{object}->sensors->with_geojson->summary->as_hashref]
+        [$c->stash->{object}->sensors->with_geojson->with_district->summary->as_hashref]
     )
   );
 }

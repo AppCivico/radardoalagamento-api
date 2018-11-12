@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "cpf_already_exists"
+msgstr "O CPF/CNPJ já está cadastrado"
+
+msgid "email_invalid"
+msgstr "Email inválido ou já em uso"
+
+msgid "name_invalid"
+msgstr "Nome inválido"
+
+msgid "password_invalid"
+msgstr "Senha inválida"
+
+msgid "login_invalid"
+msgstr "Usuário ou senha inválidos"
+
+msgid "password_missing"
+msgstr "Senha inválida"
+
+msgid "password_invalid"
+msgstr "Senha inválida"
+
+msgid "cpf_invalid"
+msgstr "CPF inválido"
+
+msgid "address_invalid"
+msgstr "Endereço inválido"
+
+msgid "name_invalid"
+msgstr "Nome inválido"
+
+msgid "current_password_invalid"
+msgstr "Senha atual não confere"
+
+msgid "secret_key_invalid"
+msgstr "Este link é inválido ou já foi usado"
+
+
+msgid "missing_cep"
+msgstr "CEP faltando ou inválido"
+
+msgid "login_missing_login"
+msgstr "É necessário o CPF ou o email para realizar o login"
+
+msgid "login_email_invalid"
+msgstr "Email não existe"
+
+msgid "login_cpf_invalid"
+msgstr "CPF não existe"
+
+msgid "missing_mobile_number"
+msgstr "Número do telefone vazio"
+
+msgid "mobile_number_invalid"
+msgstr "Número de telefone inválido"
+
+msgid "token_invalid"
+msgstr "Token inválido"
+
+msgid "cpf_empty"
+msgstr "Por favor, atualize seu cadastro informando seu CPF e atualize o aplicativo"
+
+msgid "user_invalid"
+msgstr "Usuário inexistente"
+
+msgid "rows_invalid"
+msgstr "Número de linhas inválido"
+
+msgid "page_invalid"
+msgstr "Número de página inválido"
+
+msgid "domain_invalid"
+msgstr "Domínio inválido"
+
+msgid "first_name_invalid"
+msgstr "Nome inválido"
+
+msgid "last_name_invalid"
+msgstr "Sobrenome inválido"
+
+msgid "birthday_invalid"
+msgstr "Data de nascimento inválida
+
+msgid "cellphone_number_invalid"
+msgstr "Telefone inválido"
+
+msgid "birthday_invalid"
+msgstr "Data de nascimento inválida"
+
+msgid "invalid_tt_start"
+msgstr "Intervalo inicial inválido"
+
+msgid "invalid_tt_end"
+msgstr "Intervalo final inválido"
+
+msgid "invalid_next_page_token"
+msgstr "Token de próxima página é inválido"
+
+msgid "address_number_invalid"
+msgstr "Somente números neste campo"
+
+msgid "phone_number_already_exists"
+msgstr "Telefone já existe"

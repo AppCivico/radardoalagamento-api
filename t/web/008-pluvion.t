@@ -30,9 +30,10 @@ db_transaction {
           'atMax' => 0,
           'sttName' => 'name',
           'sttId' => 'id',
-          'rhMin' => 0
+          'rhMin' => 0,
+          'description' => 'foo'
         };
-    
+
     diag('create report');
     my ($res, $ctx) =
 

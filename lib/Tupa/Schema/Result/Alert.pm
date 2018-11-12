@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::Alert;
 
 # Created by DBIx::Class::Schema::Loader
@@ -97,24 +98,24 @@ __PACKAGE__->add_columns(
     sequence          => "alert_id_seq",
   },
   "sensor_sample_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  {data_type => "integer", is_foreign_key => 1, is_nullable => 1},
   "description",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
   "level",
-  { data_type => "text", is_nullable => 0 },
+  {data_type => "text", is_nullable => 0},
   "pushed_to_users",
-  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
+  {data_type => "boolean", default_value => \"false", is_nullable => 1},
   "reporter_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  {data_type => "integer", is_foreign_key => 1, is_nullable => 0},
   "created_at",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 1,
-    original      => { default_value => \"now()" },
+    original      => {default_value => \"now()"},
   },
   "report_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  {data_type => "integer", is_foreign_key => 1, is_nullable => 1},
 );
 
 =head1 PRIMARY KEY
@@ -140,10 +141,8 @@ Related object: L<Tupa::Schema::Result::AlertDistrict>
 =cut
 
 __PACKAGE__->has_many(
-  "alert_districts",
-  "Tupa::Schema::Result::AlertDistrict",
-  { "foreign.alert_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "alert_districts", "Tupa::Schema::Result::AlertDistrict",
+  {"foreign.alert_id" => "self.id"}, {cascade_copy => 0, cascade_delete => 0},
 );
 
 =head2 report
@@ -157,7 +156,7 @@ Related object: L<Tupa::Schema::Result::Report>
 __PACKAGE__->belongs_to(
   "report",
   "Tupa::Schema::Result::Report",
-  { id => "report_id" },
+  {id => "report_id"},
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -175,10 +174,9 @@ Related object: L<Tupa::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-  "reporter",
-  "Tupa::Schema::Result::User",
-  { id => "reporter_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  "reporter", "Tupa::Schema::Result::User",
+  {id            => "reporter_id"},
+  {is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION"},
 );
 
 =head2 sensor_sample
@@ -192,7 +190,7 @@ Related object: L<Tupa::Schema::Result::SensorSample>
 __PACKAGE__->belongs_to(
   "sensor_sample",
   "Tupa::Schema::Result::SensorSample",
-  { id => "sensor_sample_id" },
+  {id => "sensor_sample_id"},
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -235,28 +233,26 @@ sub notify {
 
   state $http = HTTP::Tiny->new(timeout => 5);
 
-  my @all_keys = grep {defined} $self->affected_users_keys;
-  use Data::Dumper;
-  warn Dumper(\@all_keys);
-  my $it = natatime 100, @all_keys;
-  while (my @hundred_keys = $it->()) {
+  my $rest_api_key = $ENV{ONESIGNAL_REST_APY_KEY};
+  my $app_id       = $ENV{ONESIGNAL_APP_ID};
+  my @all_keys     = grep {defined} $self->affected_users_keys;
+  my $it           = natatime 2000, @all_keys;
+  while (my @keys = $it->()) {
     my $res = $http->post(
-      'https://exp.host/--/api/v2/push/send',
+      'https://onesignal.com/api/v1/notifications',
       {
         content => encode_json(
-          [
-            map {
-              +{
-                sound => "default",
-                badge => 1,
-                to    => $_,
-                title => 'Alerta de alagamento',
-                body  => $self->description,
-                }
-            } @hundred_keys
-          ]
+          {
+            app_id   => $app_id,
+            contents => {pt => $self->description},
+            headings {pt => 'Alerta de algamento'},
+            include_player_ids => \@keys,
+          }
         ),
-        headers => {'Content-Type' => 'application/json'}
+        headers => {
+          'Content-Type' => 'application/json; charset=utf-8',
+          Authorization  => "Basic $rest_api_key"
+        }
       }
     );
 

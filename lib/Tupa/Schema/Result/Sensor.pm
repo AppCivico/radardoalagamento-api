@@ -1,4 +1,5 @@
 use utf8;
+
 package Tupa::Schema::Result::Sensor;
 
 # Created by DBIx::Class::Schema::Loader
@@ -90,21 +91,21 @@ __PACKAGE__->add_columns(
     sequence          => "sensor_id_seq",
   },
   "source_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  {data_type => "integer", is_foreign_key => 1, is_nullable => 0},
   "name",
-  { data_type => "text", is_nullable => 0 },
+  {data_type => "text", is_nullable => 0},
   "description",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
   "sensor_type",
-  { data_type => "text", is_nullable => 1 },
+  {data_type => "text", is_nullable => 1},
   "location",
-  { data_type => "geometry", is_nullable => 1, size => "58880,16" },
+  {data_type => "geometry", is_nullable => 1, size => "58880,16"},
   "created_at",
   {
     data_type     => "timestamp",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    original      => { default_value => \"now()" },
+    original      => {default_value => \"now()"},
   },
 );
 
@@ -147,8 +148,8 @@ Related object: L<Tupa::Schema::Result::SensorSample>
 __PACKAGE__->has_many(
   "sensor_samples",
   "Tupa::Schema::Result::SensorSample",
-  { "foreign.sensor_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {"foreign.sensor_id" => "self.id"},
+  {cascade_copy        => 0, cascade_delete => 0},
 );
 
 =head2 source
@@ -162,8 +163,8 @@ Related object: L<Tupa::Schema::Result::SensorSource>
 __PACKAGE__->belongs_to(
   "source",
   "Tupa::Schema::Result::SensorSource",
-  { id => "source_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  {id            => "source_id"},
+  {is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION"},
 );
 
 
@@ -175,17 +176,26 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->has_many(
   "samples",
   "Tupa::Schema::Result::SensorSample",
-  { "foreign.sensor_id" => "self.id" },
-  { cascade_copy        => 0, cascade_delete => 0 },
+  {"foreign.sensor_id" => "self.id"},
+  {cascade_copy        => 0, cascade_delete => 0},
 );
+
+use Moo;
+with 'MooX::Role::JSON_LD';
+sub json_ld_type   {'Sensor'}
+sub json_ld_fields { [qw[ id name sensor_type]] }
+
+sub _build_context {
+  return 'http://hello.org/';
+}
 
 sub TO_JSON {
   my $self = shift;
   my $data = +{
     $self->get_from_storage(
       {
-        columns => [ grep { !/location/ } $self->result_source->columns ],
-        '+columns' => [ { location => \'ST_AsGeoJSON(location)' } ],
+        columns    => [grep { !/location/ } $self->result_source->columns],
+        '+columns' => [{location => \'ST_AsGeoJSON(location)'}],
       }
     )->get_columns
   };
@@ -198,10 +208,13 @@ __PACKAGE__->has_many(
   "Tupa::Schema::Result::District",
   sub {
     my $args = shift;
-    return { "$args->{foreign_alias}.geom" =>
-        { '&&' => { -ident => "$args->{self_alias}.location" } }, };
+    return \
+      qq{ST_Intersects($args->{foreign_alias}.geom, $args->{self_alias}.location)};
+
+    # return { "$args->{foreign_alias}.geom" =>
+    #     { '&&' => { -ident => "$args->{self_alias}.location" } }, };
   },
-  { cascade_copy => 0, cascade_delete => 0, join_type => 'LEFT' },
+  {cascade_copy => 0, cascade_delete => 0, join_type => 'LEFT'},
 );
 
 __PACKAGE__->meta->make_immutable;

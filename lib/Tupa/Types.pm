@@ -44,11 +44,12 @@ coerce Longitude, from Int, via { $_ + 0.0 };
 
 subtype PluviOnPayload,
   as Dict [
-  #id        => NonEmptySimpleStr,
-  name      => NonEmptySimpleStr,
-  timestamp => PositiveInt,
-  location  => ScalarRef,
-  reads     => HashRef
+  #id         => NonEmptySimpleStr,
+  name        => NonEmptySimpleStr,
+  timestamp   => PositiveInt,
+  location    => ScalarRef,
+  reads       => HashRef,
+  description => Str
   ];
 
 coerce PluviOnPayload, from HashRef, via {
@@ -61,8 +62,10 @@ coerce PluviOnPayload, from HashRef, via {
         delete $_->{lat}
       )
     ),
-    timestamp => delete $_->{timestamp},
-    reads     => $_
+    timestamp   => delete $_->{timestamp},
+    reads       => $_,
+
+    description => $_->{description}
   };
 
 };

@@ -19,8 +19,18 @@ sub summary {
   $self->search_rs(
     undef,
     {
-      columns    => [grep  { !/geom/ } $self->result_source->columns],
-      '+columns' => [{geom => \'ST_AsGeoJSON(geom)'}],
+      join       => 'sensors',
+      distinct   => 1,
+      columns    => [grep { !/geom/ } $self->result_source->columns],
+      '+columns' => [
+        {geom => \'ST_AsGeoJSON(geom)'},
+        {
+          sensors => {
+            array_remove => [{array_agg => 'sensors.id'}, \'NULL'],
+            -as          => 'sensors'
+          }
+        }
+      ],
     }
   );
 

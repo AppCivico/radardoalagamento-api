@@ -4,7 +4,7 @@ use utf8;
 use Moose;
 use namespace::autoclean;
 use Data::Dumper qw(Dumper);
-
+use Text::CSV::Flatten;
 BEGIN { extends 'Catalyst::Controller::REST' }
 
 __PACKAGE__->config(
@@ -78,6 +78,19 @@ sub _build_results : Private {
   if ($args{no_paging}) {
     $results{results} = [$rs->all];
     return \%results;
+  }
+
+  my $content_type
+    = $args{content_type}
+    || $c->req->header('Accept')
+    || $c->req->content_type;
+
+  if ($content_type =~ /\/csv$/i) {
+    $c->res->content_type('text/csv');
+    $c->res->status(200);
+    $c->res->body(
+      Text::CSV::Flatten->new('.<index>.*', data => [$rs->all])->csv());
+    $c->detach;
   }
 
   $rs = $rs->with_paging(%args) if $rs->can('with_paging');

@@ -48,6 +48,7 @@ sub action_specs {
         ->find_or_create({name => 'PluviOn'});
       my $reads  = delete $values{payload}->{reads};
       my $ts     = delete $values{payload}->{timestamp};
+
       my $sensor = $pluvion_source->sensors->update_or_create($values{payload});
       $sensor->samples->create(
         {location => $values{payload}{location}, value => encode_json($reads)});
@@ -60,6 +61,7 @@ sub action_specs {
 sub with_geojson {
   my $self = shift;
   my $me   = $self->current_source_alias;
+
   $self->search_rs(
     undef,
     {
@@ -94,6 +96,18 @@ sub filter {
   $rs;
 }
 
+
+sub with_district {
+    my ($self) = @_;
+
+    return $self->search_rs(
+        undef,
+        {
+            join  => 'districts',
+            '+columns' => [ qw( districts.name districts.id ) ]
+        }
+    )
+}
 
 1;
 

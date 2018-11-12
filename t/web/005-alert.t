@@ -289,6 +289,22 @@ db_transaction {
     is($json->{results}->[0]->{level}, 'overflow', 'level matches');
   }
 
+  {
+    diag('listing sensor alerts');
+    my ($res, $ctx) =
+
+      ctx_request(
+      GET "/sensor/${\$sensor->id}/alert",
+      Content_Type => 'application/json',
+      'X-Api-Key'  => $session->api_key
+      );
+    ok($res->is_success, 'Success');
+    is($res->code, 200, '200 OK');
+    ok(my $json = decode_json($res->content), 'body ok');
+    is(scalar @{$json->{results}},     1,          'count ok');
+    is($json->{results}->[0]->{level}, 'overflow', 'level matches');
+  }
+
   my $alert_to_be_removed;
   {
     diag('search alert');
