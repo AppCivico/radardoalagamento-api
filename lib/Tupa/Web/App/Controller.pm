@@ -86,8 +86,8 @@ sub _build_results : Private {
     || $c->req->content_type;
 
   if ($content_type =~ /\/csv$/i) {
-    $c->res->content_type('Content-Disposition' => 'filename=extract.csv');
-    $c->res->header('text/csv');
+    $c->res->content_type('text/csv');
+    $c->res->header('Content-disposition' => 'filename="extract.csv"');
     $c->res->status(200);
     $c->res->body(
       Text::CSV::Flatten->new('.<index>.*', data => [$rs->all])->csv());
