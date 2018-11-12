@@ -44,6 +44,7 @@ requires 'Types::UUID';
 requires 'MooX::JSON_LD';
 requires 'Text::CSV::Flatten';
 requires 'Server::Starter';
+requires 'Net::Server::SS::PreFork';
 
 test_requires 'Data::Fake';
 test_requires 'File::Slurp';
