@@ -55,7 +55,7 @@ sub with_alerts {
     my $me = $self->current_source_alias;
 
     $rs = $rs->search_rs(
-        {  },
+        { 'alert_districts.district_id' => \'IS NOT NULL' },
         {
 			'+columns' => [qw( me.name alert.description alert.level alert.created_at )],
 			order_by   => { -desc => 'alert.created_at' },
