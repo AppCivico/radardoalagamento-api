@@ -48,6 +48,19 @@ sub filter {
   $rs;
 }
 
+sub with_alerts {
+    my ($self, %args) = @_;
+
+    my $rs = $self->search_rs({});
+    my $me = $self->current_source_alias;
+
+    $rs = $rs->search_rs(
+        {  },
+        { prefetch => { 'alert_districts' => 'alert' } }
+    );
+
+    return $rs;
+}
 
 1;
 
