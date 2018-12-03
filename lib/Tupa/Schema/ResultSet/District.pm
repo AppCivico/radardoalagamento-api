@@ -56,7 +56,12 @@ sub with_alerts {
 
     $rs = $rs->search_rs(
         {  },
-        { prefetch => { 'alert_districts' => 'alert' } }
+        {
+			'+columns' => [qw( me.name alert.description alert.level alert.created_at )],
+			order_by   => { -desc => 'alert.created_at' },
+            collapse   => 0,
+			join       => { 'alert_districts' => 'alert' }
+        }
     );
 
     return $rs;
