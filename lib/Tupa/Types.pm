@@ -48,8 +48,7 @@ subtype PluviOnPayload,
   name        => NonEmptySimpleStr,
   timestamp   => PositiveInt,
   location    => ScalarRef,
-  reads       => HashRef,
-  description => Str
+  reads       => HashRef
   ];
 
 coerce PluviOnPayload, from HashRef, via {
@@ -65,7 +64,6 @@ coerce PluviOnPayload, from HashRef, via {
     timestamp   => delete $_->{timestamp},
     reads       => $_,
 
-    description => $_->{description}
   };
 
 };

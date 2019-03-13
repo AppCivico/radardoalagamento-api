@@ -48,6 +48,24 @@ sub filter {
   $rs;
 }
 
+sub with_alerts {
+    my ($self, %args) = @_;
+
+    my $rs = $self->search_rs({});
+    my $me = $self->current_source_alias;
+
+    $rs = $rs->search_rs(
+        { 'alert_districts.district_id' => \'IS NOT NULL' },
+        {
+			'+columns' => [qw( me.name alert.description alert.level alert.created_at )],
+			order_by   => { -desc => 'alert.created_at' },
+            collapse   => 0,
+			join       => { 'alert_districts' => 'alert' }
+        }
+    );
+
+    return $rs;
+}
 
 1;
 

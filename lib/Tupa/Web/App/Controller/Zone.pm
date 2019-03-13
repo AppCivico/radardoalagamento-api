@@ -47,6 +47,17 @@ sub sensor : Chained(object) Args(0) GET {
   );
 }
 
+sub alert : Chained(object) Args(0) GET {
+    my ($self, $c) = @_;
+
+	$self->status_ok(
+		$c,
+		entity => $c->forward(
+			_build_results =>[$c->stash->{object}->districts->with_alerts->as_hashref]
+		)
+	);
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
